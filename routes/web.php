@@ -1,45 +1,30 @@
 <?php
 
+use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('home'); 
+Route::view('/', 'home');
+Route::view('/borrow', 'borrow');
+Route::view('/books', 'books');
+Route::view('/curriculum', 'curriculum');
+Route::view('/projects', 'projects');
+Route::view('/exams', 'exams');
+
+Route::view('/dashboard', 'dashboard')->middleware(['auth', 'verified'])->name('dashboard');
+
+Route::middleware('auth')->group(function () {
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-Route::get('/login', function () {
-    return view('auth.login'); // تأكدي أن اسم الملف في views هو login.blade.php
-})->name('login');
+require __DIR__.'/auth.php';
 
-Route::get('/signup', function () {
-    return view('auth.signup');
-});
+Route::view('/signup', 'signup');
 
-
-Route::get('/departments/{dept}', function ($dept) {
-
-    $departments = [
-        'cs' => ['name' => 'الحاسب الالي', 'icon' => '💻'],
-        'accounting' => ['name' => 'المحاسبة', 'icon' => '💰'],
-        'law' => ['name' => 'القانون', 'icon' => '⚖️'],
-        'business' => ['name' => 'إدارة الأعمال', 'icon' => '📊'],
-        'petroleum' => ['name' => 'هندسة النفط', 'icon' => '🛢️'],
-        'arch' => ['name' => 'الهندسة المعمارية', 'icon' => '🏛️'],
-    ];
-
-    if (!isset($departments[$dept])) {
-        abort(404);
-    }
-
-    return view('departments.show', [
-        'dept' => $dept,
-        'data' => $departments[$dept]
-    ]);
-});
-
-Route::get('/borrow', function () {
-    return view('borrow');
-});
-
-Route::get('/curriculum', function () {
-    return view('curriculum');
-})->name('curriculum');
+Route::view('/', 'home');
+Route::view('/borrow', 'borrow');
+Route::view('/books', 'books');
+Route::view('/curriculum', 'curriculum')->name('curriculum');
+Route::view('/projects', 'projects');
+Route::view('/exams', 'exams');
