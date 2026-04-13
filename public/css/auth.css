@@ -1,0 +1,112 @@
+/* log in page*/
+       /* 1. تصفير المسافات الافتراضية للمتصفح (مهم جداً) */
+   * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.auth-wrapper {
+    position: relative;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    background-image: url("../images/library.jpg");
+    background-size: cover;
+    background-position: center;
+}
+
+.overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,0.6);
+}
+
+.login-container {
+    position: relative;
+    z-index: 2;
+    background: white;
+    padding: 25px;
+    width: 400px;
+    border-radius: 12px;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+}
+.login-container h2 {
+    color: #e67e22; /* لون برتقالي مريح للعين */
+    text-align: center;
+    margin-bottom: 10px;
+  }
+
+ .note {
+    font-size: 13px;
+    color: #666;
+    text-align: center;
+    margin-bottom: 25px;
+  }
+
+ .login-container label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+    color: #333;
+ }
+
+ .login-container input {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    text-align: right;
+ }
+
+ .login-btn {
+    width: 100%;
+    padding: 12px;
+    background-color: #e67e22;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    transition: background 0.3s;
+ }
+
+ .login-btn:hover {
+    background-color: #d35400;
+ }
+ /*signup page*/
+ select {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    text-align: right;
+    background: white;
+}
+.form-row {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.form-group {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group label {
+    margin-bottom: 8px;
+    font-weight: bold;
+}
+
+.form-group input {
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+}
