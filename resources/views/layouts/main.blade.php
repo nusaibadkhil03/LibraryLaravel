@@ -46,26 +46,26 @@
         </div>
     </div>
 
-    <nav class="main-menu">
-        <ul>
-            <li><a href="{{ url('/') }}">الرئيسية</a></li>
+   <nav class="main-menu">
+    <ul>
+        <li><a href="{{ url('/') }}">الرئيسية</a></li>
 
-            <li class="dropdown">
-                <a href="#" class="dropbtn">الأقسام ▼</a>
-                <div class="dropdown-content">
-                    <a href="{{ url('/departments/cs') }}">الحاسب الآلي</a>
-                    <a href="{{ url('/departments/accounting') }}">المحاسبة</a>
-                    <a href="{{ url('/departments/law') }}">القانون</a>
-                    <a href="{{ url('/departments/business') }}">إدارة الأعمال</a>
-                    <a href="{{ url('/departments/petroleum') }}">هندسة النفط</a>
-                    <a href="{{ url('/departments/arch') }}">الهندسة المعمارية</a>
-                </div>
-            </li>
+        <li class="dropdown">
+            <a href="#" class="dropbtn">الأقسام ▼</a>
+            <div class="dropdown-content">
+                <a href="{{ route('departments.show', 'computer-science') }}">الحاسب الآلي</a>
+                <a href="{{ route('departments.show', 'accounting') }}">المحاسبة</a>
+                <a href="{{ route('departments.show', 'law') }}">القانون</a>
+                <a href="{{ route('departments.show', 'business-administration') }}">إدارة الأعمال</a>
+                <a href="{{ route('departments.show', 'petroleum-engineering') }}">هندسة النفط</a>
+                <a href="{{ route('departments.show', 'architecture') }}">الهندسة المعمارية</a>
+            </div>
+        </li>
 
-            <li><a href="{{ route('curriculum') }}">الخطة الدراسية</a></li>
-            <li><a href="{{ url('/borrow') }}">استعارة كتاب</a></li>
-        </ul>
-    </nav>
+        <li><a href="{{ route('curriculum') }}">الخطة الدراسية</a></li>
+        <li><a href="{{ route('borrow') }}">استعارة كتاب</a></li>
+    </ul>
+</nav>
 </header>
 
 <main class="container">
@@ -79,19 +79,11 @@
             <ul>
                 <li><a href="{{ url('/') }}">الرئيسية</a></li>
                 <li><a href="#">الأقسام</a></li>
-                <li><a href="{{ url('/books') }}">الكتب</a></li>
                 <li><a href="{{ route('curriculum') }}">الخطة الدراسية</a></li>
+                <li><a href="{{ route('borrow') }}">استعارة كتاب</a></li>
                 <li><a href="#services">الخدمات</a></li>
             </ul>
         </div>
-
-        <div class="footer-section">
-            <h3>تواصل</h3>
-            <p>عين زارة - طرابلس</p>
-            <p>رقم الهاتف: 09XXXXXXXX</p>
-            <p>البريد الإلكتروني: info@university.ly</p>
-        </div>
-    </div>
 </footer>
 
 </body>
