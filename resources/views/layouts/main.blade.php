@@ -51,19 +51,44 @@
         <li><a href="{{ url('/') }}">الرئيسية</a></li>
 
         <li class="dropdown">
-            <a href="#" class="dropbtn">الأقسام ▼</a>
-            <div class="dropdown-content">
-                <a href="{{ route('departments.show', 'computer-science') }}">الحاسب الآلي</a>
-                <a href="{{ route('departments.show', 'accounting') }}">المحاسبة</a>
-                <a href="{{ route('departments.show', 'law') }}">القانون</a>
-                <a href="{{ route('departments.show', 'business-administration') }}">إدارة الأعمال</a>
-                <a href="{{ route('departments.show', 'petroleum-engineering') }}">هندسة النفط</a>
-                <a href="{{ route('departments.show', 'architecture') }}">الهندسة المعمارية</a>
-            </div>
+            @auth
+                <a href="#" class="dropbtn">الأقسام ▼</a>
+                <div class="dropdown-content">
+                    <a href="{{ route('departments.show', 'computer-science') }}">الحاسب الآلي</a>
+                    <a href="{{ route('departments.show', 'accounting') }}">المحاسبة</a>
+                    <a href="{{ route('departments.show', 'law') }}">القانون</a>
+                    <a href="{{ route('departments.show', 'business-administration') }}">إدارة الأعمال</a>
+                    <a href="{{ route('departments.show', 'petroleum-engineering') }}">هندسة النفط</a>
+                    <a href="{{ route('departments.show', 'architecture') }}">الهندسة المعمارية</a>
+                </div>
+            @else
+                <a href="#" class="dropbtn guest-popup-btn">الأقسام ▼</a>
+                <div class="dropdown-content">
+                    <a href="#" class="guest-popup-btn">الحاسب الآلي</a>
+                    <a href="#" class="guest-popup-btn">المحاسبة</a>
+                    <a href="#" class="guest-popup-btn">القانون</a>
+                    <a href="#" class="guest-popup-btn">إدارة الأعمال</a>
+                    <a href="#" class="guest-popup-btn">هندسة النفط</a>
+                    <a href="#" class="guest-popup-btn">الهندسة المعمارية</a>
+                </div>
+            @endauth
         </li>
 
-        <li><a href="{{ route('curriculum') }}">الخطة الدراسية</a></li>
-        <li><a href="{{ route('borrow') }}">استعارة كتاب</a></li>
+        <li>
+            @auth
+                <a href="{{ route('curriculum') }}">الخطة الدراسية</a>
+            @else
+                <a href="#" class="guest-popup-btn">الخطة الدراسية</a>
+            @endauth
+        </li>
+
+        <li>
+            @auth
+                <a href="{{ route('borrow') }}">استعارة كتاب</a>
+            @else
+                <a href="#" class="guest-popup-btn">استعارة كتاب</a>
+            @endauth
+        </li>
     </ul>
 </nav>
 </header>
@@ -85,6 +110,53 @@
             </ul>
         </div>
 </footer>
+@guest
+<div id="authModal" class="auth-modal">
+    <div class="auth-modal-box">
+        <button class="auth-close-btn" id="closeAuthModal">&times;</button>
+
+        <div class="auth-modal-icon">🔒</div>
+        <h2>يجب تسجيل الدخول أولاً</h2>
+        <p>للوصول إلى الأقسام والخدمات الأكاديمية، يرجى تسجيل الدخول أو إنشاء حساب جديد.</p>
+
+        <div class="auth-modal-actions">
+            <a href="{{ route('login') }}" class="auth-btn primary">تسجيل الدخول</a>
+            <a href="{{ route('register') }}" class="auth-btn secondary">إنشاء حساب</a>
+        </div>
+    </div>
+</div>
+@endguest
+
+@guest
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const modal = document.getElementById('authModal');
+    const openButtons = document.querySelectorAll('.guest-popup-btn');
+    const closeButton = document.getElementById('closeAuthModal');
+
+    openButtons.forEach(button => {
+        button.addEventListener('click', function (e) {
+            e.preventDefault();
+            modal.classList.add('show');
+        });
+    });
+
+    if (closeButton) {
+        closeButton.addEventListener('click', function () {
+            modal.classList.remove('show');
+        });
+    }
+
+    if (modal) {
+        modal.addEventListener('click', function (e) {
+            if (e.target === modal) {
+                modal.classList.remove('show');
+            }
+        });
+    }
+});
+</script>
+@endguest
 
 </body>
 </html>
