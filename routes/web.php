@@ -1,11 +1,15 @@
 <?php
 
+use App\Models\Borrow;
+use App\Models\LibraryBook;
+use App\Models\User;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ProfileController;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    if (auth()->check()) {
+    if (Auth::check()) {
         return view('home');
     }
 
@@ -57,9 +61,31 @@ Route::middleware(['auth'])->group(function () {
         ]);
     })->name('departments.show');
 
-    Route::view('/dashboard', 'dashboard')
-        ->middleware(['verified'])
-        ->name('dashboard');
+    Route::get('/dashboard', function () {
+        $totalBooks = LibraryBook::count();
+        $availableCopies = LibraryBook::where('status', 'available')->count();
+        $pendingBorrows = Borrow::where('status', 'pending')->count();
+        $totalStudents = User::where('role', 'student')->count();
+        $totalStudents = User::count();
+
+        $latestBorrows = Borrow::with(['user', 'libraryBook'])
+            ->latest()
+            ->take(5)
+            ->get();
+
+        $latestBooks = LibraryBook::latest()
+            ->take(5)
+            ->get();
+
+        return view('dashboard', compact(
+            'totalBooks',
+            'availableCopies',
+            'pendingBorrows',
+            'totalStudents',
+            'latestBorrows',
+            'latestBooks'
+        ));
+    })->middleware(['verified'])->name('dashboard');
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
