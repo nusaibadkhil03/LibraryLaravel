@@ -10,6 +10,10 @@ use App\Http\Controllers\CategoryController;
 
 Route::get('/', function () {
     if (Auth::check()) {
+        if (Auth::user()->role === 'admin') {
+            return redirect()->route('admin.dashboard');
+        }
+
         return view('home');
     }
 
@@ -27,6 +31,14 @@ Route::get('/guest-blocked', function () {
 |--------------------------------------------------------------------------
 */
 Route::middleware(['auth', 'verified'])->group(function () {
+
+    Route::get('/dashboard', function () {
+        if (Auth::user()->role === 'admin') {
+            return redirect()->route('admin.dashboard');
+        }
+
+        return redirect()->route('home');
+    })->name('dashboard');
 
     /*
     |--------------------------------------------------------------------------
@@ -73,42 +85,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
         ]);
     })->name('departments.show');
 
-    Route::get('/dashboard', function () {
-        if (Auth::user()->role === 'admin') {
-            return redirect()->route('admin.dashboard');
-        }
-
-        $totalBooks = LibraryBook::count();
-        $availableCopies = LibraryBook::where('status', 'available')->count();
-        $pendingBorrows = Borrow::where('status', 'pending')->count();
-        $totalStudents = User::where('role', 'student')->count();
-
-        $latestBorrows = Borrow::with(['user', 'libraryBook'])
-            ->latest()
-            ->take(5)
-            ->get();
-
-        $latestBooks = LibraryBook::latest()
-            ->take(5)
-            ->get();
-
-        return view('dashboard', compact(
-            'totalBooks',
-            'availableCopies',
-            'pendingBorrows',
-            'totalStudents',
-            'latestBorrows',
-            'latestBooks'
-        ));
-    })->name('dashboard');
-
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-
-    Route::get('/categories', [CategoryController::class, 'index'])->name('categories.index');
-    Route::post('/categories', [CategoryController::class, 'store'])->name('categories.store');
-    Route::delete('/categories/{category}', [CategoryController::class, 'destroy'])->name('categories.destroy');
 });
 
 
