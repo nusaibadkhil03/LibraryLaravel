@@ -3,21 +3,25 @@
 use App\Models\Borrow;
 use App\Models\LibraryBook;
 use App\Models\User;
+use App\Models\Department;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Str;
 use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\CategoryController;
 
 Route::get('/', function () {
+    $departments = Department::where('status', 'active')->latest()->get();
+
     if (Auth::check()) {
         if (Auth::user()->role === 'admin') {
             return redirect()->route('admin.dashboard');
         }
 
-        return view('home');
+        return view('home', compact('departments'));
     }
 
-    return view('home_guest');
+    return view('home_guest', compact('departments'));
 })->name('home');
 
 Route::get('/guest-blocked', function () {
@@ -25,11 +29,6 @@ Route::get('/guest-blocked', function () {
 })->name('guest.blocked');
 
 
-/*
-|--------------------------------------------------------------------------
-| Routes for authenticated users
-|--------------------------------------------------------------------------
-*/
 Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::get('/dashboard', function () {
@@ -40,49 +39,37 @@ Route::middleware(['auth', 'verified'])->group(function () {
         return redirect()->route('home');
     })->name('dashboard');
 
-    /*
-    |--------------------------------------------------------------------------
-    | Student / normal user routes
-    |--------------------------------------------------------------------------
-    */
-    Route::view('/borrow', 'borrow')->name('borrow');
+    // صفحة الاستعارة للطالب
+    Route::get('/borrow', function () {
+        $books = LibraryBook::all();
+
+        $borrows = Borrow::with('libraryBook')
+            ->where('user_id', auth()->id())
+            ->latest()
+            ->get();
+
+        return view('borrow', compact('books', 'borrows'));
+    })->name('borrow');
+
+    // إرسال طلب الاستعارة
+    Route::post('/borrow', function (Request $request) {
+        Borrow::create([
+            'user_id' => auth()->id(),
+            'library_book_id' => $request->book_id,
+            'status' => 'pending',
+        ]);
+
+        return back()->with('success', 'تم إرسال طلب الاستعارة بنجاح');
+    })->name('borrow.store');
+
     Route::view('/curriculum', 'curriculum')->name('curriculum');
     Route::view('/projects', 'projects')->name('projects');
     Route::view('/exams', 'exams')->name('exams');
 
     Route::get('/departments/{slug}', function ($slug) {
-        $departments = [
-            'computer-science' => [
-                'name' => 'الحاسب الآلي',
-                'icon' => '💻',
-            ],
-            'business-administration' => [
-                'name' => 'إدارة الأعمال',
-                'icon' => '📈',
-            ],
-            'accounting' => [
-                'name' => 'المحاسبة',
-                'icon' => '💰',
-            ],
-            'law' => [
-                'name' => 'القانون',
-                'icon' => '⚖️',
-            ],
-            'architecture' => [
-                'name' => 'هندسة العمارة',
-                'icon' => '🏛️',
-            ],
-            'petroleum-engineering' => [
-                'name' => 'هندسة النفط',
-                'icon' => '🛢️',
-            ],
-        ];
+        $department = Department::where('slug', $slug)->firstOrFail();
 
-        abort_unless(isset($departments[$slug]), 404);
-
-        return view('departments.show', [
-            'data' => $departments[$slug],
-        ]);
+        return view('departments.show', compact('department'));
     })->name('departments.show');
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -91,44 +78,80 @@ Route::middleware(['auth', 'verified'])->group(function () {
 });
 
 
-/*
-|--------------------------------------------------------------------------
-| Admin routes
-|--------------------------------------------------------------------------
-*/
 Route::middleware(['auth', 'verified', 'admin'])
     ->prefix('admin')
     ->name('admin.')
     ->group(function () {
 
         Route::get('/dashboard', function () {
-            $totalBooks = LibraryBook::count();
-            $availableCopies = LibraryBook::where('status', 'available')->count();
-            $pendingBorrows = Borrow::where('status', 'pending')->count();
-            $totalStudents = User::where('role', 'student')->count();
+            $borrowRequestsCount = Borrow::where('status', 'pending')->count();
+            $studentsCount = User::where('role', 'student')->count();
+            $booksCount = LibraryBook::count();
+            $departmentsCount = Department::count();
 
             $latestBorrows = Borrow::with(['user', 'libraryBook'])
                 ->latest()
                 ->take(5)
                 ->get();
 
-            $latestBooks = LibraryBook::latest()
+            $latestBooks = LibraryBook::with('department')
+                ->latest()
                 ->take(5)
                 ->get();
 
             return view('admin.dashboard', compact(
-                'totalBooks',
-                'availableCopies',
-                'pendingBorrows',
-                'totalStudents',
+                'borrowRequestsCount',
+                'studentsCount',
+                'booksCount',
+                'departmentsCount',
                 'latestBorrows',
                 'latestBooks'
             ));
         })->name('dashboard');
 
         Route::get('/departments', function () {
-            return view('admin.departments.index');
+            $departments = Department::latest()->get();
+            return view('admin.departments.index', compact('departments'));
         })->name('departments.index');
+
+        Route::post('/departments', function (Request $request) {
+            Department::create([
+                'name' => $request->name,
+                'slug' => Str::slug($request->name),
+                'description' => $request->description,
+                'status' => 'active',
+            ]);
+
+            return back()->with('success', 'تمت إضافة القسم بنجاح');
+        })->name('departments.store');
+
+        Route::delete('/departments/{id}', function ($id) {
+            Department::findOrFail($id)->delete();
+            return back()->with('success', 'تمت العملية بنجاح');
+        })->name('departments.delete');
+
+        Route::get('/borrows', function () {
+            $borrows = Borrow::with(['user', 'libraryBook'])
+                ->latest()
+                ->get();
+
+            return view('admin.borrows.index', compact('borrows'));
+        })->name('borrows.index');
+        Route::post('/borrows/{id}/approve', function ($id) {
+    $borrow = \App\Models\Borrow::findOrFail($id);
+    $borrow->update(['status' => 'approved']);
+
+    return back()->with('success', 'تم قبول طلب الاستعارة');
+})->name('borrows.approve');
+
+
+Route::post('/borrows/{id}/reject', function ($id) {
+    $borrow = \App\Models\Borrow::findOrFail($id);
+    $borrow->update(['status' => 'rejected']);
+
+    return back()->with('success', 'تم رفض طلب الاستعارة');
+})->name('borrows.reject');
+
 
         Route::get('/books', function () {
             return view('admin.books.index');
@@ -137,10 +160,6 @@ Route::middleware(['auth', 'verified', 'admin'])
         Route::get('/digital-books', function () {
             return view('admin.digital-books.index');
         })->name('digital-books.index');
-
-        Route::get('/borrows', function () {
-            return view('admin.borrows.index');
-        })->name('borrows.index');
 
         Route::get('/syllabuses', function () {
             return view('admin.syllabuses.index');

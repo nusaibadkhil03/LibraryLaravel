@@ -8,10 +8,10 @@ use App\Models\LibraryBook;
 class Department extends Model
 {
     protected $fillable = [
-        'name',
-        'code',
-        'description',
-        'status',
+    'name',
+    'slug',
+    'description',
+    'status',
     ];
 
     // علاقة: القسم فيه عدة كتب فعلية

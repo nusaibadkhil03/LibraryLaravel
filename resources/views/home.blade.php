@@ -17,13 +17,25 @@
     <h2 class="section-title">مركز الخدمات الرقمية</h2>
 
     <div class="services-grid">
+        <!--الاقسام-->
         <div class="service-card">
             <div class="card-icon">🏛️</div>
             <h3>الأقسام الأكاديمية</h3>
             <p>تصفح أقسام الجامعة والوصول إلى محتواها الأكاديمي.</p>
-            <a href="{{ route('departments.show', 'computer-science') }}" class="card-btn">الدخول إلى الأقسام</a>
+            @if(isset($departments) && $departments->count())
+                <div style="display:flex; flex-direction:column; gap:8px; margin-top:10px;">
+                    @foreach($departments as $department)
+                        <a href="{{ route('departments.show', $department->slug) }}" class="card-btn">
+                            {{ $department->name }}
+                        </a>
+                    @endforeach
         </div>
-
+         @else
+                <p style="margin-top:10px;">لا توجد أقسام متاحة حالياً.</p>
+            @endif
+        </div>
+        
+        <!-- المناهج -->
         <div class="service-card">
             <div class="card-icon">📖</div>
             <h3>المناهج والخطط الدراسية</h3>
@@ -31,6 +43,7 @@
             <a href="{{ route('curriculum') }}" class="card-btn">عرض المناهج</a>
         </div>
 
+        <!-- المشاريع -->
         <div class="service-card">
             <div class="card-icon">🎓</div>
             <h3>مشاريع التخرج السابقة</h3>

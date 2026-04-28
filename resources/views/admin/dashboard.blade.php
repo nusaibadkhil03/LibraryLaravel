@@ -41,7 +41,7 @@
                     @foreach($latestBorrows as $borrow)
                         <tr>
                             <td>{{ $borrow->user->name ?? '-' }}</td>
-                            <td>{{ $borrow->book->title ?? '-' }}</td>
+                            <td>{{ $borrow->libraryBook->title ?? '-' }}</td>
                             <td>{{ $borrow->status }}</td>
                         </tr>
                     @endforeach
