@@ -10,22 +10,19 @@ use App\Models\Borrow;
 class LibraryBook extends Model
 {
     protected $fillable = [
-        'title',
-        'author',
-        'isbn',
-        'publisher',
-        'publication_year',
-        'category_id',
-        'department_id',
-        'description',
-        'cover_image',
-        'language',
-        'pages',
-        'shelf_location',
-        'total_copies',
-        'available_copies',
-        'status',
-    ];
+    'title',
+    'author',
+    'publisher',
+    'publication_year',
+    'publication_place',
+    'book_number',
+    'department_id',
+    'category_id',
+    'shelf_location',
+    'total_copies',
+    'available_copies',
+    'status',
+];
 
     public function category()
     {

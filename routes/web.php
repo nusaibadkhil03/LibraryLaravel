@@ -154,9 +154,29 @@ Route::post('/borrows/{id}/reject', function ($id) {
 
 
         Route::get('/books', function () {
-            return view('admin.books.index');
-        })->name('books.index');
+    $books = LibraryBook::with('department')->latest()->get();
+    $departments = Department::where('status', 'active')->get();
 
+    return view('admin.books.index', compact('books', 'departments'));
+})->name('books.index');
+
+  Route::post('/books', function (Request $request) { 
+    LibraryBook::create([
+        'title' => $request->title,
+        'author' => $request->author,
+        'publisher' => $request->publisher,
+        'publication_year' => $request->publication_year,
+        'publication_place' => $request->publication_place,
+        'book_number' => $request->book_number,
+        'department_id' => $request->department_id,
+        'shelf_location' => $request->shelf_location,
+        'total_copies' => $request->total_copies,
+        'available_copies' => $request->total_copies,
+        'status' => 'available',
+    ]);
+
+    return back()->with('success', 'تم إضافة الكتاب بنجاح');
+     })->name('books.store');
         Route::get('/digital-books', function () {
             return view('admin.digital-books.index');
         })->name('digital-books.index');
