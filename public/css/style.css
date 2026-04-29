@@ -740,3 +740,54 @@ footer {
         flex-direction: column;
     }
 }
+
+.content-title {
+    text-align: center;
+    margin-bottom: 25px;
+}
+
+.book-card {
+    background: #fff;
+    border-radius: 15px;
+    padding: 15px;
+    text-align: center;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+    transition: 0.3s;
+}
+
+.book-card:hover {
+    transform: translateY(-5px);
+}
+
+.book-icon {
+    font-size: 40px;
+    margin-bottom: 10px;
+}
+
+.book-title {
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.book-meta {
+    font-size: 14px;
+    color: #777;
+}
+
+.download-btn {
+    display: inline-block;
+    margin-top: 10px;
+    background: #e67e22;
+    color: white;
+    padding: 6px 12px;
+    border-radius: 20px;
+    text-decoration: none;
+}
+.display-screen {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 20px;
+    padding: 20px;
+    max-height: 500px;
+    overflow: auto;
+}
