@@ -6,8 +6,7 @@
 <main class="main-content">
 
     <h2 class="dept-header">
-    {{ $data['icon'] }} قسم {{ $data['name'] }}
-    </h2>
+ قسم {{ $department->name }}    </h2>
     <!-- الأيقونات -->
     <section class="category-box">
 

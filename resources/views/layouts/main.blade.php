@@ -51,27 +51,28 @@
         <li><a href="{{ url('/') }}">الرئيسية</a></li>
 
         <li class="dropdown">
-            @auth
-                <a href="#" class="dropbtn">الأقسام ▼</a>
-                <div class="dropdown-content">
-                    <a href="{{ route('departments.show', 'computer-science') }}">الحاسب الآلي</a>
-                    <a href="{{ route('departments.show', 'accounting') }}">المحاسبة</a>
-                    <a href="{{ route('departments.show', 'law') }}">القانون</a>
-                    <a href="{{ route('departments.show', 'business-administration') }}">إدارة الأعمال</a>
-                    <a href="{{ route('departments.show', 'petroleum-engineering') }}">هندسة النفط</a>
-                    <a href="{{ route('departments.show', 'architecture') }}">الهندسة المعمارية</a>
-                </div>
-            @else
-                <a href="#" class="dropbtn guest-popup-btn">الأقسام ▼</a>
-                <div class="dropdown-content">
-                    <a href="#" class="guest-popup-btn">الحاسب الآلي</a>
-                    <a href="#" class="guest-popup-btn">المحاسبة</a>
-                    <a href="#" class="guest-popup-btn">القانون</a>
-                    <a href="#" class="guest-popup-btn">إدارة الأعمال</a>
-                    <a href="#" class="guest-popup-btn">هندسة النفط</a>
-                    <a href="#" class="guest-popup-btn">الهندسة المعمارية</a>
-                </div>
-            @endauth
+    @auth
+        <a href="#" class="dropbtn">الأقسام ▼</a>
+
+        <div class="dropdown-content">
+            @foreach($departments as $department)
+                <a href="{{ route('departments.show', $department->slug) }}">
+                    {{ $department->name }}
+                </a>
+            @endforeach
+        </div>
+
+    @else
+        <a href="#" class="dropbtn guest-popup-btn">الأقسام ▼</a>
+
+        <div class="dropdown-content">
+            @foreach($departments as $department)
+                <a href="#" class="guest-popup-btn">
+                    {{ $department->name }}
+                </a>
+            @endforeach
+        </div>
+          @endauth
         </li>
 
         <li>
