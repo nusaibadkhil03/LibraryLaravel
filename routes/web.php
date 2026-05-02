@@ -1,11 +1,13 @@
 <?php
 
 use App\Models\Borrow;
+use App\Models\Book;
 use App\Models\LibraryBook;
 use App\Models\User;
 use App\Models\Department;
 use App\Models\Curriculum;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Str;
@@ -17,6 +19,7 @@ Route::get('/curriculum', function () {
 
     return view('curriculum.index', compact('schedules', 'plans', 'calendars'));
 })->name('curriculum');
+use App\Http\Controllers\DepartmentController;
 
 Route::get('/', function () {
     $departments = Department::where('status', 'active')->latest()->get();
@@ -73,11 +76,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::view('/projects', 'projects')->name('projects');
     Route::view('/exams', 'exams')->name('exams');
 
-    Route::get('/departments/{slug}', function ($slug) {
-        $department = Department::where('slug', $slug)->firstOrFail();
 
-        return view('departments.show', compact('department'));
-    })->name('departments.show');
+    Route::get('/departments/{slug}', [DepartmentController::class, 'show'])
+    ->name('departments.show');
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
@@ -167,7 +168,7 @@ Route::post('/borrows/{id}/reject', function ($id) {
     $departments = Department::where('status', 'active')->get();
 
     return view('admin.books.index', compact('books', 'departments'));
-})->name('books.index');
+  })->name('books.index');
 
   Route::post('/books', function (Request $request) { 
     LibraryBook::create([
@@ -189,7 +190,38 @@ Route::post('/borrows/{id}/reject', function ($id) {
         Route::get('/digital-books', function () {
             return view('admin.digital-books.index');
         })->name('digital-books.index');
-        
+    $books = Book::with('department')->latest()->get();
+    $departments = Department::where('status', 'active')->get();
+
+    return view('admin.digital-books.index', compact('books', 'departments'));
+ })->name('digital-books.index');
+
+Route::post('/digital-books', function (Request $request) {
+
+    $request->validate([
+        'title' => 'required|string|max:255',
+        'department_id' => 'required|exists:departments,id',
+        'semester' => 'nullable|string|max:255',
+        'author' => 'nullable|string|max:255',
+        'description' => 'nullable|string',
+        'file' => 'required|mimes:pdf|max:20480',
+    ]);
+
+    $filePath = $request->file('file')->store('books', 'public');
+
+    Book::create([
+        'title' => $request->title,
+        'author' => $request->author,
+        'department_id' => $request->department_id,
+        'semester' => $request->semester,
+        'description' => $request->description,
+        'file_path' => $filePath,
+        'status' => 'published',
+    ]);
+
+    return back()->with('success', 'تم رفع الكتاب الرقمي بنجاح');
+
+})->name('digital-books.store');
 
         Route::get('/syllabuses', function () {
             return view('admin.syllabuses.index');
@@ -214,6 +246,5 @@ Route::post('/borrows/{id}/reject', function ($id) {
         Route::get('/settings', function () {
             return view('admin.settings.index');
         })->name('settings.index');
-    });
 
 require __DIR__.'/auth.php';
