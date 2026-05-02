@@ -4,11 +4,19 @@ use App\Models\Borrow;
 use App\Models\LibraryBook;
 use App\Models\User;
 use App\Models\Department;
+use App\Models\Curriculum;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Str;
 use App\Http\Controllers\ProfileController;
+Route::get('/curriculum', function () {
+    $schedules = Curriculum::where('type', 'schedule')->get();
+    $plans = Curriculum::where('type', 'plan')->get();
+    $calendars = Curriculum::where('type', 'calendar')->get();
+
+    return view('curriculum.index', compact('schedules', 'plans', 'calendars'));
+})->name('curriculum');
 
 Route::get('/', function () {
     $departments = Department::where('status', 'active')->latest()->get();
@@ -62,7 +70,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
         return back()->with('success', 'تم إرسال طلب الاستعارة بنجاح');
     })->name('borrow.store');
 
-    Route::view('/curriculum', 'curriculum')->name('curriculum');
     Route::view('/projects', 'projects')->name('projects');
     Route::view('/exams', 'exams')->name('exams');
 
@@ -107,7 +114,9 @@ Route::middleware(['auth', 'verified', 'admin'])
                 'latestBorrows',
                 'latestBooks'
             ));
+            
         })->name('dashboard');
+        Route::resource('curriculum', App\Http\Controllers\Admin\CurriculumController::class);
 
         Route::get('/departments', function () {
             $departments = Department::latest()->get();
@@ -180,6 +189,7 @@ Route::post('/borrows/{id}/reject', function ($id) {
         Route::get('/digital-books', function () {
             return view('admin.digital-books.index');
         })->name('digital-books.index');
+        
 
         Route::get('/syllabuses', function () {
             return view('admin.syllabuses.index');

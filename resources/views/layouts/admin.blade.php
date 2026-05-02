@@ -202,6 +202,7 @@
         <a href="{{ route('admin.departments.index') }}">الأقسام</a>
         <a href="{{ route('admin.books.index') }}">الكتب</a>
         <a href="{{ route('admin.digital-books.index') }}">الكتب الرقمية</a>
+        <a href="{{ route('admin.curriculum.index') }}">الخطة الدراسية</a>
         <a href="{{ route('admin.borrows.index') }}">الاستعارات</a>
         <a href="{{ route('admin.syllabuses.index') }}">المناهج</a>
         <a href="{{ route('admin.past-exams.index') }}">أسئلة السنوات</a>
