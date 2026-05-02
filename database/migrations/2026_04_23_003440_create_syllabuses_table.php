@@ -10,26 +10,36 @@ return new class extends Migration
      * Run the migrations.
      */
     public function up(): void
-    {
-        Schema::create('syllabuses', function (Blueprint $table) {
-    $table->id();
+{
+    Schema::create('syllabuses', function (Blueprint $table) {
+        $table->id();
 
-    $table->string('title');
-    $table->foreignId('department_id')->constrained()->cascadeOnDelete();
-    $table->foreignId('category_id')->nullable()->constrained()->nullOnDelete();
+        $table->string('title');
 
-    $table->string('academic_year')->nullable();
-    $table->enum('semester', ['first', 'second', 'full_year'])->nullable();
+        $table->foreignId('department_id')
+              ->constrained()
+              ->cascadeOnDelete();
 
-    $table->text('description')->nullable();
-    $table->string('file_path');
+        $table->foreignId('category_id')
+              ->nullable()
+              ->constrained()
+              ->nullOnDelete();
 
-    $table->enum('status', ['published', 'hidden', 'archived'])->default('published');
+        $table->string('academic_year')->nullable();
 
-    $table->timestamps();
-});
-    }
+        $table->enum('semester', ['first', 'second', 'full_year'])
+              ->nullable();
 
+        $table->text('description')->nullable();
+
+        $table->string('file_path');
+
+        $table->enum('status', ['published', 'hidden', 'archived'])
+              ->default('published');
+
+        $table->timestamps();
+    });
+}
     /**
      * Reverse the migrations.
      */

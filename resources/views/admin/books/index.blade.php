@@ -3,6 +3,31 @@
 @section('page_title', 'إدارة الكتب الورقية')
 
 @section('content')
+<style>
+   .admin-card {
+    background: #fff;
+    border-radius: 18px; /* 👈 هذا المهم */
+    padding: 25px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+}
+ input,
+select {
+    border-radius: 12px; /* 👈 ناعم */
+    border: 1px solid #ddd;
+    padding: 10px 14px;
+    background: #fafafa;
+}
+
+input:focus,
+select:focus {
+    border-color: #e67e22;
+    background: #fff;
+}
+table {
+    border-radius: 15px;
+    overflow: hidden; /* 👈 يخلي الزوايا تنطبق */
+}
+</style>
 <div class="section-box">
 
     <h2>إدارة الكتب الورقية</h2>

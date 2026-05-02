@@ -11,74 +11,65 @@
     </h2>
 
     <section class="category-box">
-        <div class="item">
+        <button class="item" onclick="loadDepartmentContent('channels')">
             <span class="item-icon">📺</span>
             <p>قنوات تعليمية</p>
-        </div>
+        </button>
 
-        <div class="item active">
+        <button class="item active" onclick="loadDepartmentContent('books')">
             <span class="item-icon">📚</span>
             <p>الكتب</p>
-        </div>
+        </button>
 
-        <div class="item">
+        <button class="item" onclick="loadDepartmentContent('syllabuses')">
             <span class="item-icon">📖</span>
             <p>المناهج</p>
-        </div>
+        </button>
 
-        <div class="item">
+        <button class="item" onclick="loadDepartmentContent('past-exams')">
             <span class="item-icon">📝</span>
             <p>أسئلة سنوات سابقة</p>
-        </div>
+        </button>
 
-        <div class="item">
+        <button class="item" onclick="loadDepartmentContent('projects')">
             <span class="item-icon">🎓</span>
             <p>مشاريع تخرج</p>
-        </div>
+        </button>
     </section>
 
-    <section class="display-screen">
-
-        <h3 class="content-title">الكتب الرقمية</h3>
-
-        @if(isset($books) && $books->count())
-            <div class="books-grid">
-                @foreach($books as $book)
-                    <div class="book-card">
-                        <div class="book-icon">📘</div>
-
-                        <h4>{{ $book->title }}</h4>
-
-                        @if(!empty($book->author))
-                            <p>المؤلف: {{ $book->author }}</p>
-                        @endif
-
-                        @if(!empty($book->semester))
-                            <p>الفصل الدراسي: {{ $book->semester }}</p>
-                        @endif
-
-                        @if(!empty($book->description))
-                            <p>{{ $book->description }}</p>
-                        @endif
-
-                        @if(!empty($book->file_path))
-    <a class="download-btn"
-       href="{{ asset('storage/' . $book->file_path) }}"
-       target="_blank">
-        تحميل PDF
-    </a>
-  @else
-    <span class="no-file">لا يوجد ملف PDF</span>
-  @endif
-                    </div>
-                @endforeach
-            </div>
-        @else
-            <p class="empty-message">لا توجد كتب رقمية مضافة لهذا القسم حالياً.</p>
-        @endif
-
+    <section id="department-content-area" class="display-screen">
+        @include('departments.partials.file-list', [
+            'items' => $books,
+            'title' => 'الكتب الرقمية',
+            'emptyMessage' => 'لا توجد كتب رقمية مضافة لهذا القسم حالياً.'
+        ])
     </section>
 
 </main>
+
+<script>
+    function loadDepartmentContent(type) {
+        const buttons = document.querySelectorAll('.category-box .item');
+
+        buttons.forEach(button => {
+            button.classList.remove('active');
+        });
+
+        event.currentTarget.classList.add('active');
+
+        const contentArea = document.getElementById('department-content-area');
+
+        contentArea.innerHTML = '<p class="empty-message">جاري تحميل المحتوى...</p>';
+
+        fetch("{{ url('/departments/' . $department->id . '/content') }}/" + type)
+            .then(response => response.text())
+            .then(html => {
+                contentArea.innerHTML = html;
+            })
+            .catch(() => {
+                contentArea.innerHTML = '<p class="empty-message">حدث خطأ أثناء تحميل المحتوى</p>';
+            });
+    }
+</script>
 
 @endsection

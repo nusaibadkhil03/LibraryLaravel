@@ -20,6 +20,9 @@ Route::get('/curriculum', function () {
     return view('curriculum.index', compact('schedules', 'plans', 'calendars'));
 })->name('curriculum');
 use App\Http\Controllers\DepartmentController;
+use App\Http\Controllers\Admin\SyllabusController;
+use App\Http\Controllers\DepartmentContentController;
+
 
 Route::get('/', function () {
     $departments = Department::where('status', 'active')->latest()->get();
@@ -73,12 +76,16 @@ Route::middleware(['auth', 'verified'])->group(function () {
         return back()->with('success', 'تم إرسال طلب الاستعارة بنجاح');
     })->name('borrow.store');
 
+
+    Route::view('/curriculum', 'curriculum')->name('curriculum');
     Route::view('/projects', 'projects')->name('projects');
     Route::view('/exams', 'exams')->name('exams');
 
 
     Route::get('/departments/{slug}', [DepartmentController::class, 'show'])
     ->name('departments.show');
+    Route::get('/departments/{department}/content/{type}', [DepartmentContentController::class, 'show'])
+    ->name('departments.content');
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
@@ -223,9 +230,7 @@ Route::post('/digital-books', function (Request $request) {
 
 })->name('digital-books.store');
 
-        Route::get('/syllabuses', function () {
-            return view('admin.syllabuses.index');
-        })->name('syllabuses.index');
+     Route::resource('syllabuses', SyllabusController::class);
 
         Route::get('/past-exams', function () {
             return view('admin.past-exams.index');

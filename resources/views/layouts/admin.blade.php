@@ -188,6 +188,31 @@
         button:hover {
             background: #cf711f;
         }
+        .container {
+    padding: 20px;
+}
+
+.table {
+    width: 100%;
+    background: #fff;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.table th {
+    background: #e67e22;
+    color: white;
+}
+
+.table td, .table th {
+    padding: 10px;
+    text-align: center;
+}
+
+.btn {
+    padding: 6px 12px;
+    border-radius: 6px;
+}
     </style>
 </head>
 
@@ -202,7 +227,11 @@
         <a href="{{ route('admin.departments.index') }}">الأقسام</a>
         <a href="{{ route('admin.books.index') }}">الكتب</a>
         <a href="{{ route('admin.digital-books.index') }}">الكتب الرقمية</a>
+
         <a href="{{ route('admin.curriculum.index') }}">الخطة الدراسية</a>
+
+        
+<!-- /*(تفعيل نظام إدارة المناهج (إضافة وعرض) مع ربطها بالأقسام وعرضها ديناميكياً في صفحة القسم)*/ -->
         <a href="{{ route('admin.borrows.index') }}">الاستعارات</a>
         <a href="{{ route('admin.syllabuses.index') }}">المناهج</a>
         <a href="{{ route('admin.past-exams.index') }}">أسئلة السنوات</a>
