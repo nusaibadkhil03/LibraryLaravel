@@ -104,6 +104,9 @@ Route::middleware(['auth', 'verified', 'admin'])
             $booksCount = LibraryBook::count();
             $departmentsCount = Department::count();
 
+         
+
+
             $latestBorrows = Borrow::with(['user', 'libraryBook'])
                 ->latest()
                 ->take(5)
@@ -124,6 +127,7 @@ Route::middleware(['auth', 'verified', 'admin'])
             ));
             
         })->name('dashboard');
+        Route::resource('syllabuses', SyllabusController::class); 
         Route::resource('curriculum', App\Http\Controllers\Admin\CurriculumController::class);
 
         Route::get('/departments', function () {
@@ -195,16 +199,13 @@ Route::post('/borrows/{id}/reject', function ($id) {
     return back()->with('success', 'تم إضافة الكتاب بنجاح');
      })->name('books.store');
         Route::get('/digital-books', function () {
-            return view('admin.digital-books.index');
-        })->name('digital-books.index');
     $books = Book::with('department')->latest()->get();
     $departments = Department::where('status', 'active')->get();
 
     return view('admin.digital-books.index', compact('books', 'departments'));
- })->name('digital-books.index');
+})->name('digital-books.index');
 
 Route::post('/digital-books', function (Request $request) {
-
     $request->validate([
         'title' => 'required|string|max:255',
         'department_id' => 'required|exists:departments,id',
@@ -227,15 +228,11 @@ Route::post('/digital-books', function (Request $request) {
     ]);
 
     return back()->with('success', 'تم رفع الكتاب الرقمي بنجاح');
-
 })->name('digital-books.store');
 
-     Route::resource('syllabuses', SyllabusController::class);
-
-        Route::get('/past-exams', function () {
-            return view('admin.past-exams.index');
-        })->name('past-exams.index');
-
+      /* Route::get('/past-exams', function () {
+    return view('admin.past-exams.index');
+         })->name('past-exams.index');
         Route::get('/projects', function () {
             return view('admin.projects.index');
         })->name('projects.index');
@@ -250,6 +247,6 @@ Route::post('/digital-books', function (Request $request) {
 
         Route::get('/settings', function () {
             return view('admin.settings.index');
-        })->name('settings.index');
-
+        })->name('settings.index');*/
+    });
 require __DIR__.'/auth.php';

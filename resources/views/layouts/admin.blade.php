@@ -234,10 +234,10 @@
 <!-- /*(تفعيل نظام إدارة المناهج (إضافة وعرض) مع ربطها بالأقسام وعرضها ديناميكياً في صفحة القسم)*/ -->
         <a href="{{ route('admin.borrows.index') }}">الاستعارات</a>
         <a href="{{ route('admin.syllabuses.index') }}">المناهج</a>
-        <a href="{{ route('admin.past-exams.index') }}">أسئلة السنوات</a>
-        <a href="{{ route('admin.projects.index') }}">مشاريع التخرج</a>
-        <a href="{{ route('admin.students.index') }}">الطلبة</a>
-        <a href="{{ route('admin.admins.index') }}">الأدمنات</a>
+        <a href="#">أسئلة السنوات</a>
+        <a href="#">مشاريع التخرج</a>
+        <a href="#">الطلبة</a>
+        <a href="#">الأدمن</a>
         <a href="#">الإعدادات</a>
     </aside>
 
