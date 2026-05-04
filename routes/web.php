@@ -12,6 +12,10 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Str;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\Admin\PastExamController;
+use App\Http\Controllers\Admin\ProjectController;
+use App\Http\Controllers\Admin\ResearchController;
+
 Route::get('/curriculum', function () {
     $schedules = Curriculum::where('type', 'schedule')->get();
     $plans = Curriculum::where('type', 'plan')->get();
@@ -128,6 +132,10 @@ Route::middleware(['auth', 'verified', 'admin'])
             
         })->name('dashboard');
         Route::resource('syllabuses', SyllabusController::class); 
+        Route::resource('past-exams', PastExamController::class);
+        Route::resource('projects', ProjectController::class);
+        Route::resource('researches', ResearchController::class);
+        
         Route::resource('curriculum', App\Http\Controllers\Admin\CurriculumController::class);
 
         Route::get('/departments', function () {
@@ -229,10 +237,8 @@ Route::post('/digital-books', function (Request $request) {
 
     return back()->with('success', 'تم رفع الكتاب الرقمي بنجاح');
 })->name('digital-books.store');
-
-      /* Route::get('/past-exams', function () {
-    return view('admin.past-exams.index');
-         })->name('past-exams.index');
+       
+      /* 
         Route::get('/projects', function () {
             return view('admin.projects.index');
         })->name('projects.index');

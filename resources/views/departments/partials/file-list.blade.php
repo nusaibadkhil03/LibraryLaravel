@@ -16,6 +16,18 @@
                             السنة: {{ $item->academic_year }} |
                         @endif
 
+                        @if(!empty($item->doctor_name))
+                               الدكتور: {{ $item->doctor_name }} |
+                        @endif
+
+                        @if(!empty($item->students_names))
+                                الطلبة: {{ $item->students_names }} |
+                        @endif
+
+                        @if(!empty($item->supervisor_name))
+                                المشرف: {{ $item->supervisor_name }} |
+                        @endif
+
                         @if(!empty($item->semester))
                             الفصل الدراسي: {{ $item->semester }}
                         @endif

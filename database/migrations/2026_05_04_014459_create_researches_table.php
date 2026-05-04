@@ -11,22 +11,20 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('past_exams', function (Blueprint $table) {
+        Schema::create('researches', function (Blueprint $table) {
     $table->id();
 
     $table->string('title');
     $table->foreignId('department_id')->constrained()->cascadeOnDelete();
-    $table->foreignId('category_id')->nullable()->constrained()->nullOnDelete();
 
-    $table->string('subject_name')->nullable();
+    $table->string('author')->nullable();
     $table->string('academic_year')->nullable();
-    $table->enum('semester', ['first', 'second', 'full_year'])->nullable();
-    $table->year('exam_year')->nullable();
+    $table->string('publisher')->nullable(); // مجلة أو مؤتمر
 
     $table->text('description')->nullable();
     $table->string('file_path');
 
-    $table->enum('status', ['published', 'hidden', 'archived'])->default('published');
+    $table->enum('status', ['published', 'hidden'])->default('published');
 
     $table->timestamps();
 });
@@ -37,6 +35,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('past_exams');
+        Schema::dropIfExists('researches');
     }
 };

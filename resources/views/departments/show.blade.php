@@ -31,6 +31,11 @@
             <p>أسئلة سنوات سابقة</p>
         </button>
 
+        <button class="item" onclick="loadDepartmentContent('researches')">
+          <span class="item-icon">🔬</span>
+         <p>البحوث العلمية</p>
+        </button>
+
         <button class="item" onclick="loadDepartmentContent('projects')">
             <span class="item-icon">🎓</span>
             <p>مشاريع تخرج</p>
