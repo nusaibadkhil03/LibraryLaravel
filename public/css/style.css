@@ -35,7 +35,7 @@ body {
 }
 
 img {
-    max-width: 90%;
+    max-width: 100%;
     height: auto;
 }
 
@@ -62,7 +62,7 @@ header {
 
 .header-container {
     width: 100%;
-    max-width: 1100px;
+    max-width: 1200px;
     margin: 0 auto;
     display: grid;
     grid-template-columns: 1fr 1.4fr 1fr;
@@ -148,7 +148,7 @@ header {
     display: flex;
     align-items: center;
     width: 100%;
-    max-width: 330px;
+    max-width: 350px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
@@ -1146,4 +1146,186 @@ footer {
     .category-box {
         grid-template-columns: 1fr;
     }
+}
+    .category-box .item,
+    .item {
+        width: 100%; }
+
+        /* ===== FINAL CLEAN HEADER ===== */
+
+.site-header {
+    background: #ef7d18 !important;
+    color: #fff !important;
+    padding: 22px 70px 24px !important;
+}
+
+.header-wrapper {
+    max-width: 1200px !important;
+    margin: 0 auto !important;
+}
+
+.header-top-row {
+    display: grid !important;
+    grid-template-columns: 330px 1fr 330px !important;
+    grid-template-areas: "logo title actions" !important;
+    align-items: start !important;
+    gap: 24px !important;
+}
+
+/* اللوقو + البحث */
+.header-logo-search {
+    grid-area: logo !important;
+    width: 330px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 12px !important;
+}
+
+.header-logo-search .logo-img {
+    width: 86px !important;
+    height: 86px !important;
+    object-fit: contain !important;
+    margin: 0 !important;
+}
+
+/* البحث */
+.header-logo-search .search-container {
+    width: 330px !important;
+    margin: 0 !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+    background: #fff !important;
+    border-radius: 22px !important;
+    padding: 5px 10px !important;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.12) !important;
+}
+
+.header-logo-search .search-container input {
+    flex: 1 !important;
+    border: none !important;
+    outline: none !important;
+    background: transparent !important;
+    text-align: right !important;
+}
+
+.header-logo-search .search-container button {
+    border: none !important;
+    background: transparent !important;
+    cursor: pointer !important;
+}
+
+/* العنوان */
+.header-title {
+    grid-area: title !important;
+    text-align: center !important;
+    padding-top: 28px !important;
+}
+
+.header-title h2 {
+    margin: 0 0 6px !important;
+    font-size: 28px !important;
+    color: #fff !important;
+}
+
+.header-title p {
+    margin: 0 !important;
+    color: #fff !important;
+}
+
+/* الأزرار */
+.header-actions {
+    grid-area: actions !important;
+    display: flex !important;
+    justify-content: flex-start !important;
+    align-items: flex-start !important;
+    gap: 10px !important;
+    flex-wrap: wrap !important;
+    padding-top: 18px !important;
+}
+
+.header-actions form {
+    margin: 0 !important;
+}
+
+/* القائمة */
+.main-menu {
+    margin-top: 30px !important;
+    padding-top: 16px !important;
+    border-top: 1px solid rgba(255,255,255,.35) !important;
+}
+
+.main-menu ul {
+    display: flex !important;
+    justify-content: center !important;
+    gap: 38px !important;
+    list-style: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+.main-menu a {
+    color: #fff !important;
+    text-decoration: none !important;
+    font-weight: 700 !important;
+}
+
+/* موبايل */
+@media (max-width: 768px) {
+    .site-header {
+        padding: 15px 12px !important;
+    }
+
+    .header-top-row {
+        grid-template-columns: 1fr !important;
+        grid-template-areas:
+            "logo"
+            "title"
+            "actions" !important;
+        text-align: center !important;
+    }
+
+    .header-logo-search {
+        width: 100% !important;
+        align-items: center !important;
+    }
+
+    .header-logo-search .search-container {
+        width: 100% !important;
+        max-width: 330px !important;
+    }
+
+    .header-title {
+        padding-top: 0 !important;
+    }
+
+    .header-actions {
+        justify-content: center !important;
+        padding-top: 0 !important;
+    }
+
+    .main-menu ul {
+        display: grid !important;
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 8px !important;
+    }
+}
+
+/* تحسين حجم العنوان */
+.header-title h2 {
+    font-size: 34px !important;
+    font-weight: 800 !important;
+    letter-spacing: 0.5px;
+}
+
+/* النص الصغير تحت العنوان */
+.header-title p {
+    font-size: 16px !important;
+    opacity: 0.95;
+}
+
+/* روابط القائمة */
+.main-menu a {
+    font-size: 16px !important;
 }

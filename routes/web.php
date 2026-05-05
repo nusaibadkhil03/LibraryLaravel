@@ -16,6 +16,8 @@ use App\Http\Controllers\Admin\PastExamController;
 use App\Http\Controllers\Admin\ProjectController;
 use App\Http\Controllers\Admin\ResearchController;
 use App\Http\Controllers\Admin\EducationalChannelController;
+use App\Http\Controllers\SearchController;
+
 
 Route::get('/curriculum', function () {
     $schedules = Curriculum::where('type', 'schedule')->get();
@@ -28,6 +30,7 @@ use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\Admin\SyllabusController;
 use App\Http\Controllers\DepartmentContentController;
 
+Route::get('/search', [SearchController::class, 'index'])->name('search');
 
 Route::get('/', function () {
     $departments = Department::where('status', 'active')->latest()->get();
