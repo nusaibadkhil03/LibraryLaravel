@@ -23,8 +23,8 @@
             <h3>الأقسام الأكاديمية</h3>
             <p>تصفح أقسام الجامعة والوصول إلى محتواها الأكاديمي.</p>
             @if(isset($departments) && $departments->count())
-                <div style="display:flex; flex-direction:column; gap:8px; margin-top:10px;">
-                    @foreach($departments as $department)
+<div class="department-buttons">
+                        @foreach($departments as $department)
                         <a href="{{ route('departments.show', $department->slug) }}" class="card-btn">
                             {{ $department->name }}
                         </a>

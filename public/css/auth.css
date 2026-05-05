@@ -29,7 +29,8 @@
     z-index: 2;
     background: white;
     padding: 25px;
-    width: 400px;
+     width: 100%;
+    max-width: 400px;
     border-radius: 12px;
     box-shadow: 0 15px 40px rgba(0,0,0,0.3);
 }
@@ -137,4 +138,32 @@
 .login-container {
     max-height: 90vh;
     overflow-y: auto;
+}
+@media (max-width: 480px) {
+    .auth-wrapper {
+        padding: 15px;
+        align-items: center;
+    }
+
+    .login-container {
+        width: 100%;
+        max-width: 100%;
+        padding: 20px;
+        border-radius: 10px;
+        max-height: 90vh;
+        overflow-y: auto;
+    }
+
+    .form-row {
+        flex-direction: column;
+        gap: 0;
+    }
+
+    .login-container h2 {
+        font-size: 22px;
+    }
+
+    .note {
+        font-size: 12px;
+    }
 }

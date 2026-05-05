@@ -110,6 +110,7 @@
                 <li><a href="#services">الخدمات</a></li>
             </ul>
         </div>
+        </div>
 </footer>
 @guest
 <div id="authModal" class="auth-modal">

@@ -15,6 +15,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Admin\PastExamController;
 use App\Http\Controllers\Admin\ProjectController;
 use App\Http\Controllers\Admin\ResearchController;
+use App\Http\Controllers\Admin\EducationalChannelController;
 
 Route::get('/curriculum', function () {
     $schedules = Curriculum::where('type', 'schedule')->get();
@@ -135,6 +136,7 @@ Route::middleware(['auth', 'verified', 'admin'])
         Route::resource('past-exams', PastExamController::class);
         Route::resource('projects', ProjectController::class);
         Route::resource('researches', ResearchController::class);
+        Route::resource('educational-channels', EducationalChannelController::class);
         
         Route::resource('curriculum', App\Http\Controllers\Admin\CurriculumController::class);
 

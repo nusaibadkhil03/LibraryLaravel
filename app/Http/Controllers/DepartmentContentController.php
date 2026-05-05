@@ -8,6 +8,7 @@ use App\Models\Syllabus;
 use App\Models\PastExam;
 use App\Models\Project;
 use App\Models\Research;
+use App\Models\EducationalChannel;
 use Illuminate\Http\Request;
 
 class DepartmentContentController extends Controller
@@ -85,6 +86,18 @@ if ($type === 'researches') {
         'items' => $items,
         'title' => 'البحوث العلمية',
         'emptyMessage' => 'لا توجد بحوث علمية حالياً.',
+    ]);
+}
+if ($type === 'channels') {
+    $channels = EducationalChannel::where('department_id', $department->id)
+        ->where('status', 'published')
+        ->latest()
+        ->get();
+
+    return view('departments.partials.channel-list', [
+        'channels' => $channels,
+        'title' => 'القنوات التعليمية',
+        'emptyMessage' => 'لا توجد قنوات تعليمية لهذا القسم حالياً.',
     ]);
 }
         return response('المحتوى غير موجود', 404);
