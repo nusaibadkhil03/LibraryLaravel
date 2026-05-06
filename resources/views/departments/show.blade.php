@@ -53,28 +53,39 @@
 </main>
 
 <script>
-    function loadDepartmentContent(type) {
-        const buttons = document.querySelectorAll('.category-box .item');
+function loadDepartmentContent(type) {
+    const buttons = document.querySelectorAll('.category-box .item');
 
-        buttons.forEach(button => {
-            button.classList.remove('active');
+    buttons.forEach(button => {
+        button.classList.remove('active');
+
+        const onclickValue = button.getAttribute('onclick') || '';
+        if (onclickValue.includes(type)) {
+            button.classList.add('active');
+        }
+    });
+
+    const contentArea = document.getElementById('department-content-area');
+    contentArea.innerHTML = '<p class="empty-message">جاري تحميل المحتوى...</p>';
+
+    fetch("{{ url('/departments/' . $department->id . '/content') }}/" + type)
+        .then(response => response.text())
+        .then(html => {
+            contentArea.innerHTML = html;
+        })
+        .catch(() => {
+            contentArea.innerHTML = '<p class="empty-message">حدث خطأ أثناء تحميل المحتوى</p>';
         });
+}
 
-        event.currentTarget.classList.add('active');
+document.addEventListener('DOMContentLoaded', function () {
+    const params = new URLSearchParams(window.location.search);
+    const type = params.get('type');
 
-        const contentArea = document.getElementById('department-content-area');
-
-        contentArea.innerHTML = '<p class="empty-message">جاري تحميل المحتوى...</p>';
-
-        fetch("{{ url('/departments/' . $department->id . '/content') }}/" + type)
-            .then(response => response.text())
-            .then(html => {
-                contentArea.innerHTML = html;
-            })
-            .catch(() => {
-                contentArea.innerHTML = '<p class="empty-message">حدث خطأ أثناء تحميل المحتوى</p>';
-            });
+    if (type) {
+        loadDepartmentContent(type);
     }
+});
 </script>
 
 @endsection

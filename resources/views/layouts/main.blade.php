@@ -23,20 +23,23 @@
 
         <div class="header-top-row">
 
-           <div class="header-logo-search">
+         <div class="header-logo-search">
     <img src="{{ asset('images/logo.png') }}" alt="شعار المكتبة" class="logo-img">
 
-    <form action="{{ route('search') }}" method="GET" class="search-container">
+    <div class="search-container">
         <input
             type="text"
+            id="liveSearchInput"
             name="q"
             placeholder="ابحث عن كتاب، منهج، أو مشروع..."
-            value="{{ request('q') }}"
+            autocomplete="off"
         >
-        <button type="submit" class="search-icon">🔍</button>
-    </form>
-</div>
 
+        <button type="button" class="search-icon">🔍</button>
+
+        <div id="liveSearchResults" class="live-search-results"></div>
+    </div>
+</div>
             {{-- الوسط: العنوان --}}
             <div class="header-title">
                 <h2>مكتبة الجامعة الليبية</h2>
@@ -172,8 +175,43 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 });
+
 </script>
 @endguest
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    console.log('live search loaded');
 
+    const input = document.getElementById('liveSearchInput');
+    const box = document.getElementById('liveSearchResults');
+
+    if (!input || !box) return;
+
+    input.addEventListener('input', function () {
+        const q = this.value.trim();
+
+        if (q.length < 2) {
+            box.innerHTML = '';
+            box.style.display = 'none';
+            return;
+        }
+
+        fetch(`/live-search?q=${encodeURIComponent(q)}`)
+            .then(res => res.json())
+            .then(data => {
+                box.innerHTML = data.length
+                    ? data.map(item => `
+                        <a href="${item.url}" class="live-search-item">
+                            <span>${item.title}</span>
+                            <small>${item.type}</small>
+                        </a>
+                    `).join('')
+                    : '<div class="live-search-empty">لا توجد نتائج</div>';
+
+                box.style.display = 'block';
+            });
+    });
+});
+</script>
 </body>
 </html>

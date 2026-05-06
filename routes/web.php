@@ -31,6 +31,7 @@ use App\Http\Controllers\Admin\SyllabusController;
 use App\Http\Controllers\DepartmentContentController;
 
 Route::get('/search', [SearchController::class, 'index'])->name('search');
+Route::get('/live-search', [SearchController::class, 'live'])->name('live.search');
 
 Route::get('/', function () {
     $departments = Department::where('status', 'active')->latest()->get();
