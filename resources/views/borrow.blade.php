@@ -21,6 +21,18 @@
             </div>
         @endif
 
+        @if(session('error'))
+            <div style="background:#f8d7da; color:#721c24; padding:10px; margin-bottom:15px; border-radius:8px; text-align:center;">
+                {{ session('error') }}
+            </div>
+        @endif
+
+        @if($errors->any())
+            <div style="background:#f8d7da; color:#721c24; padding:10px; margin-bottom:15px; border-radius:8px; text-align:center;">
+                الرجاء اختيار كتاب صحيح من القائمة.
+            </div>
+        @endif
+
         <form method="POST" action="{{ route('borrow.store') }}">
             @csrf
 
@@ -38,12 +50,23 @@
 
             <div class="input-box">
                 <label>اسم الكتاب *</label>
-                <select name="book_id" required style="padding:10px;">
-                    <option value="">اختر كتاب</option>
+
+                <input
+                    list="booksList"
+                    id="bookSearch"
+                    placeholder="اكتب اسم الكتاب..."
+                    autocomplete="off"
+                    required
+                    style="padding:10px; width:100%;"
+                >
+
+                <datalist id="booksList">
                     @foreach($books as $book)
-                        <option value="{{ $book->id }}">{{ $book->title }}</option>
+                        <option data-id="{{ $book->id }}" value="{{ $book->title }}"></option>
                     @endforeach
-                </select>
+                </datalist>
+
+                <input type="hidden" name="book_id" id="book_id">
             </div>
 
             <div class="form-grid">
@@ -65,52 +88,89 @@
                 </div>
 
                 <div class="input-box">
-                    <label>تاريخ الإرجاع</label>
+                    <label>تاريخ الإرجاع المتوقع</label>
                     <input type="text" id="return_date_display" readonly>
                 </div>
             </div>
 
-            <button type="submit" class="tab-btn active">إرسال الطلب</button>
-        </form>
-    </div>
-<div id="status-view" class="form-section" style="display:none;">
-    <h2>متابعة حالة الطلب</h2>
+           <div style="
+    background:#fff8e1;
+    color:#7a5a00;
+    border:1px solid #ffe08a;
+    padding:10px 14px;
+    border-radius:12px;
+    margin:15px 0;
+    font-size:14px;
+    display:flex;
+    align-items:center;
+    gap:8px;
+">
+    <span style="font-size:18px;">⚠️</span>
+    <span>
+        <strong>تنبيه:</strong>
+        في حالة التأخر عن تاريخ الإرجاع سيتم تطبيق غرامة مالية.
+    </span>
+</div>
 
-    @if(isset($borrows) && $borrows->count())
-        @foreach($borrows as $borrow)
+           <div class="borrow-actions">
 
-        <div style="
-            background:#fff;
-            padding:15px;
-            margin-bottom:10px;
-            border-radius:10px;
-            box-shadow:0 2px 8px rgba(0,0,0,0.1);
-        ">
+    <button type="submit" class="borrow-submit-btn">
+        إرسال الطلب
+    </button>
 
-            <p style="font-weight:bold;">
-                📘 {{ $borrow->libraryBook->title ?? '-' }}
-            </p>
-
-            @if($borrow->status == 'pending')
-                <span style="color:#e67e22; font-weight:bold;">⏳ قيد المراجعة</span>
-
-            @elseif($borrow->status == 'approved')
-                <span style="color:green; font-weight:bold;">✅ تمت الموافقة</span>
-
-            @elseif($borrow->status == 'rejected')
-                <span style="color:red; font-weight:bold;">❌ مرفوض</span>
-
-            @endif
-
-        </div>
-
-        @endforeach
-    @else
-        <p>لا توجد طلبات حالياً</p>
-    @endif
+    <a href="{{ url('/') }}" class="borrow-back-btn">
+        الرجوع إلى الصفحة الرئيسية
+    </a>
 
 </div>
-    
+        </form>
+    </div>
+
+    <div id="status-view" class="form-section" style="display:none;">
+        <h2>متابعة حالة الطلب</h2>
+
+        @if(isset($borrows) && $borrows->count())
+            @foreach($borrows as $borrow)
+
+                <div style="
+                    background:#fff;
+                    padding:15px;
+                    margin-bottom:10px;
+                    border-radius:10px;
+                    box-shadow:0 2px 8px rgba(0,0,0,0.1);
+                ">
+
+                    <p style="font-weight:bold;">
+                        📘 {{ $borrow->libraryBook->title ?? '-' }}
+                    </p>
+
+                    @if($borrow->status == 'pending')
+                        <span style="color:#e67e22; font-weight:bold;">⏳ قيد المراجعة</span>
+
+                    @elseif($borrow->status == 'approved' || $borrow->status == 'borrowed')
+                        <span style="color:green; font-weight:bold;">✅ تمت الموافقة</span>
+
+                        @if($borrow->due_date)
+                            <p style="margin-top:8px;">
+                                تاريخ الإرجاع المتوقع: {{ $borrow->due_date }}
+                            </p>
+                        @endif
+
+                    @elseif($borrow->status == 'returned')
+                        <span style="color:#007bff; font-weight:bold;">📗 تم الإرجاع</span>
+
+                    @elseif($borrow->status == 'rejected')
+                        <span style="color:red; font-weight:bold;">❌ مرفوض</span>
+
+                    @endif
+
+                </div>
+
+            @endforeach
+        @else
+            <p>لا توجد طلبات حالياً</p>
+        @endif
+
     </div>
 
 </div>
@@ -139,6 +199,22 @@ function showTab(sectionId, button) {
 }
 
 document.addEventListener("DOMContentLoaded", function () {
+    const bookSearch = document.getElementById('bookSearch');
+    const bookIdInput = document.getElementById('book_id');
+    const options = document.querySelectorAll('#booksList option');
+
+    if (bookSearch && bookIdInput) {
+        bookSearch.addEventListener('input', function () {
+            bookIdInput.value = '';
+
+            options.forEach(option => {
+                if (option.value === bookSearch.value) {
+                    bookIdInput.value = option.dataset.id;
+                }
+            });
+        });
+    }
+
     const input = document.getElementById("borrow_date");
     const output = document.getElementById("return_date_display");
 

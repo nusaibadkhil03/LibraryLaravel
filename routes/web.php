@@ -17,21 +17,36 @@ use App\Http\Controllers\Admin\ProjectController;
 use App\Http\Controllers\Admin\ResearchController;
 use App\Http\Controllers\Admin\EducationalChannelController;
 use App\Http\Controllers\SearchController;
+use App\Http\Controllers\BorrowController;
+use App\Http\Controllers\Admin\AdminBorrowController;
+use App\Http\Controllers\Admin\CurriculumController;
+use App\Http\Controllers\CurriculumPageController;
 
 
-Route::get('/curriculum', function () {
-    $schedules = Curriculum::where('type', 'schedule')->get();
-    $plans = Curriculum::where('type', 'plan')->get();
-    $calendars = Curriculum::where('type', 'calendar')->get();
 
-    return view('curriculum.index', compact('schedules', 'plans', 'calendars'));
-})->name('curriculum');
+
+Route::get('/curriculum', [CurriculumPageController::class, 'index'])
+    ->name('curriculum');
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\Admin\SyllabusController;
 use App\Http\Controllers\DepartmentContentController;
 
 Route::get('/search', [SearchController::class, 'index'])->name('search');
 Route::get('/live-search', [SearchController::class, 'live'])->name('live.search');
+
+Route::get('/borrow', function () {
+    $books = LibraryBook::all();
+
+    $borrows = Borrow::with('libraryBook')
+        ->where('user_id', auth()->id())
+        ->latest()
+        ->get();
+
+    return view('borrow', compact('books', 'borrows'));
+})->name('borrow');
+
+Route::post('/borrows/{book}', [BorrowController::class, 'store'])
+    ->name('borrows.store');
 
 Route::get('/', function () {
     $departments = Department::where('status', 'active')->latest()->get();
@@ -63,30 +78,31 @@ Route::middleware(['auth', 'verified'])->group(function () {
     })->name('dashboard');
 
     // صفحة الاستعارة للطالب
-    Route::get('/borrow', function () {
-        $books = LibraryBook::all();
+Route::post('/borrow', function (Request $request) {
 
-        $borrows = Borrow::with('libraryBook')
-            ->where('user_id', auth()->id())
-            ->latest()
-            ->get();
+    $request->validate([
+        'book_id' => 'required|exists:library_books,id',
+    ]);
 
-        return view('borrow', compact('books', 'borrows'));
-    })->name('borrow');
+    $book = LibraryBook::findOrFail($request->book_id);
 
-    // إرسال طلب الاستعارة
-    Route::post('/borrow', function (Request $request) {
-        Borrow::create([
-            'user_id' => auth()->id(),
-            'library_book_id' => $request->book_id,
-            'status' => 'pending',
-        ]);
+    if ($book->available_copies <= 1) {
+        return back()->with('error', 'لا يمكن استعارة هذا الكتاب لأنه متوفر بنسخة واحدة فقط.');
+    }
 
-        return back()->with('success', 'تم إرسال طلب الاستعارة بنجاح');
-    })->name('borrow.store');
+    Borrow::create([
+    'user_id' => auth()->id(),
+    'library_book_id' => $book->id,
+    'student_name' => $request->student_name,
+    'student_number' => $request->student_number,
+    'edition_number' => $request->edition_number,
+    'status' => 'pending',
+    'notes' => 'تنبيه: في حالة التأخر عن تاريخ الإرجاع سيتم تطبيق غرامة مالية.',
+]);
 
+    return back()->with('success', 'تم إرسال طلب الاستعارة بنجاح');
+})->name('borrow.store');
 
-    Route::view('/curriculum', 'curriculum')->name('curriculum');
     Route::view('/projects', 'projects')->name('projects');
     Route::view('/exams', 'exams')->name('exams');
 
@@ -99,7 +115,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-});
+
 
 
 Route::middleware(['auth', 'verified', 'admin'])
@@ -142,7 +158,14 @@ Route::middleware(['auth', 'verified', 'admin'])
         Route::resource('researches', ResearchController::class);
         Route::resource('educational-channels', EducationalChannelController::class);
         
-        Route::resource('curriculum', App\Http\Controllers\Admin\CurriculumController::class);
+        Route::get('/curriculum', [CurriculumController::class, 'index'])
+    ->name('curriculum.index');
+
+    Route::post('/curriculum/store', [CurriculumController::class, 'store'])
+    ->name('curriculum.store');
+
+Route::delete('/curriculum/{id}', [CurriculumController::class, 'destroy'])
+    ->name('curriculum.destroy');
 
         Route::get('/departments', function () {
             $departments = Department::latest()->get();
@@ -172,11 +195,27 @@ Route::middleware(['auth', 'verified', 'admin'])
 
             return view('admin.borrows.index', compact('borrows'));
         })->name('borrows.index');
-        Route::post('/borrows/{id}/approve', function ($id) {
-    $borrow = \App\Models\Borrow::findOrFail($id);
-    $borrow->update(['status' => 'approved']);
+       Route::post('/borrows/{id}/approve', function ($id) {
+
+    $borrow = \App\Models\Borrow::with('libraryBook')->findOrFail($id);
+
+    $book = $borrow->libraryBook;
+
+    if ($book->available_copies <= 1) {
+        return back()->with('error', 'لا يمكن قبول الطلب لأن المتبقي نسخة واحدة فقط.');
+    }
+
+    $borrow->update([
+        'status' => 'borrowed',
+        'borrow_date' => now()->toDateString(),
+        'due_date' => now()->addDays(14)->toDateString(),
+        'approved_by' => auth()->id(),
+    ]);
+
+    $book->decrement('available_copies');
 
     return back()->with('success', 'تم قبول طلب الاستعارة');
+
 })->name('borrows.approve');
 
 
@@ -187,78 +226,174 @@ Route::post('/borrows/{id}/reject', function ($id) {
     return back()->with('success', 'تم رفض طلب الاستعارة');
 })->name('borrows.reject');
 
+Route::post('/borrows/{id}/return', function ($id) {
 
-        Route::get('/books', function () {
-    $books = LibraryBook::with('department')->latest()->get();
-    $departments = Department::where('status', 'active')->get();
+    $borrow = \App\Models\Borrow::with('libraryBook')->findOrFail($id);
 
-    return view('admin.books.index', compact('books', 'departments'));
-  })->name('books.index');
+    if ($borrow->status != 'borrowed') {
+        return back()->with('error', 'لا يمكن إرجاع هذا الكتاب.');
+    }
 
-  Route::post('/books', function (Request $request) { 
+    $borrow->update([
+        'status' => 'returned',
+        'return_date' => now()->toDateString(),
+    ]);
+
+    $borrow->libraryBook->increment('available_copies');
+
+    return back()->with('success', 'تم إرجاع الكتاب بنجاح');
+
+})->name('borrows.return');
+
+
+       Route::get('/books', function () {
+
+    $books = LibraryBook::with('department')
+    ->orderBy('title')
+    ->get();
+
+    return view('admin.books.index', compact('books'));
+
+})->name('books.index');
+
+
+
+Route::get('/books/create', function () {
+
+$departments = Department::where('status', 'active')
+    ->orderBy('name')
+    ->get();
+    return view('admin.books.create', compact('departments'));
+
+})->name('books.create');
+
+
+
+Route::post('/books', function (Request $request) {
+
     LibraryBook::create([
+
         'title' => $request->title,
+
         'author' => $request->author,
+
         'publisher' => $request->publisher,
+
         'publication_year' => $request->publication_year,
+
         'publication_place' => $request->publication_place,
+
         'book_number' => $request->book_number,
+
+        'edition_number' => $request->edition_number,
+
         'department_id' => $request->department_id,
+
         'shelf_location' => $request->shelf_location,
+
         'total_copies' => $request->total_copies,
+
         'available_copies' => $request->total_copies,
+
         'status' => 'available',
+
     ]);
 
     return back()->with('success', 'تم إضافة الكتاب بنجاح');
-     })->name('books.store');
-        Route::get('/digital-books', function () {
-    $books = Book::with('department')->latest()->get();
-    $departments = Department::where('status', 'active')->get();
 
-    return view('admin.digital-books.index', compact('books', 'departments'));
+})->name('books.store');
+
+       Route::get('/digital-books', function () {
+
+    $books = Book::with('department')
+        ->orderBy('title')
+        ->get();
+
+    return view('admin.digital-books.index', compact('books'));
+
 })->name('digital-books.index');
 
+
+Route::get('/digital-books/create', function () {
+
+    $departments = Department::where('status', 'active')
+        ->orderBy('name')
+        ->get();
+
+    return view('admin.digital-books.create', compact('departments'));
+
+})->name('digital-books.create');
+
 Route::post('/digital-books', function (Request $request) {
+
     $request->validate([
+
         'title' => 'required|string|max:255',
+
         'department_id' => 'required|exists:departments,id',
+
         'semester' => 'nullable|string|max:255',
+
         'author' => 'nullable|string|max:255',
+
         'description' => 'nullable|string',
+
         'file' => 'required|mimes:pdf|max:20480',
+
     ]);
 
-    $filePath = $request->file('file')->store('books', 'public');
+
+
+    $filePath = $request->file('file')
+        ->store('books', 'public');
+
+
 
     Book::create([
+
         'title' => $request->title,
+
         'author' => $request->author,
+
         'department_id' => $request->department_id,
+
         'semester' => $request->semester,
+
         'description' => $request->description,
+
         'file_path' => $filePath,
+
         'status' => 'published',
+
     ]);
 
+
+
     return back()->with('success', 'تم رفع الكتاب الرقمي بنجاح');
+
 })->name('digital-books.store');
-       
-      /* 
-        Route::get('/projects', function () {
-            return view('admin.projects.index');
-        })->name('projects.index');
 
-        Route::get('/students', function () {
-            return view('admin.students.index');
-        })->name('students.index');
 
-        Route::get('/admins', function () {
-            return view('admin.admins.index');
-        })->name('admins.index');
+Route::delete('/digital-books/{id}', function ($id) {
 
-        Route::get('/settings', function () {
-            return view('admin.settings.index');
-        })->name('settings.index');*/
-    });
+    $book = Book::findOrFail($id);
+
+
+
+    if ($book->file_path &&
+        file_exists(storage_path('app/public/' . $book->file_path))) {
+
+        unlink(storage_path('app/public/' . $book->file_path));
+    }
+
+
+
+    $book->delete();
+
+
+
+    return back()->with('success', 'تم حذف الكتاب الرقمي بنجاح');
+
+})->name('digital-books.destroy');     
+    }); });
 require __DIR__.'/auth.php';

@@ -22,6 +22,7 @@ class LibraryBook extends Model
     'total_copies',
     'available_copies',
     'status',
+    'edition_number',
 ];
 
     public function category()

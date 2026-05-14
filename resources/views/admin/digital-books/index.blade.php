@@ -141,63 +141,32 @@
         <h2>إدارة الكتب الرقمية PDF</h2>
     </div>
 
+    <div style="margin:20px 0;">
+
+        <a href="{{ route('admin.digital-books.create') }}">
+
+            <button
+                style="
+                    background:#e67e22;
+                    color:white;
+                    border:none;
+                    padding:12px 20px;
+                    border-radius:10px;
+                    cursor:pointer;
+                    font-weight:bold;
+                ">
+                + إضافة كتاب رقمي
+            </button>
+
+        </a>
+
     @if(session('success'))
         <div class="success-message">
             {{ session('success') }}
         </div>
     @endif
 
-    <div class="admin-form-card">
-        <form method="POST"
-              action="{{ route('admin.digital-books.store') }}"
-              enctype="multipart/form-data">
-
-            @csrf
-
-            <div class="admin-form-grid">
-
-                <div class="admin-field">
-                    <label>اسم الكتاب</label>
-                    <input type="text" name="title" required>
-                </div>
-
-                <div class="admin-field">
-                    <label>المؤلف</label>
-                    <input type="text" name="author">
-                </div>
-
-                <div class="admin-field">
-                    <label>القسم</label>
-                    <select name="department_id" required>
-                        <option value="">اختر القسم</option>
-                        @foreach($departments as $department)
-                            <option value="{{ $department->id }}">{{ $department->name }}</option>
-                        @endforeach
-                    </select>
-                </div>
-
-                <div class="admin-field">
-                    <label>الفصل الدراسي</label>
-                    <input type="text" name="semester" placeholder="مثال: خريف 2025">
-                </div>
-
-                <div class="admin-field full">
-                    <label>ملف PDF</label>
-                    <input type="file" name="file" accept="application/pdf" required>
-                </div>
-
-                <div class="admin-field full">
-                    <label>وصف الكتاب</label>
-                    <textarea name="description" rows="4"></textarea>
-                </div>
-
-            </div>
-
-            <button type="submit" class="admin-upload-btn">
-                رفع كتاب PDF
-            </button>
-        </form>
-    </div>
+   
 
     <div class="admin-table-card">
         @if($books->count())
@@ -209,6 +178,7 @@
                         <th>القسم</th>
                         <th>الفصل</th>
                         <th>الملف</th>
+                        <th>الإجراء</th>
                     </tr>
                 </thead>
 
@@ -230,6 +200,31 @@
                                     -
                                 @endif
                             </td>
+                            <td>
+
+    <form method="POST"
+          action="{{ route('admin.digital-books.destroy', $book->id) }}"
+          onsubmit="return confirm('هل أنت متأكد من حذف الكتاب؟')">
+
+        @csrf
+        @method('DELETE')
+
+        <button type="submit"
+            style="
+                background:#dc3545;
+                color:white;
+                border:none;
+                padding:8px 14px;
+                border-radius:8px;
+                cursor:pointer;
+                font-weight:bold;
+            ">
+            حذف
+        </button>
+
+    </form>
+
+</td>
                         </tr>
                     @endforeach
                 </tbody>

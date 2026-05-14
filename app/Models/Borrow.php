@@ -15,6 +15,9 @@ class Borrow extends Model
         'due_date',
         'return_date',
         'status',
+        'student_name',
+        'student_number',
+        'edition_number',
         'approved_by',
         'notes',
     ];
