@@ -39,42 +39,126 @@
     </div>
 </section>
 
-<section id="services" class="services-hub">
-    <h2 class="section-title">مركز الخدمات الرقمية</h2>
-
-    <div class="services-grid">
-        <div class="service-card">
-            <div class="card-icon">🏛️</div>
-            <h3>الأقسام الأكاديمية</h3>
-            <p>تصفح أقسام الجامعة والوصول إلى محتواها الأكاديمي.</p>
-            <a href="{{ route('guest.blocked') }}" class="card-btn">الدخول إلى الأقسام</a>
-        </div>
-
-        <div class="service-card">
-            <div class="card-icon">📖</div>
-            <h3>المناهج والخطط الدراسية</h3>
-            <p>الوصول السريع إلى المواد والمحتوى العلمي المقرر.</p>
-            <a href="{{ route('guest.blocked') }}" class="card-btn">عرض المناهج</a>
-        </div>
-
-        <div class="service-card">
-            <div class="card-icon">🎓</div>
-            <h3>مشاريع التخرج السابقة</h3>
-            <p>استلهم من أفكار وتوثيقات زملائك الخريجين.</p>
-            <a href="{{ route('guest.blocked') }}" class="card-btn">استكشف المشاريع</a>
-        </div>
-
-        <div class="service-card">
-            <div class="card-icon">📝</div>
-            <h3>أسئلة السنوات السابقة</h3>
-            <p>تدرب على نماذج الامتحانات لكل الأقسام.</p>
-            <a href="{{ route('guest.blocked') }}" class="card-btn">تحميل الأسئلة</a>
-        </div>
+<section class="stats-modern-section">
+    <div class="stats-header">
+        <span>نظرة عامة</span>
+        <h2>إحصائيات المكتبة الرقمية</h2>
+        <p>أرقام مباشرة من قاعدة البيانات تعكس محتوى المنصة وخدماتها الأكاديمية.</p>
     </div>
 
-    <div style="margin-top: 30px; text-align: center;">
-        <a href="{{ route('login') }}" class="btn-primary" style="margin-left: 10px;">تسجيل الدخول</a>
-        <a href="{{ route('register') }}" class="btn-secondary">إنشاء حساب</a>
+    <div class="stats-modern-grid">
+        <div class="stat-modern-card">
+            <div class="stat-info">
+                <span class="stat-icon">📚</span>
+                <h3 class="counter" data-target="{{ $stats['books'] ?? 0 }}">{{ $stats['books'] ?? 0 }}</h3>
+                <p>كتاب ومرجع أكاديمي</p>
+            </div>
+            <div class="stat-bar"><span style="height: 85%;"></span></div>
+        </div>
+
+        <div class="stat-modern-card">
+            <div class="stat-info">
+                <span class="stat-icon">🎓</span>
+                <h3 class="counter" data-target="{{ $stats['projects'] ?? 0 }}">{{ $stats['projects'] ?? 0 }}</h3>
+                <p>مشروع تخرج</p>
+            </div>
+            <div class="stat-bar"><span style="height: 65%;"></span></div>
+        </div>
+
+        <div class="stat-modern-card">
+            <div class="stat-info">
+                <span class="stat-icon">🏛️</span>
+                <h3 class="counter" data-target="{{ $stats['departments'] ?? 0 }}">{{ $stats['departments'] ?? 0 }}</h3>
+                <p>قسم أكاديمي</p>
+            </div>
+            <div class="stat-bar"><span style="height: 45%;"></span></div>
+        </div>
+
+        <div class="stat-modern-card">
+            <div class="stat-info">
+                <span class="stat-icon">🧾</span>
+                <h3 class="counter" data-target="{{ $stats['researches'] ?? 0 }}">{{ $stats['researches'] ?? 0 }}</h3>
+                <p>بحث أو مجلة علمية</p>
+            </div>
+            <div class="stat-bar"><span style="height: 55%;"></span></div>
+        </div>
     </div>
 </section>
+
+<section class="academic-showcase">
+    <div class="showcase-header">
+        <span>محتوى مميز</span>
+        <h2>نافذة سريعة على المكتبة الرقمية</h2>
+        <p>تعرف على أهم محتويات المنصة، وللوصول الكامل يرجى تسجيل الدخول.</p>
+    </div>
+
+    <div class="showcase-grid">
+
+        <div class="showcase-card downloads-card guest-info-card">
+            <h3>الكتب الرقمية</h3>
+
+            <div class="locked-preview-item">
+                <div class="mini-icon">📚</div>
+                <div>
+                    <strong>تعرف على آخر الكتب المضافة</strong>
+                    <p>كتب ومراجع رقمية يتم تنظيمها حسب الأقسام الأكاديمية.</p>
+                </div>
+            </div>
+
+            <div class="locked-preview-item">
+                <div class="mini-icon">⬇️</div>
+                <div>
+                    <strong>الأكثر تحميلًا</strong>
+                    <p>اكتشف الكتب الأكثر استخدامًا داخل المنصة بعد تسجيل الدخول.</p>
+                </div>
+            </div>
+
+            <a href="{{ route('guest.blocked') }}" class="showcase-btn guest-popup-btn">
+                استعراض الكتب
+            </a>
+        </div>
+
+        <div class="showcase-card journal-feature"
+             style="background-image: url('{{ asset('images/journals-bg.jpeg') }}');">
+            <div class="journal-overlay">
+                <h3>مجلات الجامعة</h3>
+                <p>تصفح الإصدارات العلمية والمجلات الأكاديمية الخاصة بالجامعة.</p>
+
+                <a href="{{ route('guest.blocked') }}" class="journal-btn guest-popup-btn">
+                    استعراض المجلات
+                </a>
+            </div>
+        </div>
+
+        <div class="showcase-card updates-card guest-info-card">
+            <h3>آخر الإضافات الأكاديمية</h3>
+
+            <div class="locked-preview-item">
+                <div class="mini-icon">🆕</div>
+                <div>
+                    <strong>محتوى جديد باستمرار</strong>
+                    <p>تحديثات مستمرة للكتب، المشاريع، الأسئلة، والمجلات.</p>
+                </div>
+            </div>
+
+            <div class="locked-preview-item">
+                <div class="mini-icon">🎓</div>
+                <div>
+                    <strong>مواد تخدم الطالب</strong>
+                    <p>كل إضافة تهدف لتسهيل الوصول للمحتوى الأكاديمي.</p>
+                </div>
+            </div>
+
+            <a href="{{ route('guest.blocked') }}" class="showcase-btn guest-popup-btn">
+                استكشف الإضافات
+            </a>
+        </div>
+
+    </div>
+</section>
+<div style="margin: 35px 0; text-align: center;">
+    <a href="{{ route('login') }}" class="btn-primary" style="margin-left: 10px;">تسجيل الدخول</a>
+    <a href="{{ route('register') }}" class="btn-secondary">إنشاء حساب</a>
+</div>
+
 @endsection

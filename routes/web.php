@@ -6,6 +6,9 @@ use App\Models\LibraryBook;
 use App\Models\User;
 use App\Models\Department;
 use App\Models\Curriculum;
+use App\Models\Project;
+use App\Models\PastExam;
+use App\Models\Research;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
@@ -49,18 +52,67 @@ Route::post('/borrows/{book}', [BorrowController::class, 'store'])
     ->name('borrows.store');
 
 Route::get('/', function () {
-    $departments = Department::where('status', 'active')->latest()->get();
+    $departments = Department::latest()->get();
+
+    $stats = [
+        'departments' => Department::count(),
+        'books' => Book::count(),
+        'projects' => Project::count(),
+        'exams' => PastExam::count(),
+        'researches' => Research::count(),
+        'borrows' => Borrow::count(),
+    ];
+
+    $latestBooks = Book::latest()->take(4)->get();
+    $latestProjects = Project::latest()->take(3)->get();
+    $latestResearches = Research::latest()->take(3)->get();
+
+    $mostDownloadedBooks = Book::orderByDesc('downloads_count')
+        ->take(3)
+        ->get();
+
+    $latestJournals = Research::latest()
+        ->take(3)
+        ->get();
 
     if (Auth::check()) {
         if (Auth::user()->role === 'admin') {
             return redirect()->route('admin.dashboard');
         }
 
-        return view('home', compact('departments'));
+        return view('home', compact(
+            'departments',
+            'stats',
+            'latestBooks',
+            'latestProjects',
+            'latestResearches',
+            'mostDownloadedBooks',
+            'latestJournals'
+        ));
     }
 
-    return view('home_guest', compact('departments'));
+    return view('home_guest', compact(
+        'departments',
+        'stats',
+        'latestBooks',
+        'latestProjects',
+        'latestResearches',
+        'mostDownloadedBooks',
+        'latestJournals'
+    ));
 })->name('home');
+
+Route::get('/journals', function () {
+    $journals = Research::latest()->paginate(9);
+
+    return view('journals.index', compact('journals'));
+})->name('journals');
+
+Route::get('/about', function () {
+    $departments = Department::where('status', 'active')->get();
+
+    return view('about', compact('departments'));
+})->name('about');
 
 Route::get('/guest-blocked', function () {
     return redirect('/')->with('auth_required', 'يجب تسجيل الدخول أو إنشاء حساب أولاً');
