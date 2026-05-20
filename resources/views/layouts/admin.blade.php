@@ -237,6 +237,7 @@
         <a href="{{ route('admin.past-exams.index')}}">أسئلة السنوات</a>
         <a href="{{ route('admin.projects.index')}}">مشاريع التخرج</a>
         <a href="{{ route('admin.researches.index')}}">البحوث العلمية</a>
+        <a href="{{ route('admin.journals.index') }}">المجلات</a>
         <a href="{{ route('admin.educational-channels.index')}}">القنوات التعليمية</a>
 
 

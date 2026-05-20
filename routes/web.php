@@ -9,6 +9,7 @@ use App\Models\Curriculum;
 use App\Models\Project;
 use App\Models\PastExam;
 use App\Models\Research;
+use App\Models\Journal;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
@@ -24,6 +25,7 @@ use App\Http\Controllers\BorrowController;
 use App\Http\Controllers\Admin\AdminBorrowController;
 use App\Http\Controllers\Admin\CurriculumController;
 use App\Http\Controllers\CurriculumPageController;
+use App\Http\Controllers\Admin\JournalController;
 
 
 
@@ -103,7 +105,7 @@ Route::get('/', function () {
 })->name('home');
 
 Route::get('/journals', function () {
-    $journals = Research::latest()->paginate(9);
+    $journals = Journal::latest()->paginate(9);
 
     return view('journals.index', compact('journals'));
 })->name('journals');
@@ -364,6 +366,18 @@ Route::post('/books', function (Request $request) {
     return view('admin.digital-books.index', compact('books'));
 
 })->name('digital-books.index');
+
+Route::get('/journals', [JournalController::class,'index'])
+        ->name('journals.index');
+
+        Route::get('/journals/create', [JournalController::class,'create'])
+        ->name('journals.create');
+
+    Route::post('/journals/store', [JournalController::class,'store'])
+        ->name('journals.store');
+
+    Route::delete('/journals/{id}', [JournalController::class,'destroy'])
+        ->name('journals.destroy');
 
 
 Route::get('/digital-books/create', function () {

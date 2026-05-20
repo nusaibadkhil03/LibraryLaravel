@@ -26,50 +26,55 @@ class CurriculumController extends Controller
             ->latest()
             ->get();
 
+        $examSchedules = Curriculum::where('type', 'exam')->latest()->get();
+
         $departments = Department::where('status', 'active')->get();
 
         return view('admin.curriculum.index', compact(
-            'schedules',
-            'plans',
-            'calendars',
-            'departments'
-        ));
+    'schedules',
+    'plans',
+    'calendars',
+    'examSchedules',
+    'departments'
+));
     }
 
     public function store(Request $request)
-    {
-        $request->validate([
-            'type' => 'required|in:schedule,plan,calendar',
-            'department_id' => 'nullable|exists:departments,id',
-            'image' => 'required|image',
-        ]);
+{
+    $request->validate([
+        'type' => 'required|in:schedule,plan,calendar,exam',
+        'department_id' => 'nullable|exists:departments,id',
+        'image' => 'required|image',
+    ]);
 
-        if ($request->type !== 'calendar' && !$request->department_id) {
-            return back()->with('error', 'يجب اختيار القسم للجداول والخطط الدراسية');
-        }
-
-        $query = Curriculum::where('type', $request->type);
-
-        if ($request->type !== 'calendar') {
-            $query->where('department_id', $request->department_id);
-        }
-
-        $count = $query->count();
-
-        if ($count >= 10) {
-            return back()->with('error', 'وصلت للحد الأقصى (10 صور)');
-        }
-
-        $path = $request->file('image')->store('curriculum', 'public');
-
-        Curriculum::create([
-            'type' => $request->type,
-            'department_id' => $request->type === 'calendar' ? null : $request->department_id,
-            'image' => $path,
-        ]);
-
-        return back()->with('success', 'تم رفع الصورة بنجاح');
+    if (!in_array($request->type, ['calendar']) && !$request->department_id) {
+        return back()->with('error', 'يجب اختيار القسم');
     }
+
+    $query = Curriculum::where('type', $request->type);
+
+    if (!in_array($request->type, ['calendar'])) {
+        $query->where('department_id', $request->department_id);
+    }
+
+    $count = $query->count();
+
+    if ($count >= 10) {
+        return back()->with('error', 'وصلت للحد الأقصى (10 صور)');
+    }
+
+    $path = $request->file('image')->store('curriculum', 'public');
+
+    Curriculum::create([
+        'type' => $request->type,
+        'department_id' => in_array($request->type, ['calendar'])
+            ? null
+            : $request->department_id,
+        'image' => $path,
+    ]);
+
+    return back()->with('success', 'تم رفع الصورة بنجاح');
+}
 
     public function destroy($id)
     {

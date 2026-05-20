@@ -15,6 +15,7 @@ class Research extends Model
         'academic_year',
         'publisher',
         'description',
+        'publication_year',
         'file_path',
         'status',
     ];

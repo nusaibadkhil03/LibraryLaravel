@@ -33,12 +33,20 @@ class CurriculumPageController extends Controller
             ->latest()
             ->get();
 
-        return view('curriculum.index', compact(
-            'departments',
-            'selectedDepartment',
-            'schedules',
-            'plans',
-            'calendars'
-        ));
+            $examSchedules = Curriculum::where('type', 'exam')
+    ->when($selectedDepartment, function ($query) use ($selectedDepartment) {
+        $query->where('department_id', $selectedDepartment);
+    })
+    ->latest()
+    ->get();
+
+       return view('curriculum.index', compact(
+    'schedules',
+    'plans',
+    'calendars',
+    'examSchedules',
+    'departments',
+    'selectedDepartment'
+));
     }
 }

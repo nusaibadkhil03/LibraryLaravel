@@ -19,6 +19,7 @@
         <option value="schedule">الجداول الدراسية</option>
         <option value="plan">الخطة الدراسية</option>
         <option value="calendar">التقويم الأكاديمي</option>
+        <option value="exam">جدول الامتحانات</option>
     </select>
 
     <select name="department_id" id="department_id">
@@ -71,6 +72,29 @@
         <form method="POST" action="{{ route('admin.curriculum.destroy', $item->id) }}">
             @csrf
             @method('DELETE')
+            <button type="submit">حذف</button>
+        </form>
+    </div>
+
+    
+@endforeach
+
+<h3>جداول الامتحانات</h3>
+
+@foreach($examSchedules as $item)
+    <div>
+        <img src="{{ asset('storage/'.$item->image) }}" width="120">
+
+        <p>
+            القسم:
+            {{ $item->department->name ?? 'غير محدد' }}
+        </p>
+
+        <form method="POST"
+              action="{{ route('admin.curriculum.destroy', $item->id) }}">
+            @csrf
+            @method('DELETE')
+
             <button type="submit">حذف</button>
         </form>
     </div>

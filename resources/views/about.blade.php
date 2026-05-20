@@ -92,7 +92,7 @@
                 text.style.opacity = 1;
             }, 500);
 
-        }, 5000);
+        }, 4000);
     });
 </script>
 

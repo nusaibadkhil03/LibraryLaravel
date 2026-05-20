@@ -29,7 +29,7 @@ class ResearchController extends Controller
             'department_id' => 'required|exists:departments,id',
             'author' => 'nullable|string|max:255',
             'publisher' => 'nullable|string|max:255',
-            'academic_year' => 'nullable|string|max:50',
+            'publication_year' => 'nullable|string|max:50',
             'description' => 'nullable|string',
             'file' => 'required|file|mimes:pdf|max:20480',
         ]);
@@ -41,7 +41,7 @@ class ResearchController extends Controller
             'department_id' => $request->department_id,
             'author' => $request->author,
             'publisher' => $request->publisher,
-            'academic_year' => $request->academic_year,
+            'publication_year' => $request->publication_year,
             'description' => $request->description,
             'file_path' => $filePath,
             'status' => 'published',

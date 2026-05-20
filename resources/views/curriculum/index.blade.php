@@ -34,6 +34,10 @@
             <span>📆</span>
             التقويم الأكاديمي
         </button>
+        <button type="button" class="tab-btn" onclick="showSection('exams', this)">
+            <span>📝</span>
+             جدول الامتحانات
+            </button>
     </div>
 
     <div id="schedules" class="section-box active">
@@ -96,6 +100,31 @@
             <p class="empty-msg">لا يوجد تقويم أكاديمي حالياً.</p>
         @endif
     </div>
+    <div id="exams" class="section-box">
+    <h3 class="section-title">جداول الامتحانات</h3>
+
+    @if(!$selectedDepartment)
+        <p class="empty-msg">يرجى اختيار القسم لعرض جداول الامتحانات.</p>
+
+    @elseif($examSchedules->count())
+        <div class="grid-box">
+            @foreach($examSchedules as $item)
+                <div class="image-card">
+                    <img src="{{ asset('storage/' . $item->image) }}" alt="جدول امتحانات">
+
+                    <a class="download-btn"
+                       href="{{ asset('storage/' . $item->image) }}"
+                       download>
+                        تحميل الجدول
+                    </a>
+                </div>
+            @endforeach
+        </div>
+
+    @else
+        <p class="empty-msg">لا توجد جداول امتحانات لهذا القسم حالياً.</p>
+    @endif
+</div>
 
 </div>
 
