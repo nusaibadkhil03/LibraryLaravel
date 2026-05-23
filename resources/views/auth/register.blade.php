@@ -46,6 +46,43 @@
         </p>
     @enderror
 
+    <label for="student_number">رقم القيد</label>
+<input
+    id="student_number"
+    type="text"
+    name="student_number"
+    value="{{ old('student_number') }}"
+    placeholder="أدخل رقم القيد"
+    required
+>
+@error('student_number')
+    <p style="color: red; font-size: 13px; margin-top: -12px; margin-bottom: 15px;">
+        {{ $message }}
+    </p>
+@enderror
+
+<label for="department_id">القسم</label>
+<select
+    id="department_id"
+    name="department_id"
+    required
+    style="width:100%; padding:12px; margin-bottom:18px; border-radius:10px; border:1px solid #ddd;"
+>
+    <option value="">اختر القسم</option>
+
+    @foreach($departments as $department)
+        <option value="{{ $department->id }}"
+            {{ old('department_id') == $department->id ? 'selected' : '' }}>
+            {{ $department->name }}
+        </option>
+    @endforeach
+</select>
+@error('department_id')
+    <p style="color: red; font-size: 13px; margin-top: -12px; margin-bottom: 15px;">
+        {{ $message }}
+    </p>
+@enderror
+
     <label for="password">كلمة المرور</label>
     <input
         id="password"

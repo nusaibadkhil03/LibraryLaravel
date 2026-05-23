@@ -7,10 +7,12 @@ use Illuminate\Database\Eloquent\Model;
 class Journal extends Model
 {
     protected $fillable = [
-    'title',
-    'publication_year',
-    'publisher',
-    'description',
-    'file_path'
-];
+        'title',
+        'issue_number',
+        'publication_year',
+        'publication_date',
+        'publisher',
+        'description',
+        'file_path',
+    ];
 }

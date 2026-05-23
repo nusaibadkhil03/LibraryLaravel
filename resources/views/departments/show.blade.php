@@ -32,8 +32,8 @@
         </button>
 
         <button class="item" onclick="loadDepartmentContent('researches')">
-          <span class="item-icon">🔬</span>
-         <p>البحوث العلمية</p>
+            <span class="item-icon">🔬</span>
+            <p>البحوث العلمية</p>
         </button>
 
         <button class="item" onclick="loadDepartmentContent('projects')">
@@ -41,6 +41,20 @@
             <p>مشاريع تخرج</p>
         </button>
     </section>
+
+    <div class="department-toolbar">
+        <div class="sort-box">
+            <label>ترتيب المحتوى:</label>
+
+            <select id="contentSortSelect" onchange="sortContentItems(this.value)">
+                <option value="default">الترتيب الافتراضي</option>
+                <option value="newest">الأحدث</option>
+                <option value="oldest">الأقدم</option>
+                <option value="az">الاسم (أ - ي)</option>
+                <option value="za">الاسم (ي - أ)</option>
+            </select>
+        </div>
+    </div>
 
     <section id="department-content-area" class="display-screen">
         @include('departments.partials.file-list', [
@@ -72,10 +86,55 @@ function loadDepartmentContent(type) {
         .then(response => response.text())
         .then(html => {
             contentArea.innerHTML = html;
+
+            const select = document.getElementById('contentSortSelect');
+            if (select) {
+                select.value = 'default';
+            }
         })
         .catch(() => {
             contentArea.innerHTML = '<p class="empty-message">حدث خطأ أثناء تحميل المحتوى</p>';
         });
+}
+
+function sortContentItems(type) {
+    const list = document.querySelector('#department-content-area .content-list');
+    if (!list) return;
+
+    const items = Array.from(list.querySelectorAll('.content-row'));
+
+    items.sort((a, b) => {
+        const titleA = (a.dataset.title || '').trim();
+        const titleB = (b.dataset.title || '').trim();
+
+        const yearA = extractYear(a.dataset.year);
+        const yearB = extractYear(b.dataset.year);
+
+        if (type === 'newest') {
+            return yearB - yearA;
+        }
+
+        if (type === 'oldest') {
+            return yearA - yearB;
+        }
+
+        if (type === 'az') {
+            return titleA.localeCompare(titleB, 'ar');
+        }
+
+        if (type === 'za') {
+            return titleB.localeCompare(titleA, 'ar');
+        }
+
+        return 0;
+    });
+
+    items.forEach(item => list.appendChild(item));
+}
+
+function extractYear(value) {
+    const match = String(value || '').match(/\d{4}/);
+    return match ? parseInt(match[0]) : 0;
 }
 
 document.addEventListener('DOMContentLoaded', function () {

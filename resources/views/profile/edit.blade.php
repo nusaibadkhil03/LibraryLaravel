@@ -38,6 +38,18 @@
             <p class="error">{{ $message }}</p>
         @enderror
 
+        <label>رقم القيد</label>
+        <input type="text"
+               value="{{ $user->student_number ?? 'غير محدد' }}"
+               readonly
+               style="background:#f8f8f8; cursor:not-allowed;">
+
+        <label>القسم</label>
+        <input type="text"
+               value="{{ $user->department->name ?? 'غير محدد' }}"
+               readonly
+               style="background:#f8f8f8; cursor:not-allowed;">
+
         <button type="submit" class="login-btn">حفظ التعديلات</button>
     </form>
 </div>

@@ -26,15 +26,23 @@ use App\Http\Controllers\Admin\AdminBorrowController;
 use App\Http\Controllers\Admin\CurriculumController;
 use App\Http\Controllers\CurriculumPageController;
 use App\Http\Controllers\Admin\JournalController;
+use App\Http\Controllers\DepartmentController;
+use App\Http\Controllers\Admin\SyllabusController;
+use App\Http\Controllers\DepartmentContentController;
 
 
+
+Route::get('/plain', function () {
+    return '<h1>Plain HTML works</h1>';
+});
+
+Route::get('/blade', function () {
+    return view('test');
+});
 
 
 Route::get('/curriculum', [CurriculumPageController::class, 'index'])
     ->name('curriculum');
-use App\Http\Controllers\DepartmentController;
-use App\Http\Controllers\Admin\SyllabusController;
-use App\Http\Controllers\DepartmentContentController;
 
 Route::get('/search', [SearchController::class, 'index'])->name('search');
 Route::get('/live-search', [SearchController::class, 'live'])->name('live.search');
@@ -53,6 +61,7 @@ Route::get('/borrow', function () {
 Route::post('/borrows/{book}', [BorrowController::class, 'store'])
     ->name('borrows.store');
 
+ 
 Route::get('/', function () {
     $departments = Department::latest()->get();
 
@@ -69,11 +78,10 @@ Route::get('/', function () {
     $latestProjects = Project::latest()->take(3)->get();
     $latestResearches = Research::latest()->take(3)->get();
 
-    $mostDownloadedBooks = Book::orderByDesc('downloads_count')
-        ->take(3)
-        ->get();
+    $mostDownloadedBooks = collect();
 
-    $latestJournals = Research::latest()
+    // بدل Research لازم Journal
+    $latestJournals = Journal::latest()
         ->take(3)
         ->get();
 
@@ -103,6 +111,8 @@ Route::get('/', function () {
         'latestJournals'
     ));
 })->name('home');
+
+
 
 Route::get('/journals', function () {
     $journals = Journal::latest()->paginate(9);
@@ -461,5 +471,6 @@ Route::delete('/digital-books/{id}', function ($id) {
     return back()->with('success', 'تم حذف الكتاب الرقمي بنجاح');
 
 })->name('digital-books.destroy');     
-    }); });
+    });
+     });
 require __DIR__.'/auth.php';

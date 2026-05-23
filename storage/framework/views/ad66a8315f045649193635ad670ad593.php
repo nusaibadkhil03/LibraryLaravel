@@ -1,0 +1,170 @@
+
+
+<?php $__env->startSection('content'); ?>
+
+<?php if(session('auth_required')): ?>
+    <div id="auth-popup" style="
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background: #fff3cd;
+        color: #856404;
+        padding: 14px 18px;
+        border-radius: 10px;
+        border: 1px solid #ffeeba;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        z-index: 9999;
+        font-weight: bold;
+    ">
+        <?php echo e(session('auth_required')); ?>
+
+    </div>
+
+    <script>
+        setTimeout(() => {
+            const popup = document.getElementById('auth-popup');
+            if (popup) popup.style.display = 'none';
+        }, 3000);
+    </script>
+<?php endif; ?>
+
+<section class="welcome-banner" dir="rtl">
+    <div class="welcome-text" style="text-align:right;">
+        <h1>مرحباً بك في مكتبة الجامعة الليبية الإلكترونية</h1>
+        <p>
+            بوابتك الرقمية الشاملة للمراجع الأكاديمية، المناهج الدراسية، المجلات العلمية، وتوثيقات مشاريع التخرج.
+        </p>
+
+        <div class="action-buttons" style="justify-content:flex-start;">
+            <a href="#services" class="btn-primary">استكشف الخدمات</a>
+            <a href="<?php echo e(route('about')); ?>" class="btn-secondary">عن الجامعة</a>
+        </div>
+    </div>
+</section>
+
+<section class="stats-modern-section">
+    <div class="stats-header">
+        <span>نظرة عامة</span>
+        <h2>إحصائيات المكتبة الرقمية</h2>
+        <p>أرقام مباشرة من قاعدة البيانات تعكس محتوى المنصة وخدماتها الأكاديمية.</p>
+    </div>
+
+    <div class="stats-modern-grid">
+        <div class="stat-modern-card">
+            <div class="stat-info">
+                <span class="stat-icon">📚</span>
+                <h3><?php echo e($stats['books'] ?? 0); ?></h3>
+                <p>كتاب ومرجع أكاديمي</p>
+            </div>
+            <div class="stat-bar"><span style="height:85%;"></span></div>
+        </div>
+
+        <div class="stat-modern-card">
+            <div class="stat-info">
+                <span class="stat-icon">🎓</span>
+                <h3><?php echo e($stats['projects'] ?? 0); ?></h3>
+                <p>مشروع تخرج</p>
+            </div>
+            <div class="stat-bar"><span style="height:65%;"></span></div>
+        </div>
+
+        <div class="stat-modern-card">
+            <div class="stat-info">
+                <span class="stat-icon">🏛️</span>
+                <h3><?php echo e($stats['departments'] ?? 0); ?></h3>
+                <p>قسم أكاديمي</p>
+            </div>
+            <div class="stat-bar"><span style="height:45%;"></span></div>
+        </div>
+
+        <div class="stat-modern-card">
+            <div class="stat-info">
+                <span class="stat-icon">🧾</span>
+                <h3><?php echo e($stats['researches'] ?? 0); ?></h3>
+                <p>بحث أو مجلة علمية</p>
+            </div>
+            <div class="stat-bar"><span style="height:55%;"></span></div>
+        </div>
+    </div>
+</section>
+
+<section class="academic-showcase" id="services">
+    <div class="showcase-header">
+        <span>محتوى مميز</span>
+        <h2>نافذة سريعة على المكتبة الرقمية</h2>
+        <p>يمكن للضيف فتح صفحة عن الجامعة والمجلات، وباقي الخدمات تحتاج تسجيل دخول.</p>
+    </div>
+
+    <div class="showcase-grid">
+
+        <div class="showcase-card downloads-card guest-info-card">
+            <h3>الكتب الرقمية</h3>
+
+            <div class="locked-preview-item">
+                <div class="mini-icon">📚</div>
+                <div>
+                    <strong>كتب ومراجع أكاديمية</strong>
+                    <p>كتب ومراجع رقمية يتم تنظيمها حسب الأقسام الأكاديمية.</p>
+                </div>
+            </div>
+
+            <div class="locked-preview-item">
+                <div class="mini-icon">🔒</div>
+                <div>
+                    <strong>تحتاج تسجيل الدخول</strong>
+                    <p>استعراض وتحميل الكتب متاح للطلاب المسجلين فقط.</p>
+                </div>
+            </div>
+
+            <a href="<?php echo e(route('guest.blocked')); ?>" class="showcase-btn guest-popup-btn">
+                استعراض الكتب
+            </a>
+        </div>
+
+        <div class="showcase-card journal-feature"
+             style="background-image: url('<?php echo e(asset('images/journals-bg.jpeg')); ?>');">
+            <div class="journal-overlay">
+                <div class="journal-icon">📘</div>
+                <h3>مجلات الجامعة</h3>
+                <p>تصفح الإصدارات العلمية والمجلات الأكاديمية الخاصة بالجامعة.</p>
+
+                <a href="<?php echo e(route('journals')); ?>" class="journal-btn">
+                    استعراض المجلات
+                </a>
+            </div>
+        </div>
+
+        <div class="showcase-card updates-card guest-info-card">
+            <h3>عن الجامعة</h3>
+
+            <div class="locked-preview-item">
+                <div class="mini-icon">🏛️</div>
+                <div>
+                    <strong>معلومات عامة</strong>
+                    <p>تعرف على الجامعة ورؤيتها ورسالتها الأكاديمية.</p>
+                </div>
+            </div>
+
+            <div class="locked-preview-item">
+                <div class="mini-icon">✅</div>
+                <div>
+                    <strong>متاحة للضيف</strong>
+                    <p>يمكنك فتح صفحة عن الجامعة بدون تسجيل دخول.</p>
+                </div>
+            </div>
+
+            <a href="<?php echo e(route('about')); ?>" class="showcase-btn">
+                فتح صفحة عن الجامعة
+            </a>
+        </div>
+
+    </div>
+</section>
+
+<div style="margin:35px 0; text-align:center;">
+    <a href="<?php echo e(route('login')); ?>" class="btn-primary" style="margin-left:10px;">تسجيل الدخول</a>
+    <a href="<?php echo e(route('register')); ?>" class="btn-secondary">إنشاء حساب</a>
+</div>
+
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('layouts.main', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\course laravel\LibraryLaravel\resources\views/home_guest.blade.php ENDPATH**/ ?>

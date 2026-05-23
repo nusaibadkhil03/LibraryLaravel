@@ -27,14 +27,16 @@
     </script>
 @endif
 
-<section class="welcome-banner">
-    <div class="welcome-text">
+<section class="welcome-banner" dir="rtl">
+    <div class="welcome-text" style="text-align:right;">
         <h1>مرحباً بك في مكتبة الجامعة الليبية الإلكترونية</h1>
-        <p>بوابتك الرقمية الشاملة للمراجع الأكاديمية، المناهج الدراسية، وتوثيقات مشاريع التخرج.</p>
+        <p>
+            بوابتك الرقمية الشاملة للمراجع الأكاديمية، المناهج الدراسية، المجلات العلمية، وتوثيقات مشاريع التخرج.
+        </p>
 
-        <div class="action-buttons">
+        <div class="action-buttons" style="justify-content:flex-start;">
             <a href="#services" class="btn-primary">استكشف الخدمات</a>
-            <a href="{{ route('guest.blocked') }}" class="btn-secondary">استعارة كتاب ورقي</a>
+            <a href="{{ route('about') }}" class="btn-secondary">عن الجامعة</a>
         </div>
     </div>
 </section>
@@ -50,46 +52,46 @@
         <div class="stat-modern-card">
             <div class="stat-info">
                 <span class="stat-icon">📚</span>
-                <h3 class="counter" data-target="{{ $stats['books'] ?? 0 }}">{{ $stats['books'] ?? 0 }}</h3>
+                <h3>{{ $stats['books'] ?? 0 }}</h3>
                 <p>كتاب ومرجع أكاديمي</p>
             </div>
-            <div class="stat-bar"><span style="height: 85%;"></span></div>
+            <div class="stat-bar"><span style="height:85%;"></span></div>
         </div>
 
         <div class="stat-modern-card">
             <div class="stat-info">
                 <span class="stat-icon">🎓</span>
-                <h3 class="counter" data-target="{{ $stats['projects'] ?? 0 }}">{{ $stats['projects'] ?? 0 }}</h3>
+                <h3>{{ $stats['projects'] ?? 0 }}</h3>
                 <p>مشروع تخرج</p>
             </div>
-            <div class="stat-bar"><span style="height: 65%;"></span></div>
+            <div class="stat-bar"><span style="height:65%;"></span></div>
         </div>
 
         <div class="stat-modern-card">
             <div class="stat-info">
                 <span class="stat-icon">🏛️</span>
-                <h3 class="counter" data-target="{{ $stats['departments'] ?? 0 }}">{{ $stats['departments'] ?? 0 }}</h3>
+                <h3>{{ $stats['departments'] ?? 0 }}</h3>
                 <p>قسم أكاديمي</p>
             </div>
-            <div class="stat-bar"><span style="height: 45%;"></span></div>
+            <div class="stat-bar"><span style="height:45%;"></span></div>
         </div>
 
         <div class="stat-modern-card">
             <div class="stat-info">
                 <span class="stat-icon">🧾</span>
-                <h3 class="counter" data-target="{{ $stats['researches'] ?? 0 }}">{{ $stats['researches'] ?? 0 }}</h3>
+                <h3>{{ $stats['researches'] ?? 0 }}</h3>
                 <p>بحث أو مجلة علمية</p>
             </div>
-            <div class="stat-bar"><span style="height: 55%;"></span></div>
+            <div class="stat-bar"><span style="height:55%;"></span></div>
         </div>
     </div>
 </section>
 
-<section class="academic-showcase">
+<section class="academic-showcase" id="services">
     <div class="showcase-header">
         <span>محتوى مميز</span>
         <h2>نافذة سريعة على المكتبة الرقمية</h2>
-        <p>تعرف على أهم محتويات المنصة، وللوصول الكامل يرجى تسجيل الدخول.</p>
+        <p>يمكن للضيف فتح صفحة عن الجامعة والمجلات، وباقي الخدمات تحتاج تسجيل دخول.</p>
     </div>
 
     <div class="showcase-grid">
@@ -100,16 +102,16 @@
             <div class="locked-preview-item">
                 <div class="mini-icon">📚</div>
                 <div>
-                    <strong>تعرف على آخر الكتب المضافة</strong>
+                    <strong>كتب ومراجع أكاديمية</strong>
                     <p>كتب ومراجع رقمية يتم تنظيمها حسب الأقسام الأكاديمية.</p>
                 </div>
             </div>
 
             <div class="locked-preview-item">
-                <div class="mini-icon">⬇️</div>
+                <div class="mini-icon">🔒</div>
                 <div>
-                    <strong>الأكثر تحميلًا</strong>
-                    <p>اكتشف الكتب الأكثر استخدامًا داخل المنصة بعد تسجيل الدخول.</p>
+                    <strong>تحتاج تسجيل الدخول</strong>
+                    <p>استعراض وتحميل الكتب متاح للطلاب المسجلين فقط.</p>
                 </div>
             </div>
 
@@ -121,43 +123,45 @@
         <div class="showcase-card journal-feature"
              style="background-image: url('{{ asset('images/journals-bg.jpeg') }}');">
             <div class="journal-overlay">
+                <div class="journal-icon">📘</div>
                 <h3>مجلات الجامعة</h3>
                 <p>تصفح الإصدارات العلمية والمجلات الأكاديمية الخاصة بالجامعة.</p>
 
-                <a href="{{ route('guest.blocked') }}" class="journal-btn guest-popup-btn">
+                <a href="{{ route('journals') }}" class="journal-btn">
                     استعراض المجلات
                 </a>
             </div>
         </div>
 
         <div class="showcase-card updates-card guest-info-card">
-            <h3>آخر الإضافات الأكاديمية</h3>
+            <h3>عن الجامعة</h3>
 
             <div class="locked-preview-item">
-                <div class="mini-icon">🆕</div>
+                <div class="mini-icon">🏛️</div>
                 <div>
-                    <strong>محتوى جديد باستمرار</strong>
-                    <p>تحديثات مستمرة للكتب، المشاريع، الأسئلة، والمجلات.</p>
+                    <strong>معلومات عامة</strong>
+                    <p>تعرف على الجامعة ورؤيتها ورسالتها الأكاديمية.</p>
                 </div>
             </div>
 
             <div class="locked-preview-item">
-                <div class="mini-icon">🎓</div>
+                <div class="mini-icon">✅</div>
                 <div>
-                    <strong>مواد تخدم الطالب</strong>
-                    <p>كل إضافة تهدف لتسهيل الوصول للمحتوى الأكاديمي.</p>
+                    <strong>متاحة للضيف</strong>
+                    <p>يمكنك فتح صفحة عن الجامعة بدون تسجيل دخول.</p>
                 </div>
             </div>
 
-            <a href="{{ route('guest.blocked') }}" class="showcase-btn guest-popup-btn">
-                استكشف الإضافات
+            <a href="{{ route('about') }}" class="showcase-btn">
+                فتح صفحة عن الجامعة
             </a>
         </div>
 
     </div>
 </section>
-<div style="margin: 35px 0; text-align: center;">
-    <a href="{{ route('login') }}" class="btn-primary" style="margin-left: 10px;">تسجيل الدخول</a>
+
+<div style="margin:35px 0; text-align:center;">
+    <a href="{{ route('login') }}" class="btn-primary" style="margin-left:10px;">تسجيل الدخول</a>
     <a href="{{ route('register') }}" class="btn-secondary">إنشاء حساب</a>
 </div>
 

@@ -326,6 +326,75 @@ footer {
     list-style: none;
 }
 
+/*تعديلات للفوتر */
+.main-footer {
+    background: #f97316;
+    color: #fff;
+    padding: 45px 20px 15px;
+    margin-top: 60px;
+    direction: rtl;
+}
+
+.footer-container {
+    max-width: 1200px;
+    margin: auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 35px;
+}
+
+.footer-section h3 {
+    font-size: 20px;
+    margin-bottom: 18px;
+    color: #fff;
+}
+
+.footer-section p {
+    line-height: 1.8;
+    color: #fff7ed;
+    font-size: 15px;
+}
+
+.footer-section ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.footer-section ul li {
+    margin-bottom: 11px;
+}
+
+.footer-section ul li a {
+    color: #fff7ed;
+    text-decoration: none;
+    transition: .3s;
+}
+
+.footer-section ul li a:hover {
+    color: #1f2937;
+    padding-right: 6px;
+}
+
+.footer-bottom {
+    border-top: 1px solid rgba(255,255,255,.25);
+    margin-top: 35px;
+    padding-top: 15px;
+    text-align: center;
+    color: #fff7ed;
+    font-size: 14px;
+}
+.footer-contact a {
+    color: #fff7ed;
+    text-decoration: none;
+    transition: .3s;
+}
+
+.footer-contact a:hover {
+    color: #ffffff;
+    text-decoration: underline;
+}
+
 /* إعدادات التجاوب للهواتف والأجهزة اللوحية */
 @media screen and (max-width: 768px) {
     
@@ -429,25 +498,25 @@ footer {
 }
 
 .display-screen {
-    margin-top: 30px;
+    margin-top: 12px;
     border: 2px solid #e67e22;
     border-radius: 15px;
     min-height: 250px;
     background: white;
-    padding: 15px 20px;
+    padding: 25px;
     color: #333;
 }
 
 .content-title {
     text-align: center;
     color: #333;
-    margin-bottom: 20px;
+    margin-bottom: 22px;
 }
 
 .content-list {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
 }
 
 .content-row {
@@ -455,29 +524,35 @@ footer {
     justify-content: space-between;
     align-items: center;
     gap: 15px;
-    background: #fafafa;
-    border: 1px solid #eee;
-    border-radius: 14px;
-    padding: 10px 15px;
+    background: #fff;
+    border: 1px solid #ffedd5;
+    border-radius: 16px;
+    padding: 16px 18px;
+    box-shadow: 0 8px 22px rgba(0,0,0,.05);
+    transition: .3s ease;
 }
+
 .content-row:hover {
-    background: #fdf3ea;
+    background: #fff7ed;
     border-color: #e67e22;
+    transform: translateY(-3px);
 }
 
 .content-info {
     text-align: right;
+    flex: 1;
 }
 
 .content-info strong {
     color: #333;
-    font-size: 0.95rem;
+    font-size: 1rem;
 }
 
 .content-info p {
-    margin: 5px 0 0;
+    margin: 6px 0 0;
     color: #777;
-    font-size: 0.85rem;
+    font-size: 0.88rem;
+    line-height: 1.6;
 }
 
 .content-action {
@@ -486,11 +561,13 @@ footer {
 
 .download-btn {
     background: #e67e22;
-    color: white;
-    padding: 6px 14px;
+    color: white !important;
+    padding: 9px 16px;
     border-radius: 20px;
     text-decoration: none;
-    font-size: 0.85rem;
+    font-size: 0.88rem;
+    font-weight: bold;
+    display: inline-block;
 }
 
 .download-btn:hover {
@@ -501,6 +578,93 @@ footer {
 .empty-message {
     text-align: center;
     color: #999;
+    background: #fff7ed;
+    padding: 16px;
+    border-radius: 14px;
+}
+.content-filter-bar {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.content-filter-bar label {
+    font-weight: bold;
+    color: #1f2937;
+}
+
+.content-filter-bar select {
+    padding: 10px 15px;
+    border: 1px solid #f3c194;
+    border-radius: 12px;
+    background: #fff7ed;
+    color: #333;
+    font-family: inherit;
+    cursor: pointer;
+}
+/* شريط الترتيب */
+
+.department-toolbar {
+    width: 100%;
+    display: flex;
+    justify-content: flex-start;
+    margin: 20px 0 12px;
+    text-align:right;
+}
+
+.sort-box {
+    margin-right:auto;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    float:right;
+    margin-left:auto;
+}
+
+.sort-box label {
+    font-weight: 800;
+    color: #1f2937;
+    font-size: 15px;
+}
+
+.sort-box select {
+    min-width: 230px;
+    padding: 12px 16px;
+    border: 2px solid #e67e22;
+    border-radius: 14px;
+    background: #fff;
+    color: #333;
+    font-family: inherit;
+    font-weight: 700;
+    cursor: pointer;
+    transition: .3s ease;
+}
+
+.sort-box select:focus {
+    outline: none;
+    box-shadow: 0 0 0 4px rgba(230,126,34,.18);
+}
+
+.display-screen {
+    margin-top: 12px;
+}
+
+@media (max-width: 900px) {
+    .content-list {
+        grid-template-columns: 1fr;
+    }
+
+    .content-row {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .download-btn {
+        display: block;
+        text-align: center;
+    }
 }
 
 @media (max-width: 768px) {
@@ -1119,12 +1283,18 @@ footer {
    FINAL CLEAN FIXES - HEADER + DEPARTMENT ITEMS + LIVE SEARCH
    ضعه آخر ملف style.css أو استخدم هذا الملف كامل بدل القديم
 ========================================================= */
-
+/* ===== الهيدر الثابت ===== */
 /* ===== HEADER FINAL LAYOUT ===== */
 .site-header {
     background: #ef7d18 !important;
     color: #fff !important;
     padding: 22px 70px 24px !important;
+    position: sticky;
+    top: 0;
+    z-index: 9999;
+    background: #e67e22;
+    box-shadow: 0 4px 18px rgba(0,0,0,0.12);
+
 }
 
 .header-wrapper {
@@ -1711,7 +1881,7 @@ body:has(.about-cinematic) .container {
     padding: 0 !important;
     margin: 0 !important;
     max-width: none !important;
-    width: 100% !important;
+    width: 90% !important;
 }
 
 body:has(.about-cinematic) header {

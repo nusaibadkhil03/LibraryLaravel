@@ -12,7 +12,7 @@
     display: grid !important;
     grid-template-columns: auto 1fr auto !important;
     align-items: center !important;
-    padding: 20px !important;
+    padding: 0px !important;
 }
 </style>
 </head>
@@ -72,24 +72,28 @@
                 <li><a href="{{ url('/') }}">الرئيسية</a></li>
 
                 <li class="dropdown">
-                    @auth
-                        <a href="#" class="dropbtn">الأقسام ▼</a>
-                        <div class="dropdown-content">
-                            @foreach($departments as $department)
-                                <a href="{{ route('departments.show', $department->slug) }}">
-                                    {{ $department->name }}
-                                </a>
-                            @endforeach
-                        </div>
-                    @else
-                        <a href="#" class="dropbtn guest-popup-btn">الأقسام ▼</a>
-                        <div class="dropdown-content">
-                            @foreach($departments as $department)
-                                <a href="#" class="guest-popup-btn">{{ $department->name }}</a>
-                            @endforeach
-                        </div>
-                    @endauth
-                </li>
+    @auth
+        <a href="#" class="dropbtn">الأقسام ▼</a>
+        <div class="dropdown-content">
+            @isset($departments)
+                @foreach($departments as $department)
+                    <a href="{{ route('departments.show', $department->slug) }}">
+                        {{ $department->name }}
+                    </a>
+                @endforeach
+            @endisset
+        </div>
+    @else
+        <a href="#" class="dropbtn guest-popup-btn">الأقسام ▼</a>
+        <div class="dropdown-content">
+            @isset($departments)
+                @foreach($departments as $department)
+                    <a href="#" class="guest-popup-btn">{{ $department->name }}</a>
+                @endforeach
+            @endisset
+        </div>
+    @endauth
+</li>
 
                 <li>
                     @auth
@@ -116,19 +120,82 @@
     @yield('content')
 </main>
 
-<footer>
-    <div class="footer-content">
+<footer class="main-footer">
+    <div class="footer-container">
+
+        <div class="footer-section footer-about">
+            <h3>مكتبة الجامعة الليبية</h3>
+            <p>
+                منصة أكاديمية رقمية تهدف إلى تنظيم المحتوى العلمي وتسهيل وصول الطلاب إلى الكتب، المناهج، المجلات، والمشاريع الجامعية.
+            </p>
+        </div>
+
         <div class="footer-section">
             <h3>روابط سريعة</h3>
             <ul>
                 <li><a href="{{ url('/') }}">الرئيسية</a></li>
-                <li><a href="#">الأقسام</a></li>
-                <li><a href="{{ route('curriculum') }}">الخطة الدراسية</a></li>
-                <li><a href="{{ route('borrow') }}">استعارة كتاب</a></li>
-                <li><a href="#services">الخدمات</a></li>
+                <li><a href="{{ route('about') }}">عن الجامعة</a></li>
+                <li><a href="{{ route('journals') }}">المجلات</a></li>
+
+                @auth
+                    <li><a href="{{ route('curriculum') }}">الخطة الدراسية</a></li>
+                    <li><a href="{{ route('borrow') }}">استعارة كتاب</a></li>
+                    <li><a href="#services">الخدمات</a></li>
+                @else
+                    <li><a href="{{ route('login') }}">تسجيل الدخول</a></li>
+                    <li><a href="{{ route('register') }}">إنشاء حساب</a></li>
+                @endauth
             </ul>
         </div>
+
+        <div class="footer-section">
+            <h3>خدمات المنصة</h3>
+            <ul>
+                @auth
+                    <li><a href="{{ route('curriculum') }}">المناهج والخطة الدراسية</a></li>
+                    <li><a href="{{ route('borrow') }}">طلبات الاستعارة</a></li>
+                    <li><a href="{{ route('journals') }}">المجلات العلمية</a></li>
+                @else
+                    <li><a href="{{ route('guest.blocked') }}">الكتب الرقمية</a></li>
+                    <li><a href="{{ route('guest.blocked') }}">المناهج الدراسية</a></li>
+                    <li><a href="{{ route('journals') }}">المجلات العلمية</a></li>
+                @endauth
+            </ul>
         </div>
+
+        <div class="footer-section footer-contact">
+    <h3>تواصل معنا</h3>
+
+    <p>
+        📍
+        <a href="https://maps.apple.com/place?coordinate=32.90753410%2C13.18115658"
+           target="_blank">
+            موقع الجامعة على الخريطة
+        </a>
+    </p>
+
+    <p>
+        🌐
+        <a href="https://libyanuniv.edu.ly"
+           target="_blank">
+            الموقع الرسمي للجامعة الليبية
+        </a>
+    </p>
+
+    
+
+    <p>🕘 السبت - الخميس</p>
+
+    <p>⏰ 08:00 صباحًا - 05:00 عصرًا</p>
+</div>
+
+    </div>
+
+    <div class="footer-bottom">
+        <p>
+            © {{ date('Y') }} مكتبة الجامعة الليبية - جميع الحقوق محفوظة
+        </p>
+    </div>
 </footer>
 @guest
 <div id="authModal" class="auth-modal">

@@ -1,9 +1,10 @@
-<h3 class="content-title">{{ $title }}</h3>
-
 @if($items->count())
     <div class="content-list">
         @foreach($items as $item)
-            <div class="content-row">
+            <div class="content-row"
+                 data-title="{{ $item->title }}"
+                 data-year="{{ $item->academic_year ?? $item->publication_year ?? $item->year ?? $item->created_at ?? 0 }}">
+
                 <div class="content-info">
                     <strong>{{ $item->title }}</strong>
 
@@ -17,15 +18,15 @@
                         @endif
 
                         @if(!empty($item->doctor_name))
-                               الدكتور: {{ $item->doctor_name }} |
+                            الدكتور: {{ $item->doctor_name }} |
                         @endif
 
                         @if(!empty($item->students_names))
-                                الطلبة: {{ $item->students_names }} |
+                            الطلبة: {{ $item->students_names }} |
                         @endif
 
                         @if(!empty($item->supervisor_name))
-                                المشرف: {{ $item->supervisor_name }} |
+                            المشرف: {{ $item->supervisor_name }} |
                         @endif
 
                         @if(!empty($item->semester))
@@ -34,7 +35,7 @@
                     </p>
 
                     @if(!empty($item->description))
-                        <p>{{ $item->description }}</p>
+                        <p>{{ \Illuminate\Support\Str::limit($item->description, 120) }}</p>
                     @endif
                 </div>
 
@@ -47,7 +48,7 @@
                         <a class="download-btn"
                            href="{{ asset('storage/' . $file) }}"
                            target="_blank">
-                            تحميل PDF
+                            📥 تحميل الملف
                         </a>
                     @else
                         <span class="no-file">لا يوجد ملف PDF</span>
