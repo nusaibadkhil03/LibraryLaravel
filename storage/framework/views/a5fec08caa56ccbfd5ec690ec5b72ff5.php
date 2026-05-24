@@ -42,19 +42,67 @@
             font-weight: bold;
         }
 
-        .sidebar a {
-            display: block;
-            color: white;
-            text-decoration: none;
-            padding: 14px 16px;
-            border-radius: 12px;
-            margin-bottom: 10px;
-            font-size: 18px;
-        }
+        .sidebar a,
+.sidebar-dropdown-btn {
+    display: block;
+    width: 100%;
+    color: white;
+    text-decoration: none;
+    padding: 14px 16px;
+    border-radius: 12px;
+    margin-bottom: 10px;
+    font-size: 18px;
+    background: transparent;
+    border: none;
+    text-align: right;
+    cursor: pointer;
+    transition: 0.3s;
+}
 
-        .sidebar a:hover {
-            background: rgba(255, 255, 255, 0.18);
-        }
+.sidebar a:hover,
+.sidebar a.active,
+.sidebar-dropdown.open > .sidebar-dropdown-btn,
+.sidebar-dropdown.active > .sidebar-dropdown-btn {
+    background: rgba(255, 255, 255, 0.22);
+}
+
+.sidebar-dropdown-btn {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.sidebar-dropdown-content {
+    display: none;
+    padding-right: 15px;
+    margin-bottom: 10px;
+}
+
+.sidebar-dropdown.open .sidebar-dropdown-content {
+    display: block;
+}
+
+.sidebar-dropdown-content a {
+    font-size: 15px;
+    padding: 10px 14px;
+    margin-bottom: 6px;
+    background: rgba(255,255,255,0.08);
+}
+
+.sidebar-dropdown-content a:hover,
+.sidebar-dropdown-content a.active {
+    background: #fff;
+    color: #e67e22;
+    font-weight: bold;
+}
+
+.arrow {
+    transition: 0.3s;
+}
+
+.sidebar-dropdown.open .arrow {
+    transform: rotate(180deg);
+}
 
         .main-content {
             flex: 1;
@@ -220,31 +268,72 @@
 
 <div class="admin-wrapper">
 
-    <aside class="sidebar">
-        <h2>لوحة الأدمن</h2>
+   <aside class="sidebar">
+    <h2>لوحة الأدمن</h2>
 
-        <a href="<?php echo e(route('admin.dashboard')); ?>">الرئيسية</a>
-        <a href="<?php echo e(route('admin.departments.index')); ?>">الأقسام</a>
-        <a href="<?php echo e(route('admin.books.index')); ?>">الكتب</a>
-        <a href="<?php echo e(route('admin.digital-books.index')); ?>">الكتب الرقمية</a>
+    <a class="<?php echo e(request()->routeIs('admin.dashboard') ? 'active' : ''); ?>"
+       href="<?php echo e(route('admin.dashboard')); ?>">الرئيسية</a>
 
-        <a href="<?php echo e(route('admin.curriculum.index')); ?>">الخطة الدراسية</a>
+    <a class="<?php echo e(request()->routeIs('admin.departments.*') ? 'active' : ''); ?>"
+       href="<?php echo e(route('admin.departments.index')); ?>">الأقسام</a>
 
-        
-<!-- /*(تفعيل نظام إدارة المناهج (إضافة وعرض) مع ربطها بالأقسام وعرضها ديناميكياً في صفحة القسم)*/ -->
-        <a href="<?php echo e(route('admin.borrows.index')); ?>">الاستعارات</a>
-        <a href="<?php echo e(route('admin.syllabuses.index')); ?>">المناهج</a>
-        <a href="<?php echo e(route('admin.past-exams.index')); ?>">أسئلة السنوات</a>
-        <a href="<?php echo e(route('admin.projects.index')); ?>">مشاريع التخرج</a>
-        <a href="<?php echo e(route('admin.researches.index')); ?>">البحوث العلمية</a>
-        <a href="<?php echo e(route('admin.journals.index')); ?>">المجلات</a>
-        <a href="<?php echo e(route('admin.educational-channels.index')); ?>">القنوات التعليمية</a>
+    <a class="<?php echo e(request()->routeIs('admin.books.*') ? 'active' : ''); ?>"
+       href="<?php echo e(route('admin.books.index')); ?>">الكتب</a>
+
+    <a class="<?php echo e(request()->routeIs('admin.borrows.*') ? 'active' : ''); ?>"
+       href="<?php echo e(route('admin.borrows.index')); ?>">الاستعارات</a>
+    
+
+    <a class="<?php echo e(request()->routeIs('admin.curriculum.*') ? 'active' : ''); ?>"
+      href="<?php echo e(route('admin.curriculum.index')); ?>">الخطة الدراسية</a>
+
+   
+
+    <div class="sidebar-dropdown <?php echo e(request()->routeIs(
+        'admin.digital-books.*',
+        'admin.curriculum.*',
+        'admin.syllabuses.*',
+        'admin.past-exams.*',
+        'admin.projects.*',
+        'admin.researches.*',
+        'admin.journals.*',
+        'admin.educational-channels.*'
+    ) ? 'open active' : ''); ?>">
+
+        <button type="button" class="sidebar-dropdown-btn">
+            <span>المحتوى الرقمي</span>
+            <span class="arrow">▼</span>
+        </button>
+
+        <div class="sidebar-dropdown-content">
+            <a class="<?php echo e(request()->routeIs('admin.digital-books.*') ? 'active' : ''); ?>"
+               href="<?php echo e(route('admin.digital-books.index')); ?>">الكتب الرقمية</a>
 
 
-        <a href="#">الطلبة</a>
-        <a href="#">الأدمن</a>
-        <a href="#">الإعدادات</a>
-    </aside>
+            <a class="<?php echo e(request()->routeIs('admin.syllabuses.*') ? 'active' : ''); ?>"
+               href="<?php echo e(route('admin.syllabuses.index')); ?>">المناهج</a>
+
+            <a class="<?php echo e(request()->routeIs('admin.past-exams.*') ? 'active' : ''); ?>"
+               href="<?php echo e(route('admin.past-exams.index')); ?>">أسئلة السنوات</a>
+
+            <a class="<?php echo e(request()->routeIs('admin.projects.*') ? 'active' : ''); ?>"
+               href="<?php echo e(route('admin.projects.index')); ?>">مشاريع التخرج</a>
+
+            <a class="<?php echo e(request()->routeIs('admin.researches.*') ? 'active' : ''); ?>"
+               href="<?php echo e(route('admin.researches.index')); ?>">البحوث العلمية</a>
+
+            <a class="<?php echo e(request()->routeIs('admin.journals.*') ? 'active' : ''); ?>"
+               href="<?php echo e(route('admin.journals.index')); ?>">المجلات</a>
+
+            <a class="<?php echo e(request()->routeIs('admin.educational-channels.*') ? 'active' : ''); ?>"
+               href="<?php echo e(route('admin.educational-channels.index')); ?>">القنوات التعليمية</a>
+        </div>
+    </div>
+
+    <a href="#">الطلبة</a>
+    <a href="#">الأدمن</a>
+    <a href="#">الإعدادات</a>
+</aside>
 
     <div class="main-content">
 
@@ -273,6 +362,17 @@
     </div>
 
 </div>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const dropdownButtons = document.querySelectorAll('.sidebar-dropdown-btn');
 
+    dropdownButtons.forEach(function (button) {
+        button.addEventListener('click', function () {
+            const dropdown = button.closest('.sidebar-dropdown');
+            dropdown.classList.toggle('open');
+        });
+    });
+});
+</script>
 </body>
 </html><?php /**PATH C:\course laravel\LibraryLaravel\resources\views/layouts/admin.blade.php ENDPATH**/ ?>

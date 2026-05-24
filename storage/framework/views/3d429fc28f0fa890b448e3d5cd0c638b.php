@@ -93,17 +93,73 @@
     color: #999 !important;
     padding: 25px !important;
 }
+
+.admin-header-actions {
+    display: flex !important;
+    align-items: center !important;
+    gap: 12px !important;
+    flex-wrap: wrap !important;
+}
+
+.admin-filter-form {
+    display: flex !important;
+    gap: 10px !important;
+    align-items: center !important;
+}
+
+.admin-filter-form select {
+    padding: 11px 15px !important;
+    border: 1px solid #ddd !important;
+    border-radius: 12px !important;
+    background: white !important;
+    min-width: 170px !important;
+    font-family: inherit !important;
+}
 </style>
 
 <div class="admin-table-page">
 
     <div class="admin-table-header">
-        <h2>إدارة المناهج</h2>
+    <h2>إدارة المناهج</h2>
+
+    <div class="admin-header-actions">
+
+        <form method="GET"
+              action="<?php echo e(route('admin.syllabuses.index')); ?>"
+              class="admin-filter-form">
+
+            <select name="department_id" onchange="this.form.submit()">
+                <option value="">كل الأقسام</option>
+
+                <?php $__currentLoopData = $departments; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $department): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                    <option value="<?php echo e($department->id); ?>"
+                        <?php echo e(request('department_id') == $department->id ? 'selected' : ''); ?>>
+                        <?php echo e($department->name); ?>
+
+                    </option>
+                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+            </select>
+
+            <select name="sort" onchange="this.form.submit()">
+                <option value="">الأحدث أولاً</option>
+
+                <option value="oldest" <?php echo e(request('sort') == 'oldest' ? 'selected' : ''); ?>>
+                    الأقدم أولاً
+                </option>
+
+                <option value="title" <?php echo e(request('sort') == 'title' ? 'selected' : ''); ?>>
+                    ترتيب أبجدي
+                </option>
+            </select>
+
+        </form>
 
         <a href="<?php echo e(route('admin.syllabuses.create')); ?>" class="admin-add-btn">
             + إضافة منهج
         </a>
+
     </div>
+</div>
 
     <?php if(session('success')): ?>
         <div class="success-message">

@@ -10,12 +10,30 @@ use Illuminate\Support\Facades\Storage;
 
 class ProjectController extends Controller
 {
-    public function index()
-    {
-        $projects = Project::with('department')->latest()->get();
+    public function index(Request $request)
+{
+    $departments = Department::where('status', 'active')
+        ->orderBy('name')
+        ->get();
 
-        return view('admin.projects.index', compact('projects'));
+    $query = Project::with('department');
+
+    if ($request->filled('department_id')) {
+        $query->where('department_id', $request->department_id);
     }
+
+    if ($request->sort === 'oldest') {
+        $query->oldest();
+    } elseif ($request->sort === 'title') {
+        $query->orderBy('title');
+    } else {
+        $query->latest();
+    }
+
+    $projects = $query->get();
+
+    return view('admin.projects.index', compact('projects', 'departments'));
+}
 
     public function create()
     {

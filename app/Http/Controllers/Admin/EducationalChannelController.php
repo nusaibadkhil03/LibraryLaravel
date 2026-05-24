@@ -9,13 +9,30 @@ use Illuminate\Http\Request;
 
 class EducationalChannelController extends Controller
 {
-    public function index()
-    {
-        $channels = EducationalChannel::with('department')->latest()->get();
+    public function index(Request $request)
+{
+    $departments = Department::where('status', 'active')
+        ->orderBy('name')
+        ->get();
 
-        return view('admin.educational-channels.index', compact('channels'));
+    $query = EducationalChannel::with('department');
+
+    if ($request->filled('department_id')) {
+        $query->where('department_id', $request->department_id);
     }
 
+    if ($request->sort === 'oldest') {
+        $query->oldest();
+    } elseif ($request->sort === 'title') {
+        $query->orderBy('title');
+    } else {
+        $query->latest();
+    }
+
+    $channels = $query->get();
+
+    return view('admin.educational-channels.index', compact('channels', 'departments'));
+}
     public function create()
     {
         $departments = Department::where('status', 'active')->get();

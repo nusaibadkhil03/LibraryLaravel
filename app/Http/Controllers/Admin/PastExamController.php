@@ -10,11 +10,29 @@ use Illuminate\Support\Facades\Storage;
 
 class PastExamController extends Controller
 {
-    public function index()
+    public function index(Request $request)
 {
-    $pastExams = PastExam::with('department')->latest()->get();
+    $departments = Department::where('status', 'active')
+        ->orderBy('name')
+        ->get();
 
-    return view('admin.past-exams.index', compact('pastExams'));
+    $query = PastExam::with('department');
+
+    if ($request->filled('department_id')) {
+        $query->where('department_id', $request->department_id);
+    }
+
+    if ($request->sort === 'oldest') {
+        $query->oldest();
+    } elseif ($request->sort === 'title') {
+        $query->orderBy('title');
+    } else {
+        $query->latest();
+    }
+
+    $pastExams = $query->get();
+
+    return view('admin.past-exams.index', compact('pastExams', 'departments'));
 }
 
     public function create()

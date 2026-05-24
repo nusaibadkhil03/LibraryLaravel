@@ -1,14 +1,105 @@
 @extends('layouts.admin')
 
 @section('content')
+ <style>
+    .admin-page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 28px;
+    flex-wrap: wrap;
+    gap: 15px;
+}
 
+.admin-page-header h2 {
+    color: #e67e22;
+    font-size: 30px;
+    margin: 0;
+}
+
+.admin-header-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.admin-filter-form {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.admin-filter-form select {
+    padding: 12px 18px;
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    background: white;
+    min-width: 170px;
+    font-family: inherit;
+    font-size: 15px;
+}
+
+.admin-add-btn {
+    background: #e67e22;
+    color: white !important;
+    text-decoration: none;
+    padding: 13px 24px;
+    border-radius: 14px;
+    font-weight: bold;
+    display: inline-flex;
+    align-items: center;
+}
+
+.admin-add-btn:hover {
+    background: #cf711f;
+}
+ </style>
 <div class="section-box">
 
-    <h2>البحوث العلمية</h2>
+    <div class="admin-page-header">
 
-    <a href="{{ route('admin.researches.create') }}" class="admin-logout-btn">
-        إضافة بحث
-    </a>
+        <h2>البحوث العلمية</h2>
+
+        <div class="admin-header-actions">
+
+            <form method="GET"
+                  action="{{ route('admin.researches.index') }}"
+                  class="admin-filter-form">
+
+                <select name="department_id" onchange="this.form.submit()">
+                    <option value="">كل الأقسام</option>
+
+                    @foreach($departments as $department)
+                        <option value="{{ $department->id }}"
+                            {{ request('department_id') == $department->id ? 'selected' : '' }}>
+                            {{ $department->name }}
+                        </option>
+                    @endforeach
+                </select>
+
+                <select name="sort" onchange="this.form.submit()">
+                    <option value="">الأحدث أولاً</option>
+
+                    <option value="oldest" {{ request('sort') == 'oldest' ? 'selected' : '' }}>
+                        الأقدم أولاً
+                    </option>
+
+                    <option value="title" {{ request('sort') == 'title' ? 'selected' : '' }}>
+                        ترتيب أبجدي
+                    </option>
+                </select>
+
+            </form>
+
+            <a href="{{ route('admin.researches.create') }}"
+               class="admin-add-btn">
+                + إضافة بحث
+            </a>
+
+        </div>
+
+    </div>
 
     @if(session('success'))
         <div style="background:#d4edda; padding:10px; margin:10px 0; border-radius:8px;">
@@ -37,10 +128,11 @@
                         <td>{{ $item->title }}</td>
                         <td>{{ $item->department->name ?? '-' }}</td>
                         <td>{{ $item->author ?? '-' }}</td>
-                        <td>{{ $item->academic_year ?? '-' }}</td>
+                        <td>{{ $item->publication_year ?? '-' }}</td>
 
                         <td>
-                            <a href="{{ asset('storage/'.$item->file_path) }}" target="_blank">
+                            <a href="{{ asset('storage/'.$item->file_path) }}"
+                               target="_blank">
                                 عرض
                             </a>
                         </td>

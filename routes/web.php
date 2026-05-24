@@ -29,6 +29,7 @@ use App\Http\Controllers\Admin\JournalController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\Admin\SyllabusController;
 use App\Http\Controllers\DepartmentContentController;
+use App\Http\Controllers\Admin\DigitalBookController;
 
 
 
@@ -367,15 +368,7 @@ Route::post('/books', function (Request $request) {
 
 })->name('books.store');
 
-       Route::get('/digital-books', function () {
-
-    $books = Book::with('department')
-        ->orderBy('title')
-        ->get();
-
-    return view('admin.digital-books.index', compact('books'));
-
-})->name('digital-books.index');
+    
 
 Route::get('/journals', [JournalController::class,'index'])
         ->name('journals.index');
@@ -389,88 +382,17 @@ Route::get('/journals', [JournalController::class,'index'])
     Route::delete('/journals/{id}', [JournalController::class,'destroy'])
         ->name('journals.destroy');
 
+Route::get('/digital-books', [DigitalBookController::class, 'index'])
+    ->name('digital-books.index');
 
-Route::get('/digital-books/create', function () {
+Route::get('/digital-books/create', [DigitalBookController::class, 'create'])
+    ->name('digital-books.create');
 
-    $departments = Department::where('status', 'active')
-        ->orderBy('name')
-        ->get();
+Route::post('/digital-books', [DigitalBookController::class, 'store'])
+    ->name('digital-books.store');
 
-    return view('admin.digital-books.create', compact('departments'));
-
-})->name('digital-books.create');
-
-Route::post('/digital-books', function (Request $request) {
-
-    $request->validate([
-
-        'title' => 'required|string|max:255',
-
-        'department_id' => 'required|exists:departments,id',
-
-        'semester' => 'nullable|string|max:255',
-
-        'author' => 'nullable|string|max:255',
-
-        'description' => 'nullable|string',
-
-        'file' => 'required|mimes:pdf|max:20480',
-
-    ]);
-
-
-
-    $filePath = $request->file('file')
-        ->store('books', 'public');
-
-
-
-    Book::create([
-
-        'title' => $request->title,
-
-        'author' => $request->author,
-
-        'department_id' => $request->department_id,
-
-        'semester' => $request->semester,
-
-        'description' => $request->description,
-
-        'file_path' => $filePath,
-
-        'status' => 'published',
-
-    ]);
-
-
-
-    return back()->with('success', 'تم رفع الكتاب الرقمي بنجاح');
-
-})->name('digital-books.store');
-
-
-Route::delete('/digital-books/{id}', function ($id) {
-
-    $book = Book::findOrFail($id);
-
-
-
-    if ($book->file_path &&
-        file_exists(storage_path('app/public/' . $book->file_path))) {
-
-        unlink(storage_path('app/public/' . $book->file_path));
-    }
-
-
-
-    $book->delete();
-
-
-
-    return back()->with('success', 'تم حذف الكتاب الرقمي بنجاح');
-
-})->name('digital-books.destroy');     
+Route::delete('/digital-books/{id}', [DigitalBookController::class, 'destroy'])
+    ->name('digital-books.destroy');
     });
-     });
+});
 require __DIR__.'/auth.php';

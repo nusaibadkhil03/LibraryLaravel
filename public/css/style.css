@@ -1279,6 +1279,83 @@ footer {
 .admin-save-btn:hover {
     background: #cf711f;
 }
+
+.sidebar a,
+.sidebar-dropdown-btn {
+    display: block;
+    width: 100%;
+    padding: 13px 18px;
+    margin-bottom: 8px;
+    border-radius: 12px;
+    color: #fff;
+    text-decoration: none;
+    background: transparent;
+    border: none;
+    text-align: right;
+    font-family: inherit;
+    font-size: 17px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.sidebar a:hover,
+.sidebar a.active,
+.sidebar-dropdown.open > .sidebar-dropdown-btn,
+.sidebar-dropdown.active > .sidebar-dropdown-btn {
+    background: rgba(255,255,255,0.22);
+}
+
+.sidebar-dropdown-btn {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.sidebar-dropdown-content {
+    display: none;
+    padding-right: 18px;
+    margin-bottom: 12px;
+}
+
+.sidebar-dropdown.open .sidebar-dropdown-content {
+    display: block;
+}
+
+.sidebar-dropdown-content a {
+    font-size: 15px;
+    padding: 10px 15px;
+    margin-bottom: 6px;
+    background: rgba(255,255,255,0.08);
+}
+
+.sidebar-dropdown-content a:hover,
+.sidebar-dropdown-content a.active {
+    background: #fff;
+    color: #e67e22;
+    font-weight: bold;
+}
+
+.arrow {
+    transition: 0.3s;
+}
+
+.sidebar-dropdown.open .arrow {
+    transform: rotate(180deg);
+}
+
+/* العنصر الرئيسي النشط */
+.sidebar a.active,
+.sidebar-dropdown.active > .sidebar-dropdown-btn {
+    background: rgba(255,255,255,.22);
+    color: white;
+}
+
+/* العناصر الفرعية النشطة */
+.sidebar-dropdown-content a.active {
+    background: white;
+    color: #e67e22;
+    font-weight: bold;
+}
 /* =========================================================
    FINAL CLEAN FIXES - HEADER + DEPARTMENT ITEMS + LIVE SEARCH
    ضعه آخر ملف style.css أو استخدم هذا الملف كامل بدل القديم

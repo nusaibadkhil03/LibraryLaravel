@@ -3,6 +3,56 @@
 <?php $__env->startSection('content'); ?>
 
 <style>
+    .admin-page-header{
+    display:flex !important;
+    justify-content:space-between !important;
+    align-items:center !important;
+    margin-bottom:25px !important;
+    flex-wrap:wrap !important;
+    gap:15px !important;
+}
+
+.admin-header-actions{
+    display:flex !important;
+    align-items:center !important;
+    gap:12px !important;
+    flex-wrap:wrap !important;
+}
+
+.admin-filter-form{
+    display:flex !important;
+    gap:10px !important;
+    align-items:center !important;
+}
+
+.admin-filter-form select{
+    padding:11px 15px !important;
+    border:1px solid #ddd !important;
+    border-radius:12px !important;
+    background:white !important;
+    min-width:170px !important;
+    font-family:inherit !important;
+}
+
+.admin-filter-form select:focus{
+    border-color:#e67e22 !important;
+    outline:none !important;
+}
+
+.admin-add-btn{
+    background:#e67e22 !important;
+    color:white !important;
+    text-decoration:none !important;
+    padding:12px 22px !important;
+    border-radius:12px !important;
+    font-weight:bold !important;
+    display:inline-flex !important;
+    align-items:center !important;
+}
+
+.admin-add-btn:hover{
+    background:#cf711f !important;
+}
 .admin-digital-page {
     padding: 35px !important;
     direction: rtl !important;
@@ -136,36 +186,64 @@
 <div class="admin-digital-page">
 
     <div class="admin-page-header">
-        <h2>إدارة الكتب الرقمية PDF</h2>
-    </div>
 
-    <div style="margin:20px 0;">
+    <h2>إدارة الكتب الرقمية PDF</h2>
 
-        <a href="<?php echo e(route('admin.digital-books.create')); ?>">
+    <div class="admin-header-actions">
 
-            <button
-                style="
-                    background:#e67e22;
-                    color:white;
-                    border:none;
-                    padding:12px 20px;
-                    border-radius:10px;
-                    cursor:pointer;
-                    font-weight:bold;
-                ">
-                + إضافة كتاب رقمي
-            </button>
+        <form method="GET"
+              action="<?php echo e(route('admin.digital-books.index')); ?>"
+              class="admin-filter-form">
+
+            <select name="department_id" onchange="this.form.submit()">
+
+                <option value="">كل الأقسام</option>
+
+                <?php $__currentLoopData = $departments; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $department): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                    <option value="<?php echo e($department->id); ?>"
+                        <?php echo e(request('department_id') == $department->id ? 'selected' : ''); ?>>
+                        <?php echo e($department->name); ?>
+
+                    </option>
+                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+
+            </select>
+
+            <select name="sort" onchange="this.form.submit()">
+
+                <option value="">الأحدث أولاً</option>
+
+                <option value="oldest"
+                    <?php echo e(request('sort') == 'oldest' ? 'selected' : ''); ?>>
+                    الأقدم أولاً
+                </option>
+
+                <option value="title"
+                    <?php echo e(request('sort') == 'title' ? 'selected' : ''); ?>>
+                    ترتيب أبجدي
+                </option>
+
+            </select>
+
+        </form>
+
+        <a href="<?php echo e(route('admin.digital-books.create')); ?>"
+           class="admin-add-btn">
+
+            + إضافة كتاب رقمي
 
         </a>
 
-    <?php if(session('success')): ?>
-        <div class="success-message">
-            <?php echo e(session('success')); ?>
+    </div>
 
-        </div>
-    <?php endif; ?>
+</div>
 
-   
+<?php if(session('success')): ?>
+    <div class="success-message">
+        <?php echo e(session('success')); ?>
+
+    </div>
+<?php endif; ?>
 
     <div class="admin-table-card">
         <?php if($books->count()): ?>

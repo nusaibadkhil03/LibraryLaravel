@@ -10,11 +10,30 @@ use Illuminate\Support\Facades\Storage;
 
 class ResearchController extends Controller
 {
-    public function index()
-    {
-        $researches = Research::with('department')->latest()->get();
-        return view('admin.researches.index', compact('researches'));
+    public function index(Request $request)
+{
+    $departments = Department::where('status', 'active')
+        ->orderBy('name')
+        ->get();
+
+    $query = Research::with('department');
+
+    if ($request->filled('department_id')) {
+        $query->where('department_id', $request->department_id);
     }
+
+    if ($request->sort === 'oldest') {
+        $query->oldest();
+    } elseif ($request->sort === 'title') {
+        $query->orderBy('title');
+    } else {
+        $query->latest();
+    }
+
+    $researches = $query->get();
+
+    return view('admin.researches.index', compact('researches', 'departments'));
+}
 
     public function create()
     {

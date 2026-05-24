@@ -45,14 +45,29 @@
                     @endphp
 
                     @if($file)
-                        <a class="download-btn"
-                           href="{{ asset('storage/' . $file) }}"
-                           target="_blank">
-                            📥 تحميل الملف
-                        </a>
-                    @else
-                        <span class="no-file">لا يوجد ملف PDF</span>
-                    @endif
+
+    @if(isset($title) && str_contains($title, 'مشاريع'))
+
+        <a class="download-btn"
+           href="{{ asset('storage/' . $file) }}"
+           target="_blank">
+           👁️ قراءة المشروع
+        </a>
+
+    @else
+
+        <a class="download-btn"
+           href="{{ asset('storage/' . $file) }}"
+           target="_blank"
+           download>
+           📥 تحميل الملف
+        </a>
+
+    @endif
+
+@else
+    <span class="no-file">لا يوجد ملف</span>
+@endif
                 </div>
             </div>
         @endforeach

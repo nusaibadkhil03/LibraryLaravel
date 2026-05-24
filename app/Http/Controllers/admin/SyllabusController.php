@@ -9,11 +9,30 @@ use Illuminate\Http\Request;
 
 class SyllabusController extends Controller
 {
-    public function index()
-    {
-        $syllabuses = Syllabus::with('department')->latest()->get();
-        return view('admin.syllabuses.index', compact('syllabuses'));
+    public function index(Request $request)
+{
+    $departments = Department::where('status', 'active')
+        ->orderBy('name')
+        ->get();
+
+    $query = Syllabus::with('department');
+
+    if ($request->filled('department_id')) {
+        $query->where('department_id', $request->department_id);
     }
+
+    if ($request->sort === 'oldest') {
+        $query->oldest();
+    } elseif ($request->sort === 'title') {
+        $query->orderBy('title');
+    } else {
+        $query->latest();
+    }
+
+    $syllabuses = $query->get();
+
+    return view('admin.syllabuses.index', compact('syllabuses', 'departments'));
+}
 
     public function create()
     {
