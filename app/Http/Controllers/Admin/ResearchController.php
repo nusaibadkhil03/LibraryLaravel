@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Research;
 use App\Models\Department;
+use App\Models\AdminActivity;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -17,6 +19,10 @@ class ResearchController extends Controller
         ->get();
 
     $query = Research::with('department');
+    
+    if ($request->filled('search')) {
+        $query->where('title', 'like', '%' . $request->search . '%');
+    }
 
     if ($request->filled('department_id')) {
         $query->where('department_id', $request->department_id);
@@ -55,31 +61,50 @@ class ResearchController extends Controller
 
         $filePath = $request->file('file')->store('researches', 'public');
 
-        Research::create([
-            'title' => $request->title,
-            'department_id' => $request->department_id,
-            'author' => $request->author,
-            'publisher' => $request->publisher,
-            'publication_year' => $request->publication_year,
-            'description' => $request->description,
-            'file_path' => $filePath,
-            'status' => 'published',
-        ]);
+        $research = Research::create([
+    'title' => $request->title,
+    'department_id' => $request->department_id,
+    'author' => $request->author,
+    'publisher' => $request->publisher,
+    'publication_year' => $request->publication_year,
+    'description' => $request->description,
+    'file_path' => $filePath,
+    'status' => 'published',
+]);
+
+AdminActivity::create([
+    'admin_id' => Auth::id(),
+    'action' => 'إضافة بحث',
+    'description' => 'تمت إضافة البحث: ' . $research->title,
+    'type' => 'research',
+]);
 
         return redirect()->route('admin.researches.index')
             ->with('success', 'تمت إضافة البحث بنجاح');
     }
 
     public function destroy($id)
-    {
-        $research = Research::findOrFail($id);
+{
+    $research = Research::findOrFail($id);
 
-        if ($research->file_path && Storage::disk('public')->exists($research->file_path)) {
-            Storage::disk('public')->delete($research->file_path);
-        }
+    $title = $research->title;
 
-        $research->delete();
-
-        return back()->with('success', 'تم حذف البحث');
+    if (
+        $research->file_path &&
+        Storage::disk('public')->exists($research->file_path)
+    ) {
+        Storage::disk('public')->delete($research->file_path);
     }
+
+    $research->delete();
+
+    AdminActivity::create([
+        'admin_id' => Auth::id(),
+        'action' => 'حذف بحث',
+        'description' => 'تم حذف البحث: ' . $title,
+        'type' => 'research',
+    ]);
+
+    return back()->with('success', 'تم حذف البحث بنجاح');
+}
 }

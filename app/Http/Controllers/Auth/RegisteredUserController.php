@@ -65,6 +65,7 @@ class RegisteredUserController extends Controller
                 'confirmed',
                 Rules\Password::defaults(),
             ],
+            'phone' => ['required', 'string', 'max:20'],
         ], [
             'name.required' => 'اسم الطالب مطلوب.',
             'student_number.required' => 'رقم القيد مطلوب.',
@@ -85,6 +86,7 @@ class RegisteredUserController extends Controller
             'email' => $request->email,
             'password' => Hash::make($request->password),
             'role' => 'student',
+            'phone' => $request->phone,
         ]);
 
         event(new Registered($user));

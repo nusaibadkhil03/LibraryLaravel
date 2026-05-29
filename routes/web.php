@@ -10,6 +10,7 @@ use App\Models\Project;
 use App\Models\PastExam;
 use App\Models\Research;
 use App\Models\Journal;
+use App\Models\AdminActivity;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
@@ -30,6 +31,8 @@ use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\Admin\SyllabusController;
 use App\Http\Controllers\DepartmentContentController;
 use App\Http\Controllers\Admin\DigitalBookController;
+use App\Http\Controllers\Admin\StudentController;
+use App\Http\Controllers\Admin\AdminUserController;
 
 
 
@@ -141,7 +144,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
         return redirect()->route('home');
     })->name('dashboard');
-
+    
+ 
     // صفحة الاستعارة للطالب
 Route::post('/borrow', function (Request $request) {
 
@@ -182,46 +186,77 @@ Route::post('/borrow', function (Request $request) {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
 
-
+/* --------admin routes-------- */
 Route::middleware(['auth', 'verified', 'admin'])
     ->prefix('admin')
     ->name('admin.')
     ->group(function () {
 
         Route::get('/dashboard', function () {
-            $borrowRequestsCount = Borrow::where('status', 'pending')->count();
-            $studentsCount = User::where('role', 'student')->count();
-            $booksCount = LibraryBook::count();
-            $departmentsCount = Department::count();
 
-         
+    $pendingBorrowsCount = Borrow::where('status', 'pending')->count();
 
+    $totalBorrowsCount = Borrow::count();
 
-            $latestBorrows = Borrow::with(['user', 'libraryBook'])
-                ->latest()
-                ->take(5)
-                ->get();
+    $approvedBorrowsCount = Borrow::whereIn('status', ['approved', 'borrowed'])->count();
 
-            $latestBooks = LibraryBook::with('department')
-                ->latest()
-                ->take(5)
-                ->get();
+    $returnedBorrowsCount = Borrow::where('status', 'returned')->count();
 
-            return view('admin.dashboard', compact(
-                'borrowRequestsCount',
-                'studentsCount',
-                'booksCount',
-                'departmentsCount',
-                'latestBorrows',
-                'latestBooks'
-            ));
-            
-        })->name('dashboard');
+    $studentsCount = User::where('role', 'student')->count();
+
+    $booksCount = LibraryBook::count();
+
+    $availableBooksCount = LibraryBook::sum('available_copies');
+
+    $departmentsCount = Department::count();
+
+    $latestBorrows = Borrow::with(['user', 'libraryBook'])
+        ->latest()
+        ->take(5)
+        ->get();
+
+    $latestBooks = LibraryBook::with('department')
+        ->latest()
+        ->take(5)
+        ->get();
+
+    return view('admin.dashboard', compact(
+        'pendingBorrowsCount',
+        'totalBorrowsCount',
+        'approvedBorrowsCount',
+        'returnedBorrowsCount',
+        'studentsCount',
+        'booksCount',
+        'availableBooksCount',
+        'departmentsCount',
+        'latestBorrows',
+        'latestBooks'
+    ));
+
+})->name('dashboard');
         Route::resource('syllabuses', SyllabusController::class); 
         Route::resource('past-exams', PastExamController::class);
         Route::resource('projects', ProjectController::class);
         Route::resource('researches', ResearchController::class);
         Route::resource('educational-channels', EducationalChannelController::class);
+
+         Route::get('/live-search', [SearchController::class, 'adminLive'])
+    ->name('live-search');
+
+    Route::get('/students', [StudentController::class, 'index'])
+    ->name('students.index');
+
+Route::patch('/students/{id}/status/{status}', [StudentController::class, 'updateStatus'])
+    ->name('students.updateStatus');
+
+Route::delete('/students/{id}', [StudentController::class, 'destroy'])
+    ->name('students.destroy');
+
+   Route::get('/admins', [AdminUserController::class, 'index'])
+    ->name('admins.index');
+
+Route::patch('/admins/{id}/role/{role}', [AdminUserController::class, 'updateRole'])
+    ->name('admins.updateRole');
         
         Route::get('/curriculum', [CurriculumController::class, 'index'])
     ->name('curriculum.index');
@@ -336,38 +371,49 @@ $departments = Department::where('status', 'active')
 
 Route::post('/books', function (Request $request) {
 
-    LibraryBook::create([
-
-        'title' => $request->title,
-
-        'author' => $request->author,
-
-        'publisher' => $request->publisher,
-
-        'publication_year' => $request->publication_year,
-
-        'publication_place' => $request->publication_place,
-
-        'book_number' => $request->book_number,
-
-        'edition_number' => $request->edition_number,
-
-        'department_id' => $request->department_id,
-
-        'shelf_location' => $request->shelf_location,
-
-        'total_copies' => $request->total_copies,
-
-        'available_copies' => $request->total_copies,
-
-        'status' => 'available',
-
-    ]);
+   $book = LibraryBook::create([
+    'title' => $request->title,
+    'author' => $request->author,
+    'publisher' => $request->publisher,
+    'publication_year' => $request->publication_year,
+    'publication_place' => $request->publication_place,
+    'book_number' => $request->book_number,
+    'edition_number' => $request->edition_number,
+    'department_id' => $request->department_id,
+    'shelf_location' => $request->shelf_location,
+    'total_copies' => $request->total_copies,
+    'available_copies' => $request->total_copies,
+    'status' => 'available',
+]);
+    AdminActivity::create([
+    'admin_id' => Auth::id(),
+    'action' => 'إضافة كتاب ورقي',
+    'description' => 'تمت إضافة الكتاب الورقي: ' . $book->title,
+    'type' => 'library_book',
+]);
 
     return back()->with('success', 'تم إضافة الكتاب بنجاح');
 
 })->name('books.store');
 
+Route::delete('/books/{id}', function ($id) {
+
+    $book = LibraryBook::findOrFail($id);
+
+    $title = $book->title;
+
+    $book->delete();
+
+    AdminActivity::create([
+        'admin_id' => Auth::id(),
+        'action' => 'حذف كتاب ورقي',
+        'description' => 'تم حذف الكتاب الورقي: ' . $title,
+        'type' => 'library_book',
+    ]);
+
+    return back()->with('success', 'تم حذف الكتاب بنجاح');
+
+})->name('books.destroy');
     
 
 Route::get('/journals', [JournalController::class,'index'])

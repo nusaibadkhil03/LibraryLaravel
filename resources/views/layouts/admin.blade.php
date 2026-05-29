@@ -261,6 +261,192 @@
     padding: 6px 12px;
     border-radius: 6px;
 }
+
+.admin-search-container {
+    position: relative;
+    width: 360px;
+    max-width: 100%;
+    display: flex;
+    align-items: center;
+    background: #f8f9fc;
+    border: 1px solid #eee;
+    border-radius: 8px;
+    overflow: visible;
+}
+
+.admin-search-container input {
+    width: 100%;
+    border: none;
+    background: transparent;
+    padding: 12px 15px;
+    outline: none;
+    font-family: inherit;
+}
+
+.admin-search-container button {
+    background: #e67e22;
+    color: white;
+    border: none;
+    padding: 12px 15px;
+    border-radius: 8px;
+}
+
+.admin-live-search-results {
+    position: absolute;
+    top: 52px;
+    right: 0;
+    width: 100%;
+    background: white;
+    border-radius: 14px;
+    box-shadow: 0 10px 30px rgba(0,0,0,.15);
+    z-index: 99999;
+    display: none;
+    overflow: hidden;
+}
+
+.admin-live-search-item {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 12px 15px;
+    color: #333;
+    text-decoration: none;
+    border-bottom: 1px solid #f1f1f1;
+}
+
+.admin-live-search-item:hover {
+    background: #fff4ec;
+}
+
+.admin-live-search-item small {
+    color: #e67e22;
+    font-weight: bold;
+}
+
+.admin-live-search-empty {
+    padding: 15px;
+    color: #999;
+    text-align: center;
+}
+
+.admin-table-card {
+    background: #fff;
+    border-radius: 18px;
+    padding: 25px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+    overflow-x: auto;
+}
+
+.admin-table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 900px;
+}
+
+.admin-table th {
+    background: #e67e22;
+    color: #fff;
+    padding: 14px;
+    text-align: center;
+    font-weight: bold;
+}
+
+.admin-table td {
+    padding: 14px;
+    text-align: center;
+    border-bottom: 1px solid #eee;
+    vertical-align: middle;
+}
+
+.admin-table tr:hover {
+    background: #fff7ed;
+}
+
+.success-message {
+    background: #eaf8ee;
+    color: #218838;
+    padding: 12px 18px;
+    border-radius: 12px;
+    margin-bottom: 18px;
+    font-weight: bold;
+}
+
+.admin-filter-form {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.admin-filter-form input,
+.admin-filter-form select {
+    padding: 11px 15px;
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    background: white;
+    min-width: 180px;
+    font-family: inherit;
+}
+
+.admin-filter-form input:focus,
+.admin-filter-form select:focus {
+    border-color: #e67e22;
+    outline: none;
+}
+
+.student-actions {
+    display: flex;
+    justify-content: center;
+    gap: 7px;
+    flex-wrap: wrap;
+}
+
+.btn-active,
+.btn-warning,
+.btn-danger {
+    color: white;
+    border: none;
+    padding: 7px 13px;
+    border-radius: 18px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.btn-active {
+    background: #16a34a;
+}
+
+.btn-warning {
+    background: #f59e0b;
+}
+
+.btn-danger {
+    background: #dc3545;
+}
+
+.status-active,
+.status-inactive,
+.status-suspended {
+    padding: 6px 14px;
+    border-radius: 18px;
+    font-weight: bold;
+    font-size: 14px;
+}
+
+.status-active {
+    background: #dcfce7;
+    color: #166534;
+}
+
+.status-inactive {
+    background: #fef3c7;
+    color: #92400e;
+}
+
+.status-suspended {
+    background: #fee2e2;
+    color: #991b1b;
+}
     </style>
 </head>
 
@@ -330,8 +516,14 @@
         </div>
     </div>
 
-    <a href="#">الطلبة</a>
-    <a href="#">الأدمن</a>
+    <a class="{{ request()->routeIs('admin.students.*') ? 'active' : '' }}"
+       href="{{ route('admin.students.index') }}">
+          الطلبة
+    </a>
+    <a class="{{ request()->routeIs('admin.admins.*') ? 'active' : '' }}"
+   href="{{ route('admin.admins.index') }}">
+    الأدمن
+</a>
     <a href="#">الإعدادات</a>
 </aside>
 
@@ -339,7 +531,18 @@
 
         <div class="topbar">
             <h1>@yield('page_title', 'لوحة التحكم')</h1>
+              <div class="admin-search-container">
+    <input
+        type="text"
+        id="adminLiveSearchInput"
+        placeholder="ابحث داخل لوحة الأدمن..."
+        autocomplete="off"
+    >
 
+    <button type="button">🔍</button>
+
+    <div id="adminLiveSearchResults" class="admin-live-search-results"></div>
+</div>
             <div class="admin-actions">
                 <div class="admin-info">
                     مرحبًا، {{ auth()->user()->name }}
@@ -372,6 +575,45 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 });
+
+document.addEventListener('DOMContentLoaded', function () {
+    const input = document.getElementById('adminLiveSearchInput');
+    const box = document.getElementById('adminLiveSearchResults');
+
+    if (!input || !box) return;
+
+    input.addEventListener('input', function () {
+        const q = this.value.trim();
+
+        if (q.length < 2) {
+            box.innerHTML = '';
+            box.style.display = 'none';
+            return;
+        }
+
+        fetch(`/admin/live-search?q=${encodeURIComponent(q)}`)
+            .then(res => res.json())
+            .then(data => {
+                box.innerHTML = data.length
+                    ? data.map(item => `
+                        <a href="${item.url}" class="admin-live-search-item">
+                            <span>${item.title}</span>
+                            <small>${item.type}</small>
+                        </a>
+                    `).join('')
+                    : '<div class="admin-live-search-empty">لا توجد نتائج</div>';
+
+                box.style.display = 'block';
+            });
+    });
+
+    document.addEventListener('click', function (e) {
+        if (!e.target.closest('.admin-search-container')) {
+            box.style.display = 'none';
+        }
+    });
+});
 </script>
 </body>
+
 </html>

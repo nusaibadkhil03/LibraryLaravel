@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Department;
 use App\Models\PastExam;
+use App\Models\AdminActivity;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -17,6 +19,10 @@ class PastExamController extends Controller
         ->get();
 
     $query = PastExam::with('department');
+
+        if ($request->filled('search')) {
+            $query->where('title', 'like', '%' . $request->search . '%');
+        }
 
     if ($request->filled('department_id')) {
         $query->where('department_id', $request->department_id);
@@ -58,34 +64,52 @@ class PastExamController extends Controller
 
         $filePath = $request->file('file')->store('past_exams', 'public');
 
-        PastExam::create([
-            'title' => $request->title,
-            'department_id' => $request->department_id,
-            'subject_name' => $request->subject_name,
-            'doctor_name' => $request->doctor_name,
-            'academic_year' => $request->academic_year,
-            'semester' => $request->semester,
-            'exam_year' => $request->exam_year,
-            'description' => $request->description,
-            'file_path' => $filePath,
-            'status' => 'published',
-        ]);
+        $exam = PastExam::create([
+    'title' => $request->title,
+    'department_id' => $request->department_id,
+    'subject_name' => $request->subject_name,
+    'doctor_name' => $request->doctor_name,
+    'academic_year' => $request->academic_year,
+    'semester' => $request->semester,
+    'exam_year' => $request->exam_year,
+    'description' => $request->description,
+    'file_path' => $filePath,
+    'status' => 'published',
+]);
+AdminActivity::create([
+    'admin_id' => Auth::id(),
+    'action' => 'إضافة أسئلة سنة',
+    'description' => 'تمت إضافة أسئلة السنة: ' . $exam->title,
+    'type' => 'past_exam',
+]);
 
         return redirect()
             ->route('admin.past-exams.index')
             ->with('success', 'تمت إضافة أسئلة السنة بنجاح');
     }
 
-    public function destroy($id)
-    {
-        $exam = PastExam::findOrFail($id);
+   public function destroy($id)
+{
+    $exam = PastExam::findOrFail($id);
 
-        if ($exam->file_path && Storage::disk('public')->exists($exam->file_path)) {
-            Storage::disk('public')->delete($exam->file_path);
-        }
+    $title = $exam->title;
 
-        $exam->delete();
-
-        return back()->with('success', 'تم حذف أسئلة السنة بنجاح');
+    if (
+        $exam->file_path &&
+        Storage::disk('public')->exists($exam->file_path)
+    ) {
+        Storage::disk('public')->delete($exam->file_path);
     }
+
+    $exam->delete();
+
+    AdminActivity::create([
+        'admin_id' => Auth::id(),
+        'action' => 'حذف أسئلة سنة',
+        'description' => 'تم حذف أسئلة السنة: ' . $title,
+        'type' => 'past_exam',
+    ]);
+
+    return back()->with('success', 'تم حذف أسئلة السنة بنجاح');
+}
 }

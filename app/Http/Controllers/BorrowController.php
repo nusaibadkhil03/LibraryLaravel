@@ -17,11 +17,15 @@ class BorrowController extends Controller
         }
 
         Borrow::create([
-            'user_id' => auth()->id(),
-            'library_book_id' => $book->id,
-            'status' => 'pending',
-            'notes' => 'تنبيه: في حالة التأخر عن تاريخ الإرجاع سيتم تطبيق غرامة مالية.',
-        ]);
+    'user_id' => auth()->id(),
+    'library_book_id' => $book->id,
+
+    'student_name' => auth()->user()->name,
+    'student_number' => auth()->user()->student_number,
+
+    'status' => 'pending',
+    'notes' => 'تنبيه: في حالة التأخر عن تاريخ الإرجاع سيتم تطبيق غرامة مالية.',
+]);
 
         return back()->with('success', 'تم إرسال طلب الاستعارة بنجاح، بانتظار موافقة الأدمن.');
     }

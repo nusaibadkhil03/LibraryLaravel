@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Department;
 use App\Models\EducationalChannel;
+use App\Models\AdminActivity;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 
 class EducationalChannelController extends Controller
@@ -16,7 +18,11 @@ class EducationalChannelController extends Controller
         ->get();
 
     $query = EducationalChannel::with('department');
-
+    
+    if ($request->filled('search')) {
+        $query->where('title', 'like', '%' . $request->search . '%');
+    }
+    
     if ($request->filled('department_id')) {
         $query->where('department_id', $request->department_id);
     }
@@ -50,7 +56,7 @@ class EducationalChannelController extends Controller
             'description' => 'nullable|string',
         ]);
 
-        EducationalChannel::create([
+        $channel = EducationalChannel::create([
             'title' => $request->title,
             'department_id' => $request->department_id,
             'channel_url' => $request->channel_url,
@@ -58,6 +64,12 @@ class EducationalChannelController extends Controller
             'description' => $request->description,
             'status' => 'published',
         ]);
+        AdminActivity::create([
+    'admin_id' => Auth::id(),
+    'action' => 'إضافة قناة تعليمية',
+    'description' => 'تمت إضافة القناة التعليمية: ' . $channel->title,
+    'type' => 'educational_channel',
+]);
 
         return redirect()
             ->route('admin.educational-channels.index')
@@ -65,9 +77,20 @@ class EducationalChannelController extends Controller
     }
 
     public function destroy($id)
-    {
-        EducationalChannel::findOrFail($id)->delete();
+{
+    $channel = EducationalChannel::findOrFail($id);
 
-        return back()->with('success', 'تم حذف القناة التعليمية بنجاح');
-    }
+    $title = $channel->title;
+
+    $channel->delete();
+
+    AdminActivity::create([
+        'admin_id' => Auth::id(),
+        'action' => 'حذف قناة تعليمية',
+        'description' => 'تم حذف القناة التعليمية: ' . $title,
+        'type' => 'educational_channel',
+    ]);
+
+    return back()->with('success', 'تم حذف القناة التعليمية بنجاح');
+}
 }

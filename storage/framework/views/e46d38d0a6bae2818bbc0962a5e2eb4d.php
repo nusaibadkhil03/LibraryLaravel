@@ -1,8 +1,6 @@
-@extends('layouts.borrow_layout')
+<?php $__env->startSection('title', 'استعارة كتاب'); ?>
 
-@section('title', 'استعارة كتاب')
-
-@section('content')
+<?php $__env->startSection('content'); ?>
 
 <div class="borrow-container">
 
@@ -15,26 +13,28 @@
 
         <h2>تقديم طلب استعارة</h2>
 
-        @if(session('success'))
+        <?php if(session('success')): ?>
             <div style="background:#d4edda; color:#155724; padding:10px; margin-bottom:15px; border-radius:8px; text-align:center;">
-                {{ session('success') }}
-            </div>
-        @endif
+                <?php echo e(session('success')); ?>
 
-        @if(session('error'))
+            </div>
+        <?php endif; ?>
+
+        <?php if(session('error')): ?>
             <div style="background:#f8d7da; color:#721c24; padding:10px; margin-bottom:15px; border-radius:8px; text-align:center;">
-                {{ session('error') }}
-            </div>
-        @endif
+                <?php echo e(session('error')); ?>
 
-        @if($errors->any())
+            </div>
+        <?php endif; ?>
+
+        <?php if($errors->any()): ?>
             <div style="background:#f8d7da; color:#721c24; padding:10px; margin-bottom:15px; border-radius:8px; text-align:center;">
                 الرجاء اختيار كتاب صحيح من القائمة.
             </div>
-        @endif
+        <?php endif; ?>
 
-        <form method="POST" action="{{ route('borrow.store') }}">
-            @csrf
+        <form method="POST" action="<?php echo e(route('borrow.store')); ?>">
+            <?php echo csrf_field(); ?>
 
             <div class="form-grid">
                 <div class="input-box">
@@ -52,7 +52,7 @@
     <div class="input-box">
         <label>القسم</label>
         <input type="text"
-               value="{{ auth()->user()->department->name ?? '-' }}"
+               value="<?php echo e(auth()->user()->department->name ?? '-'); ?>"
                readonly>
     </div>
 
@@ -60,7 +60,7 @@
         <label>رقم الهاتف</label>
         <input type="text"
                name="phone"
-               value="{{ auth()->user()->phone ?? '' }}"
+               value="<?php echo e(auth()->user()->phone ?? ''); ?>"
                readonly>
     </div>
 </div>
@@ -78,9 +78,9 @@
                 >
 
                 <datalist id="booksList">
-                    @foreach($books as $book)
-                        <option data-id="{{ $book->id }}" value="{{ $book->title }}"></option>
-                    @endforeach
+                    <?php $__currentLoopData = $books; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $book): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                        <option data-id="<?php echo e($book->id); ?>" value="<?php echo e($book->title); ?>"></option>
+                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                 </datalist>
 
                 <input type="hidden" name="book_id" id="book_id">
@@ -135,7 +135,7 @@
         إرسال الطلب
     </button>
 
-    <a href="{{ url('/') }}" class="borrow-back-btn">
+    <a href="<?php echo e(url('/')); ?>" class="borrow-back-btn">
         الرجوع إلى الصفحة الرئيسية
     </a>
 
@@ -146,8 +146,8 @@
     <div id="status-view" class="form-section" style="display:none;">
         <h2>متابعة حالة الطلب</h2>
 
-        @if(isset($borrows) && $borrows->count())
-            @foreach($borrows as $borrow)
+        <?php if(isset($borrows) && $borrows->count()): ?>
+            <?php $__currentLoopData = $borrows; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $borrow): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
 
                 <div style="
                     background:#fff;
@@ -158,43 +158,45 @@
                 ">
 
                     <p style="font-weight:bold;">
-                        📘 {{ $borrow->libraryBook->title ?? '-' }}
+                        📘 <?php echo e($borrow->libraryBook->title ?? '-'); ?>
+
                     </p>
 
-                    @if($borrow->status == 'pending')
+                    <?php if($borrow->status == 'pending'): ?>
                         <span style="color:#e67e22; font-weight:bold;">⏳ قيد المراجعة</span>
 
-                    @elseif($borrow->status == 'approved' || $borrow->status == 'borrowed')
+                    <?php elseif($borrow->status == 'approved' || $borrow->status == 'borrowed'): ?>
                         <span style="color:green; font-weight:bold;">✅ تمت الموافقة</span>
 
-                        @if($borrow->due_date)
+                        <?php if($borrow->due_date): ?>
                             <p style="margin-top:8px;">
-                                تاريخ الإرجاع المتوقع: {{ $borrow->due_date }}
-                            </p>
-                        @endif
+                                تاريخ الإرجاع المتوقع: <?php echo e($borrow->due_date); ?>
 
-                    @elseif($borrow->status == 'returned')
+                            </p>
+                        <?php endif; ?>
+
+                    <?php elseif($borrow->status == 'returned'): ?>
                         <span style="color:#007bff; font-weight:bold;">📗 تم الإرجاع</span>
 
-                    @elseif($borrow->status == 'rejected')
+                    <?php elseif($borrow->status == 'rejected'): ?>
                         <span style="color:red; font-weight:bold;">❌ مرفوض</span>
 
-                    @endif
+                    <?php endif; ?>
 
                 </div>
 
-            @endforeach
-        @else
+            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+        <?php else: ?>
             <p>لا توجد طلبات حالياً</p>
-        @endif
+        <?php endif; ?>
 
     </div>
 
 </div>
 
-@endsection
+<?php $__env->stopSection(); ?>
 
-@section('scripts')
+<?php $__env->startSection('scripts'); ?>
 <script>
 function showTab(sectionId, button) {
     document.querySelectorAll('.form-section').forEach(section => {
@@ -251,4 +253,6 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 });
 </script>
-@endsection
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('layouts.borrow_layout', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\course laravel\LibraryLaravel\resources\views/borrow.blade.php ENDPATH**/ ?>

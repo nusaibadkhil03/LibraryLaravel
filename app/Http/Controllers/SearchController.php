@@ -104,4 +104,85 @@ foreach (EducationalChannel::where('title', 'like', "%{$q}%")->limit(5)->get() a
 }
     return response()->json($results);
 }
+public function adminLive(Request $request)
+{
+    $q = trim($request->q);
+    $results = [];
+
+    if (strlen($q) < 2) {
+        return response()->json([]);
+    }
+
+    foreach (Book::where('title', 'like', "%{$q}%")->limit(5)->get() as $item) {
+        $results[] = [
+            'title' => $item->title,
+            'type' => 'كتاب رقمي',
+            'url' => route('admin.digital-books.index', [
+                'search' => $item->title
+            ]),
+        ];
+    }
+
+    foreach (LibraryBook::where('title', 'like', "%{$q}%")->limit(5)->get() as $item) {
+        $results[] = [
+            'title' => $item->title,
+            'type' => 'كتاب ورقي',
+            'url' => route('admin.books.index', [
+                'search' => $item->title
+            ]),
+        ];
+    }
+
+    foreach (Syllabus::where('title', 'like', "%{$q}%")->limit(5)->get() as $item) {
+        $results[] = [
+            'title' => $item->title,
+            'type' => 'منهج',
+            'url' => route('admin.syllabuses.index', [
+                'search' => $item->title
+            ]),
+        ];
+    }
+
+    foreach (PastExam::where('title', 'like', "%{$q}%")->limit(5)->get() as $item) {
+        $results[] = [
+            'title' => $item->title,
+            'type' => 'أسئلة سنوات',
+            'url' => route('admin.past-exams.index', [
+                'search' => $item->title
+            ]),
+        ];
+    }
+
+    foreach (Project::where('title', 'like', "%{$q}%")->limit(5)->get() as $item) {
+        $results[] = [
+            'title' => $item->title,
+            'type' => 'مشروع تخرج',
+            'url' => route('admin.projects.index', [
+                'search' => $item->title
+            ]),
+        ];
+    }
+
+    foreach (Research::where('title', 'like', "%{$q}%")->limit(5)->get() as $item) {
+        $results[] = [
+            'title' => $item->title,
+            'type' => 'بحث علمي',
+            'url' => route('admin.researches.index', [
+                'search' => $item->title
+            ]),
+        ];
+    }
+
+    foreach (EducationalChannel::where('title', 'like', "%{$q}%")->limit(5)->get() as $item) {
+        $results[] = [
+            'title' => $item->title,
+            'type' => 'قناة تعليمية',
+            'url' => route('admin.educational-channels.index', [
+                'search' => $item->title
+            ]),
+        ];
+    }
+
+    return response()->json($results);
+}
 }

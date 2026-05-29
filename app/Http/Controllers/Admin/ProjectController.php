@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Department;
 use App\Models\Project;
+use App\Models\AdminActivity;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -17,6 +19,10 @@ class ProjectController extends Controller
         ->get();
 
     $query = Project::with('department');
+
+    if ($request->filled('search')) {
+        $query->where('title', 'like', '%' . $request->search . '%');
+    }
 
     if ($request->filled('department_id')) {
         $query->where('department_id', $request->department_id);
@@ -67,7 +73,7 @@ class ProjectController extends Controller
             $coverPath = $request->file('cover_image')->store('projects/covers', 'public');
         }
 
-        Project::create([
+        $project = Project::create([
             'title' => $request->title,
             'department_id' => $request->department_id,
             'students_names' => $request->students_names,
@@ -79,6 +85,12 @@ class ProjectController extends Controller
             'cover_image' => $coverPath,
             'status' => 'published',
         ]);
+        AdminActivity::create([
+    'admin_id' => Auth::id(),
+    'action' => 'إضافة مشروع تخرج',
+    'description' => 'تمت إضافة مشروع التخرج: ' . $project->title,
+    'type' => 'project',
+]);
 
         return redirect()
             ->route('admin.projects.index')
@@ -86,19 +98,28 @@ class ProjectController extends Controller
     }
 
     public function destroy($id)
-    {
-        $project = Project::findOrFail($id);
+{
+    $project = Project::findOrFail($id);
 
-        if ($project->file_path && Storage::disk('public')->exists($project->file_path)) {
-            Storage::disk('public')->delete($project->file_path);
-        }
+    $title = $project->title;
 
-        if ($project->cover_image && Storage::disk('public')->exists($project->cover_image)) {
-            Storage::disk('public')->delete($project->cover_image);
-        }
-
-        $project->delete();
-
-        return back()->with('success', 'تم حذف مشروع التخرج بنجاح');
+    if ($project->file_path && Storage::disk('public')->exists($project->file_path)) {
+        Storage::disk('public')->delete($project->file_path);
     }
+
+    if ($project->cover_image && Storage::disk('public')->exists($project->cover_image)) {
+        Storage::disk('public')->delete($project->cover_image);
+    }
+
+    $project->delete();
+
+    AdminActivity::create([
+        'admin_id' => Auth::id(),
+        'action' => 'حذف مشروع تخرج',
+        'description' => 'تم حذف مشروع التخرج: ' . $title,
+        'type' => 'project',
+    ]);
+
+    return back()->with('success', 'تم حذف مشروع التخرج بنجاح');
+}
 }

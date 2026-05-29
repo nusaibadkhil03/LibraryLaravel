@@ -55,6 +55,22 @@
     placeholder="أدخل رقم القيد"
     required
 >
+<div class="mt-4">
+
+    <x-input-label for="phone" :value="'رقم الهاتف'" />
+
+    <x-text-input
+        id="phone"
+        class="block mt-1 w-full"
+        type="text"
+        name="phone"
+        :value="old('phone')"
+        required
+    />
+
+    <x-input-error :messages="$errors->get('phone')" class="mt-2" />
+
+</div>
 @error('student_number')
     <p style="color: red; font-size: 13px; margin-top: -12px; margin-bottom: 15px;">
         {{ $message }}

@@ -91,6 +91,8 @@ table {
 
                     <th style="padding:10px;">الحالة</th>
 
+                    <th>حذف</th>
+
                 </tr>
             </thead>
 
@@ -147,6 +149,26 @@ table {
                         <td style="padding:10px;">
                             {{ $book->status }}
                         </td>
+
+                        <td>
+    <form action="{{ route('admin.books.destroy', $book->id) }}"
+          method="POST"
+          onsubmit="return confirm('هل أنت متأكد من حذف هذا الكتاب؟')">
+
+        @csrf
+        @method('DELETE')
+
+        <button style="
+            background:red;
+            color:white;
+            border:none;
+            padding:8px 12px;
+            border-radius:8px;
+            cursor:pointer;">
+            حذف
+        </button>
+    </form>
+</td>
 
                     </tr>
 

@@ -5,8 +5,10 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Book;
 use App\Models\Department;
+use App\Models\AdminActivity;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Auth;
 
 class DigitalBookController extends Controller
 {
@@ -17,6 +19,10 @@ class DigitalBookController extends Controller
             ->get();
 
         $query = Book::with('department');
+
+        if ($request->filled('search')) {
+        $query->where('title', 'like', '%' . $request->search . '%');
+    }
 
         if ($request->filled('department_id')) {
             $query->where('department_id', $request->department_id);
@@ -57,29 +63,48 @@ class DigitalBookController extends Controller
 
         $filePath = $request->file('file')->store('books', 'public');
 
-        Book::create([
-            'title' => $request->title,
-            'author' => $request->author,
-            'department_id' => $request->department_id,
-            'semester' => $request->semester,
-            'description' => $request->description,
-            'file_path' => $filePath,
-            'status' => 'published',
-        ]);
+        $book = Book::create([
+    'title' => $request->title,
+    'author' => $request->author,
+    'department_id' => $request->department_id,
+    'semester' => $request->semester,
+    'description' => $request->description,
+    'file_path' => $filePath,
+    'status' => 'published',
+]);
+
+AdminActivity::create([
+    'admin_id' => Auth::id(),
+    'action' => 'إضافة كتاب رقمي',
+    'description' => 'تمت إضافة الكتاب الرقمي: ' . $book->title,
+    'type' => 'digital_book',
+]);
 
         return back()->with('success', 'تم رفع الكتاب الرقمي بنجاح');
     }
 
-    public function destroy($id)
-    {
-        $book = Book::findOrFail($id);
+   public function destroy($id)
+{
+    $book = Book::findOrFail($id);
 
-        if ($book->file_path) {
-            Storage::disk('public')->delete($book->file_path);
-        }
+    $title = $book->title;
 
-        $book->delete();
-
-        return back()->with('success', 'تم حذف الكتاب الرقمي بنجاح');
+    if (
+        $book->file_path &&
+        Storage::disk('public')->exists($book->file_path)
+    ) {
+        Storage::disk('public')->delete($book->file_path);
     }
+
+    $book->delete();
+
+    AdminActivity::create([
+        'admin_id' => Auth::id(),
+        'action' => 'حذف كتاب رقمي',
+        'description' => 'تم حذف الكتاب الرقمي: ' . $title,
+        'type' => 'digital_book',
+    ]);
+
+    return back()->with('success', 'تم حذف الكتاب الرقمي بنجاح');
+}
 }
