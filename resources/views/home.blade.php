@@ -17,46 +17,76 @@
 <section class="stats-modern-section">
     <div class="stats-header">
         <span>نظرة عامة</span>
-        <h2>إحصائيات المكتبة الرقمية</h2>
+        <h2>إحصائيات المكتبة </h2>
         <p>أرقام مباشرة من قاعدة البيانات تعكس محتوى المنصة وخدماتها الأكاديمية.</p>
     </div>
 
     <div class="stats-modern-grid">
+
         <div class="stat-modern-card">
             <div class="stat-info">
                 <span class="stat-icon">📚</span>
-                <h3 class="counter" data-target="{{ $stats['books'] ?? 0 }}">{{ $stats['books'] ?? 0 }}</h3>
-                <p>كتاب ومرجع أكاديمي</p>
+                <h3 class="counter" data-target="{{ $stats['library_books'] ?? 0 }}">
+                    {{ $stats['library_books'] ?? 0 }}
+                </h3>
+                <p>كتاب </p>
             </div>
-            <div class="stat-bar"><span style="height: 85%;"></span></div>
+            <div class="stat-bar">
+                <span style="height: 85%;"></span>
+            </div>
         </div>
 
         <div class="stat-modern-card">
             <div class="stat-info">
                 <span class="stat-icon">🎓</span>
-                <h3 class="counter" data-target="{{ $stats['projects'] ?? 0 }}">{{ $stats['projects'] ?? 0 }}</h3>
+                <h3 class="counter" data-target="{{ $stats['projects'] ?? 0 }}">
+                    {{ $stats['projects'] ?? 0 }}
+                </h3>
                 <p>مشروع تخرج</p>
             </div>
-            <div class="stat-bar"><span style="height: 65%;"></span></div>
+            <div class="stat-bar">
+                <span style="height: 65%;"></span>
+            </div>
         </div>
 
         <div class="stat-modern-card">
             <div class="stat-info">
-                <span class="stat-icon">🏛️</span>
-                <h3 class="counter" data-target="{{ $stats['departments'] ?? 0 }}">{{ $stats['departments'] ?? 0 }}</h3>
-                <p>قسم أكاديمي</p>
+                <span class="stat-icon">📖</span>
+                <h3 class="counter" data-target="{{ $stats['syllabuses'] ?? 0 }}">
+                    {{ $stats['syllabuses'] ?? 0 }}
+                </h3>
+                <p>منهج دراسي</p>
             </div>
-            <div class="stat-bar"><span style="height: 45%;"></span></div>
+            <div class="stat-bar">
+                <span style="height: 75%;"></span>
+            </div>
         </div>
+         <div class="stat-modern-card">
+    <div class="stat-info">
+        <span class="stat-icon">🏛️</span>
+        <h3 class="counter" data-target="{{ $stats['departments'] ?? 0 }}">
+            {{ $stats['departments'] ?? 0 }}
+        </h3>
+        <p>قسم أكاديمي</p>
+    </div>
+    <div class="stat-bar">
+        <span style="height: 55%;"></span>
+    </div>
+</div>
 
         <div class="stat-modern-card">
             <div class="stat-info">
-                <span class="stat-icon">🧾</span>
-                <h3 class="counter" data-target="{{ $stats['researches'] ?? 0 }}">{{ $stats['researches'] ?? 0 }}</h3>
-                <p>بحث أو مجلة علمية</p>
+                <span class="stat-icon">🔬</span>
+                <h3 class="counter" data-target="{{ $stats['researches'] ?? 0 }}">
+                    {{ $stats['researches'] ?? 0 }}
+                </h3>
+                <p>بحث علمي</p>
             </div>
-            <div class="stat-bar"><span style="height: 55%;"></span></div>
+            <div class="stat-bar">
+                <span style="height: 55%;"></span>
+            </div>
         </div>
+
     </div>
 </section>
 

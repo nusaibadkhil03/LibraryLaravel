@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Models\Department;
 use App\Models\Curriculum;
 use App\Models\Project;
+use App\Models\Syllabus;
 use App\Models\PastExam;
 use App\Models\Research;
 use App\Models\Journal;
@@ -33,16 +34,10 @@ use App\Http\Controllers\DepartmentContentController;
 use App\Http\Controllers\Admin\DigitalBookController;
 use App\Http\Controllers\Admin\StudentController;
 use App\Http\Controllers\Admin\AdminUserController;
+use App\Http\Controllers\FavoriteController;
 
 
 
-Route::get('/plain', function () {
-    return '<h1>Plain HTML works</h1>';
-});
-
-Route::get('/blade', function () {
-    return view('test');
-});
 
 
 Route::get('/curriculum', [CurriculumPageController::class, 'index'])
@@ -50,6 +45,16 @@ Route::get('/curriculum', [CurriculumPageController::class, 'index'])
 
 Route::get('/search', [SearchController::class, 'index'])->name('search');
 Route::get('/live-search', [SearchController::class, 'live'])->name('live.search');
+
+Route::middleware('auth')->group(function () {
+
+    Route::get('/favorites', [FavoriteController::class, 'index'])
+        ->name('favorites.index');
+
+    Route::post('/favorites/toggle', [FavoriteController::class, 'toggle'])
+        ->name('favorites.toggle');
+
+});
 
 Route::get('/borrow', function () {
     $books = LibraryBook::all();
@@ -67,27 +72,36 @@ Route::post('/borrows/{book}', [BorrowController::class, 'store'])
 
  
 Route::get('/', function () {
+
     $departments = Department::latest()->get();
 
     $stats = [
-        'departments' => Department::count(),
-        'books' => Book::count(),
-        'projects' => Project::count(),
-        'exams' => PastExam::count(),
-        'researches' => Research::count(),
-        'borrows' => Borrow::count(),
-    ];
+    'library_books' => LibraryBook::count(),
+    'projects' => Project::count(),
+    'syllabuses' => Syllabus::count(),
+    'departments' => Department::count(),
+    'researches' => Research::count(),
+];
 
     $latestBooks = Book::latest()->take(4)->get();
+
     $latestProjects = Project::latest()->take(3)->get();
+
     $latestResearches = Research::latest()->take(3)->get();
 
-    $mostDownloadedBooks = collect();
-
-    // بدل Research لازم Journal
     $latestJournals = Journal::latest()
         ->take(3)
         ->get();
+
+    $latestContents = collect()
+        ->merge(Book::latest()->take(2)->get())
+        ->merge(Syllabus::latest()->take(2)->get())
+        ->merge(PastExam::latest()->take(2)->get())
+        ->merge(Project::latest()->take(2)->get())
+        ->sortByDesc('created_at')
+        ->take(5);
+
+    $mostDownloadedBooks = Book::latest()->take(5)->get();
 
     if (Auth::check()) {
         if (Auth::user()->role === 'admin') {
@@ -100,8 +114,9 @@ Route::get('/', function () {
             'latestBooks',
             'latestProjects',
             'latestResearches',
-            'mostDownloadedBooks',
-            'latestJournals'
+            'latestJournals',
+            'latestContents',
+            'mostDownloadedBooks'
         ));
     }
 
@@ -111,9 +126,11 @@ Route::get('/', function () {
         'latestBooks',
         'latestProjects',
         'latestResearches',
-        'mostDownloadedBooks',
-        'latestJournals'
+        'latestJournals',
+        'latestContents',
+        'mostDownloadedBooks'
     ));
+
 })->name('home');
 
 
