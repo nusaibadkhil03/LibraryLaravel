@@ -2,73 +2,106 @@
 
 <section class="welcome-banner">
     <div class="welcome-text">
-        <h1>مرحباً بك في مكتبة الجامعة الليبية الإلكترونية</h1>
-        <p>بوابتك الرقمية الشاملة للمراجع الأكاديمية، المناهج الدراسية، وتوثيقات مشاريع التخرج.</p>
-
+<h1><?php echo e(__('messages.hero_title')); ?></h1>
+<p><?php echo e(__('messages.hero_description')); ?></p>
         <div class="action-buttons">
-            <a href="<?php echo e(route('about')); ?>" class="btn-primary">عن الجامعة</a>
-            <a href="<?php echo e(route('borrow')); ?>" class="btn-secondary">استعارة كتاب ورقي</a>
-        </div>
+             <a href="<?php echo e(route('about')); ?>" class="btn-primary"><?php echo e(__('messages.about_university')); ?></a>
+             <a href="<?php echo e(route('borrow')); ?>" class="btn-secondary"><?php echo e(__('messages.borrow_paper_book')); ?></a>        </div>
     </div>
 </section>
 
 <section class="stats-modern-section">
     <div class="stats-header">
-        <span>نظرة عامة</span>
-        <h2>إحصائيات المكتبة الرقمية</h2>
-        <p>أرقام مباشرة من قاعدة البيانات تعكس محتوى المنصة وخدماتها الأكاديمية.</p>
+        <span><?php echo e(__('messages.overview')); ?></span>
+        <h2><?php echo e(__('messages.library_statistics')); ?></h2>
+        <p><?php echo e(__('messages.statistics_description')); ?></p>
     </div>
 
     <div class="stats-modern-grid">
+
         <div class="stat-modern-card">
             <div class="stat-info">
                 <span class="stat-icon">📚</span>
-                <h3 class="counter" data-target="<?php echo e($stats['books'] ?? 0); ?>"><?php echo e($stats['books'] ?? 0); ?></h3>
-                <p>كتاب ومرجع أكاديمي</p>
+                <h3 class="counter" data-target="<?php echo e($stats['library_books'] ?? 0); ?>">
+                    <?php echo e($stats['library_books'] ?? 0); ?>
+
+                </h3>
+        <p><?php echo e(__('messages.book')); ?></p>
             </div>
-            <div class="stat-bar"><span style="height: 85%;"></span></div>
+            <div class="stat-bar">
+                <span style="height: 85%;"></span>
+            </div>
         </div>
 
         <div class="stat-modern-card">
             <div class="stat-info">
                 <span class="stat-icon">🎓</span>
-                <h3 class="counter" data-target="<?php echo e($stats['projects'] ?? 0); ?>"><?php echo e($stats['projects'] ?? 0); ?></h3>
-                <p>مشروع تخرج</p>
+                <h3 class="counter" data-target="<?php echo e($stats['projects'] ?? 0); ?>">
+                    <?php echo e($stats['projects'] ?? 0); ?>
+
+                </h3>
+                <p><?php echo e(__('messages.graduation_project')); ?></p>
             </div>
-            <div class="stat-bar"><span style="height: 65%;"></span></div>
+            <div class="stat-bar">
+                <span style="height: 65%;"></span>
+            </div>
         </div>
 
         <div class="stat-modern-card">
             <div class="stat-info">
-                <span class="stat-icon">🏛️</span>
-                <h3 class="counter" data-target="<?php echo e($stats['departments'] ?? 0); ?>"><?php echo e($stats['departments'] ?? 0); ?></h3>
-                <p>قسم أكاديمي</p>
+                <span class="stat-icon">📖</span>
+                <h3 class="counter" data-target="<?php echo e($stats['syllabuses'] ?? 0); ?>">
+                    <?php echo e($stats['syllabuses'] ?? 0); ?>
+
+                </h3>
+                <p><?php echo e(__('messages.syllabus')); ?></p>
             </div>
-            <div class="stat-bar"><span style="height: 45%;"></span></div>
+            <div class="stat-bar">
+                <span style="height: 75%;"></span>
+            </div>
         </div>
+         <div class="stat-modern-card">
+    <div class="stat-info">
+        <span class="stat-icon">🏛️</span>
+        <h3 class="counter" data-target="<?php echo e($stats['departments'] ?? 0); ?>">
+            <?php echo e($stats['departments'] ?? 0); ?>
+
+        </h3>
+        <p><?php echo e(__('messages.academic_department')); ?></p>
+    </div>
+    <div class="stat-bar">
+        <span style="height: 55%;"></span>
+    </div>
+</div>
 
         <div class="stat-modern-card">
             <div class="stat-info">
-                <span class="stat-icon">🧾</span>
-                <h3 class="counter" data-target="<?php echo e($stats['researches'] ?? 0); ?>"><?php echo e($stats['researches'] ?? 0); ?></h3>
-                <p>بحث أو مجلة علمية</p>
+                <span class="stat-icon">🔬</span>
+                <h3 class="counter" data-target="<?php echo e($stats['researches'] ?? 0); ?>">
+                    <?php echo e($stats['researches'] ?? 0); ?>
+
+                </h3>
+                <p><?php echo e(__('messages.scientific_research')); ?></p>
             </div>
-            <div class="stat-bar"><span style="height: 55%;"></span></div>
+            <div class="stat-bar">
+                <span style="height: 55%;"></span>
+            </div>
         </div>
+
     </div>
 </section>
 
 <section class="academic-showcase">
     <div class="showcase-header">
         
-        <h2>نافذة سريعة على المكتبة الرقمية</h2>
-        <p>وصول سريع لأهم المحتويات الأكاديمية المضافة داخل المنصة.</p>
+        <h2><?php echo e(__('messages.quick_window')); ?></h2>
+        <p><?php echo e(__('messages.quick_window_description')); ?></p>
     </div>
 
     <div class="showcase-grid">
 
         <div class="showcase-card downloads-card">
-    <h3>أكثر الكتب الرقمية تحميلًا</h3>
+    <h3><?php echo e(__('messages.most_downloaded_books')); ?></h3>
 
     <?php $__empty_1 = true; $__currentLoopData = ($mostDownloadedBooks ?? collect())->take(3); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $book): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
         <a href="<?php echo e(asset('storage/' . $book->file_path)); ?>"
@@ -89,14 +122,14 @@
              style="background-image: url('<?php echo e(asset('images/journals-bg.jpeg')); ?>');">
             <div class="journal-overlay">
                 
-                <h3>مجلات الجامعة</h3>
-                <p>تصفح الإصدارات العلمية والمجلات الأكاديمية الخاصة بالجامعة.</p>
-                <a href="<?php echo e(route('journals')); ?>" class="journal-btn">استعراض المجلات</a>
+                <h3><?php echo e(__('messages.university_journals')); ?></h3>
+                <p><?php echo e(__('messages.university_journals_description')); ?></p>
+                <a href="<?php echo e(route('journals')); ?>" class="journal-btn"><?php echo e(__('messages.browse_journals')); ?></a>
             </div>
         </div>
 
         <div class="showcase-card updates-card">
-    <h3>آخر الإضافات الأكاديمية</h3>
+    <h3><?php echo e(__('messages.latest_academic_additions')); ?></h3>
 
     <?php if(isset($latestBooks) && $latestBooks->count()): ?>
         <a href="<?php echo e(asset('storage/' . $latestBooks->first()->file_path)); ?>"
@@ -104,8 +137,8 @@
            class="update-item mini-link">
             <span>📚</span>
             <div>
-                <strong>كتاب جديد</strong>
-                <p><?php echo e($latestBooks->first()->title ?? 'تمت إضافة كتاب جديد'); ?></p>
+                <strong><?php echo e(__('messages.new_book')); ?></strong>
+                <p><?php echo e($latestBooks->first()->title ?? __('messages.new_book_added')); ?></p>
             </div>
         </a>
     <?php endif; ?>
@@ -115,8 +148,8 @@
            class="update-item mini-link">
             <span>🎓</span>
             <div>
-                <strong>مشروع تخرج</strong>
-                <p><?php echo e($latestProjects->first()->title ?? 'تمت إضافة مشروع جديد'); ?></p>
+                <strong><?php echo e(__('messages.graduation_project')); ?></strong>
+                <p><?php echo e($latestProjects->first()->title ?? __('messages.new_project_added')); ?></p>
             </div>
         </a>
     <?php endif; ?>
@@ -126,7 +159,7 @@
            class="update-item mini-link">
             <span>🧾</span>
             <div>
-                <strong>بحث أو مجلة</strong>
+                <strong><?php echo e(__('messages.research_or_journal')); ?></strong>
                 <p><?php echo e($latestJournals->first()->title ?? 'تمت إضافة إصدار جديد'); ?></p>
             </div>
         </a>

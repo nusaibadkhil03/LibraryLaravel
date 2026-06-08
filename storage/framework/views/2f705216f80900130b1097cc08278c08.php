@@ -1,23 +1,24 @@
-<?php $__env->startSection('title', 'إنشاء حساب - مكتبة الجامعة'); ?>
+<?php $__env->startSection('title', __('messages.register_page_title')); ?>
 
 <?php $__env->startSection('form_body'); ?>
 
-<h2>إنشاء حساب</h2>
+<h2><?php echo e(__('messages.create_account')); ?></h2>
 
 <p class="note">
-ملاحظة: يجب استخدام البريد الجامعي
+    <?php echo e(__('messages.university_email_note')); ?>
+
 </p>
 
 <form method="POST" action="<?php echo e(route('register')); ?>">
     <?php echo csrf_field(); ?>
 
-    <label for="name">اسم الطالب</label>
+    <label for="name"><?php echo e(__('messages.student_name')); ?></label>
     <input
         id="name"
         type="text"
         name="name"
         value="<?php echo e(old('name')); ?>"
-        placeholder="الاسم الكامل"
+        placeholder="<?php echo e(__('messages.full_name')); ?>"
         required
         autofocus
         autocomplete="name"
@@ -27,7 +28,7 @@ $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
 if (isset($message)) { $__messageOriginal = $message; }
 $message = $__bag->first($__errorArgs[0]); ?>
-        <p style="color: red; font-size: 13px; margin-top: -12px; margin-bottom: 15px;">
+        <p style="color:red; font-size:13px; margin-top:-12px; margin-bottom:15px;">
             <?php echo e($message); ?>
 
         </p>
@@ -36,7 +37,7 @@ if (isset($__messageOriginal)) { $message = $__messageOriginal; }
 endif;
 unset($__errorArgs, $__bag); ?>
 
-    <label for="email">البريد الجامعي</label>
+    <label for="email"><?php echo e(__('messages.university_email')); ?></label>
     <input
         id="email"
         type="email"
@@ -51,7 +52,7 @@ $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
 if (isset($message)) { $__messageOriginal = $message; }
 $message = $__bag->first($__errorArgs[0]); ?>
-        <p style="color: red; font-size: 13px; margin-top: -12px; margin-bottom: 15px;">
+        <p style="color:red; font-size:13px; margin-top:-12px; margin-bottom:15px;">
             <?php echo e($message); ?>
 
         </p>
@@ -60,132 +61,91 @@ if (isset($__messageOriginal)) { $message = $__messageOriginal; }
 endif;
 unset($__errorArgs, $__bag); ?>
 
-    <label for="student_number">رقم القيد</label>
-<input
-    id="student_number"
-    type="text"
-    name="student_number"
-    value="<?php echo e(old('student_number')); ?>"
-    placeholder="أدخل رقم القيد"
-    required
->
-<div class="mt-4">
-
-    <?php if (isset($component)) { $__componentOriginale3da9d84bb64e4bc2eeebaafabfb2581 = $component; } ?>
-<?php if (isset($attributes)) { $__attributesOriginale3da9d84bb64e4bc2eeebaafabfb2581 = $attributes; } ?>
-<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.input-label','data' => ['for' => 'phone','value' => 'رقم الهاتف']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
-<?php $component->withName('input-label'); ?>
-<?php if ($component->shouldRender()): ?>
-<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
-<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
-<?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
-<?php endif; ?>
-<?php $component->withAttributes(['for' => 'phone','value' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute('رقم الهاتف')]); ?>
-<?php echo $__env->renderComponent(); ?>
-<?php endif; ?>
-<?php if (isset($__attributesOriginale3da9d84bb64e4bc2eeebaafabfb2581)): ?>
-<?php $attributes = $__attributesOriginale3da9d84bb64e4bc2eeebaafabfb2581; ?>
-<?php unset($__attributesOriginale3da9d84bb64e4bc2eeebaafabfb2581); ?>
-<?php endif; ?>
-<?php if (isset($__componentOriginale3da9d84bb64e4bc2eeebaafabfb2581)): ?>
-<?php $component = $__componentOriginale3da9d84bb64e4bc2eeebaafabfb2581; ?>
-<?php unset($__componentOriginale3da9d84bb64e4bc2eeebaafabfb2581); ?>
-<?php endif; ?>
-
-    <?php if (isset($component)) { $__componentOriginal18c21970322f9e5c938bc954620c12bb = $component; } ?>
-<?php if (isset($attributes)) { $__attributesOriginal18c21970322f9e5c938bc954620c12bb = $attributes; } ?>
-<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.text-input','data' => ['id' => 'phone','class' => 'block mt-1 w-full','type' => 'text','name' => 'phone','value' => old('phone'),'required' => true]] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
-<?php $component->withName('text-input'); ?>
-<?php if ($component->shouldRender()): ?>
-<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
-<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
-<?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
-<?php endif; ?>
-<?php $component->withAttributes(['id' => 'phone','class' => 'block mt-1 w-full','type' => 'text','name' => 'phone','value' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute(old('phone')),'required' => true]); ?>
-<?php echo $__env->renderComponent(); ?>
-<?php endif; ?>
-<?php if (isset($__attributesOriginal18c21970322f9e5c938bc954620c12bb)): ?>
-<?php $attributes = $__attributesOriginal18c21970322f9e5c938bc954620c12bb; ?>
-<?php unset($__attributesOriginal18c21970322f9e5c938bc954620c12bb); ?>
-<?php endif; ?>
-<?php if (isset($__componentOriginal18c21970322f9e5c938bc954620c12bb)): ?>
-<?php $component = $__componentOriginal18c21970322f9e5c938bc954620c12bb; ?>
-<?php unset($__componentOriginal18c21970322f9e5c938bc954620c12bb); ?>
-<?php endif; ?>
-
-    <?php if (isset($component)) { $__componentOriginalf94ed9c5393ef72725d159fe01139746 = $component; } ?>
-<?php if (isset($attributes)) { $__attributesOriginalf94ed9c5393ef72725d159fe01139746 = $attributes; } ?>
-<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.input-error','data' => ['messages' => $errors->get('phone'),'class' => 'mt-2']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
-<?php $component->withName('input-error'); ?>
-<?php if ($component->shouldRender()): ?>
-<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
-<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
-<?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
-<?php endif; ?>
-<?php $component->withAttributes(['messages' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute($errors->get('phone')),'class' => 'mt-2']); ?>
-<?php echo $__env->renderComponent(); ?>
-<?php endif; ?>
-<?php if (isset($__attributesOriginalf94ed9c5393ef72725d159fe01139746)): ?>
-<?php $attributes = $__attributesOriginalf94ed9c5393ef72725d159fe01139746; ?>
-<?php unset($__attributesOriginalf94ed9c5393ef72725d159fe01139746); ?>
-<?php endif; ?>
-<?php if (isset($__componentOriginalf94ed9c5393ef72725d159fe01139746)): ?>
-<?php $component = $__componentOriginalf94ed9c5393ef72725d159fe01139746; ?>
-<?php unset($__componentOriginalf94ed9c5393ef72725d159fe01139746); ?>
-<?php endif; ?>
-
-</div>
-<?php $__errorArgs = ['student_number'];
+    <label for="student_number"><?php echo e(__('messages.student_number')); ?></label>
+    <input
+        id="student_number"
+        type="text"
+        name="student_number"
+        value="<?php echo e(old('student_number')); ?>"
+        placeholder="<?php echo e(__('messages.enter_student_number')); ?>"
+        required
+    >
+    <?php $__errorArgs = ['student_number'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
 if (isset($message)) { $__messageOriginal = $message; }
 $message = $__bag->first($__errorArgs[0]); ?>
-    <p style="color: red; font-size: 13px; margin-top: -12px; margin-bottom: 15px;">
-        <?php echo e($message); ?>
+        <p style="color:red; font-size:13px; margin-top:-12px; margin-bottom:15px;">
+            <?php echo e($message); ?>
 
-    </p>
-<?php unset($message);
+        </p>
+    <?php unset($message);
 if (isset($__messageOriginal)) { $message = $__messageOriginal; }
 endif;
 unset($__errorArgs, $__bag); ?>
 
-<label for="department_id">القسم</label>
-<select
-    id="department_id"
-    name="department_id"
-    required
-    style="width:100%; padding:12px; margin-bottom:18px; border-radius:10px; border:1px solid #ddd;"
->
-    <option value="">اختر القسم</option>
-
-    <?php $__currentLoopData = $departments; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $department): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-        <option value="<?php echo e($department->id); ?>"
-            <?php echo e(old('department_id') == $department->id ? 'selected' : ''); ?>>
-            <?php echo e($department->name); ?>
-
-        </option>
-    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-</select>
-<?php $__errorArgs = ['department_id'];
+    <label for="phone"><?php echo e(__('messages.phone_number')); ?></label>
+    <input
+        id="phone"
+        type="text"
+        name="phone"
+        value="<?php echo e(old('phone')); ?>"
+        placeholder="<?php echo e(__('messages.phone_number')); ?>"
+        required
+    >
+    <?php $__errorArgs = ['phone'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
 if (isset($message)) { $__messageOriginal = $message; }
 $message = $__bag->first($__errorArgs[0]); ?>
-    <p style="color: red; font-size: 13px; margin-top: -12px; margin-bottom: 15px;">
-        <?php echo e($message); ?>
+        <p style="color:red; font-size:13px; margin-top:-12px; margin-bottom:15px;">
+            <?php echo e($message); ?>
 
-    </p>
-<?php unset($message);
+        </p>
+    <?php unset($message);
 if (isset($__messageOriginal)) { $message = $__messageOriginal; }
 endif;
 unset($__errorArgs, $__bag); ?>
 
-    <label for="password">كلمة المرور</label>
+    <label for="department_id"><?php echo e(__('messages.department')); ?></label>
+    <select
+        id="department_id"
+        name="department_id"
+        required
+        style="width:100%; padding:12px; margin-bottom:18px; border-radius:10px; border:1px solid #ddd;"
+    >
+        <option value=""><?php echo e(__('messages.select_department')); ?></option>
+
+        <?php $__currentLoopData = $departments; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $department): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+            <option value="<?php echo e($department->id); ?>"
+                <?php echo e(old('department_id') == $department->id ? 'selected' : ''); ?>>
+                <?php echo e(app()->getLocale() == 'en'
+                    ? ucwords(str_replace('-', ' ', $department->slug))
+                    : $department->name); ?>
+
+            </option>
+        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+    </select>
+    <?php $__errorArgs = ['department_id'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+        <p style="color:red; font-size:13px; margin-top:-12px; margin-bottom:15px;">
+            <?php echo e($message); ?>
+
+        </p>
+    <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
+
+    <label for="password"><?php echo e(__('messages.password')); ?></label>
     <input
         id="password"
         type="password"
         name="password"
-        placeholder="أدخل كلمة المرور"
+        placeholder="<?php echo e(__('messages.password_placeholder')); ?>"
         required
         autocomplete="new-password"
     >
@@ -194,7 +154,7 @@ $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
 if (isset($message)) { $__messageOriginal = $message; }
 $message = $__bag->first($__errorArgs[0]); ?>
-        <p style="color: red; font-size: 13px; margin-top: -12px; margin-bottom: 15px;">
+        <p style="color:red; font-size:13px; margin-top:-12px; margin-bottom:15px;">
             <?php echo e($message); ?>
 
         </p>
@@ -203,12 +163,12 @@ if (isset($__messageOriginal)) { $message = $__messageOriginal; }
 endif;
 unset($__errorArgs, $__bag); ?>
 
-    <label for="password_confirmation">إعادة كلمة المرور</label>
+    <label for="password_confirmation"><?php echo e(__('messages.confirm_password')); ?></label>
     <input
         id="password_confirmation"
         type="password"
         name="password_confirmation"
-        placeholder="أعد كتابة كلمة المرور"
+        placeholder="<?php echo e(__('messages.confirm_password_placeholder')); ?>"
         required
         autocomplete="new-password"
     >
@@ -217,7 +177,7 @@ $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
 if (isset($message)) { $__messageOriginal = $message; }
 $message = $__bag->first($__errorArgs[0]); ?>
-        <p style="color: red; font-size: 13px; margin-top: -12px; margin-bottom: 15px;">
+        <p style="color:red; font-size:13px; margin-top:-12px; margin-bottom:15px;">
             <?php echo e($message); ?>
 
         </p>
@@ -227,13 +187,18 @@ endif;
 unset($__errorArgs, $__bag); ?>
 
     <button type="submit" class="login-btn">
-        إنشاء حساب
+        <?php echo e(__('messages.create_account')); ?>
+
     </button>
 </form>
 
 <p style="text-align:center; margin-top:15px;">
-    لديك حساب بالفعل؟
-    <a href="<?php echo e(route('login')); ?>">تسجيل الدخول</a>
+    <?php echo e(__('messages.have_account')); ?>
+
+    <a href="<?php echo e(route('login')); ?>">
+        <?php echo e(__('messages.login')); ?>
+
+    </a>
 </p>
 
 <?php $__env->stopSection(); ?>

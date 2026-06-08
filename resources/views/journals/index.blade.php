@@ -241,18 +241,46 @@
                             </p>
 
                             <div class="journals-full-actions">
-                                <a href="{{ asset('storage/' . $journal->file_path) }}"
-                                   target="_blank"
-                                   class="journals-full-btn journals-full-read">
-                                    قراءة
-                                </a>
 
-                                <a href="{{ asset('storage/' . $journal->file_path) }}"
-                                   download
-                                   class="journals-full-btn journals-full-download">
-                                    تحميل PDF
-                                </a>
-                            </div>
+    <form method="POST"
+          action="{{ route('favorites.toggle') }}"
+          style="display:inline;">
+        @csrf
+
+        <input type="hidden"
+               name="favoritable_id"
+               value="{{ $journal->id }}">
+
+        <input type="hidden"
+               name="favoritable_type"
+               value="{{ App\Models\Journal::class }}">
+
+        <button type="submit"
+                style="
+                    border:none;
+                    background:#fff7ed;
+                    padding:10px 14px;
+                    border-radius:12px;
+                    cursor:pointer;
+                    font-size:18px;
+                ">
+            ⭐
+        </button>
+    </form>
+
+    <a href="{{ asset('storage/' . $journal->file_path) }}"
+       target="_blank"
+       class="journals-full-btn journals-full-read">
+        قراءة
+    </a>
+
+    <a href="{{ asset('storage/' . $journal->file_path) }}"
+       download
+       class="journals-full-btn journals-full-download">
+        تحميل PDF
+    </a>
+
+</div>
 
                         </div>
 

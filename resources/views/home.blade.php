@@ -4,21 +4,19 @@
 
 <section class="welcome-banner">
     <div class="welcome-text">
-        <h1>مرحباً بك في مكتبة الجامعة الليبية الإلكترونية</h1>
-        <p>بوابتك الرقمية الشاملة للمراجع الأكاديمية، المناهج الدراسية، وتوثيقات مشاريع التخرج.</p>
-
+<h1>{{ __('messages.hero_title') }}</h1>
+<p>{{ __('messages.hero_description') }}</p>
         <div class="action-buttons">
-            <a href="{{ route('about') }}" class="btn-primary">عن الجامعة</a>
-            <a href="{{ route('borrow') }}" class="btn-secondary">استعارة كتاب ورقي</a>
-        </div>
+             <a href="{{ route('about') }}" class="btn-primary">{{ __('messages.about_university') }}</a>
+             <a href="{{ route('borrow') }}" class="btn-secondary">{{ __('messages.borrow_paper_book') }}</a>        </div>
     </div>
 </section>
 
 <section class="stats-modern-section">
     <div class="stats-header">
-        <span>نظرة عامة</span>
-        <h2>إحصائيات المكتبة </h2>
-        <p>أرقام مباشرة من قاعدة البيانات تعكس محتوى المنصة وخدماتها الأكاديمية.</p>
+        <span>{{ __('messages.overview') }}</span>
+        <h2>{{ __('messages.library_statistics') }}</h2>
+        <p>{{ __('messages.statistics_description') }}</p>
     </div>
 
     <div class="stats-modern-grid">
@@ -29,7 +27,7 @@
                 <h3 class="counter" data-target="{{ $stats['library_books'] ?? 0 }}">
                     {{ $stats['library_books'] ?? 0 }}
                 </h3>
-                <p>كتاب </p>
+        <p>{{ __('messages.book') }}</p>
             </div>
             <div class="stat-bar">
                 <span style="height: 85%;"></span>
@@ -42,7 +40,7 @@
                 <h3 class="counter" data-target="{{ $stats['projects'] ?? 0 }}">
                     {{ $stats['projects'] ?? 0 }}
                 </h3>
-                <p>مشروع تخرج</p>
+                <p>{{ __('messages.graduation_project') }}</p>
             </div>
             <div class="stat-bar">
                 <span style="height: 65%;"></span>
@@ -55,7 +53,7 @@
                 <h3 class="counter" data-target="{{ $stats['syllabuses'] ?? 0 }}">
                     {{ $stats['syllabuses'] ?? 0 }}
                 </h3>
-                <p>منهج دراسي</p>
+                <p>{{ __('messages.syllabus') }}</p>
             </div>
             <div class="stat-bar">
                 <span style="height: 75%;"></span>
@@ -67,7 +65,7 @@
         <h3 class="counter" data-target="{{ $stats['departments'] ?? 0 }}">
             {{ $stats['departments'] ?? 0 }}
         </h3>
-        <p>قسم أكاديمي</p>
+        <p>{{ __('messages.academic_department') }}</p>
     </div>
     <div class="stat-bar">
         <span style="height: 55%;"></span>
@@ -80,7 +78,7 @@
                 <h3 class="counter" data-target="{{ $stats['researches'] ?? 0 }}">
                     {{ $stats['researches'] ?? 0 }}
                 </h3>
-                <p>بحث علمي</p>
+                <p>{{ __('messages.scientific_research') }}</p>
             </div>
             <div class="stat-bar">
                 <span style="height: 55%;"></span>
@@ -93,14 +91,14 @@
 <section class="academic-showcase">
     <div class="showcase-header">
         
-        <h2>نافذة سريعة على المكتبة الرقمية</h2>
-        <p>وصول سريع لأهم المحتويات الأكاديمية المضافة داخل المنصة.</p>
+        <h2>{{ __('messages.quick_window') }}</h2>
+        <p>{{ __('messages.quick_window_description') }}</p>
     </div>
 
     <div class="showcase-grid">
 
         <div class="showcase-card downloads-card">
-    <h3>أكثر الكتب الرقمية تحميلًا</h3>
+    <h3>{{ __('messages.most_downloaded_books') }}</h3>
 
     @forelse(($mostDownloadedBooks ?? collect())->take(3) as $book)
         <a href="{{ asset('storage/' . $book->file_path) }}"
@@ -121,14 +119,14 @@
              style="background-image: url('{{ asset('images/journals-bg.jpeg') }}');">
             <div class="journal-overlay">
                 
-                <h3>مجلات الجامعة</h3>
-                <p>تصفح الإصدارات العلمية والمجلات الأكاديمية الخاصة بالجامعة.</p>
-                <a href="{{ route('journals') }}" class="journal-btn">استعراض المجلات</a>
+                <h3>{{ __('messages.university_journals') }}</h3>
+                <p>{{ __('messages.university_journals_description') }}</p>
+                <a href="{{ route('journals') }}" class="journal-btn">{{ __('messages.browse_journals') }}</a>
             </div>
         </div>
 
         <div class="showcase-card updates-card">
-    <h3>آخر الإضافات الأكاديمية</h3>
+    <h3>{{ __('messages.latest_academic_additions') }}</h3>
 
     @if(isset($latestBooks) && $latestBooks->count())
         <a href="{{ asset('storage/' . $latestBooks->first()->file_path) }}"
@@ -136,8 +134,8 @@
            class="update-item mini-link">
             <span>📚</span>
             <div>
-                <strong>كتاب جديد</strong>
-                <p>{{ $latestBooks->first()->title ?? 'تمت إضافة كتاب جديد' }}</p>
+                <strong>{{ __('messages.new_book') }}</strong>
+                <p>{{ $latestBooks->first()->title ?? __('messages.new_book_added') }}</p>
             </div>
         </a>
     @endif
@@ -147,8 +145,8 @@
            class="update-item mini-link">
             <span>🎓</span>
             <div>
-                <strong>مشروع تخرج</strong>
-                <p>{{ $latestProjects->first()->title ?? 'تمت إضافة مشروع جديد' }}</p>
+                <strong>{{ __('messages.graduation_project') }}</strong>
+                <p>{{ $latestProjects->first()->title ?? __('messages.new_project_added') }}</p>
             </div>
         </a>
     @endif
@@ -158,7 +156,7 @@
            class="update-item mini-link">
             <span>🧾</span>
             <div>
-                <strong>بحث أو مجلة</strong>
+                <strong>{{ __('messages.research_or_journal') }}</strong>
                 <p>{{ $latestJournals->first()->title ?? 'تمت إضافة إصدار جديد' }}</p>
             </div>
         </a>

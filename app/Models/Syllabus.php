@@ -3,6 +3,9 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Favorite;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
+
 
 class Syllabus extends Model
 {
@@ -16,10 +19,17 @@ class Syllabus extends Model
         'description',
         'file_path',
         'status',
+        'lecture_number',
+        'doctor_name',
     ];
 
     public function department()
     {
         return $this->belongsTo(Department::class);
     }
+
+    public function favorites(): MorphMany
+{
+    return $this->morphMany(Favorite::class, 'favoritable');
+}
 }

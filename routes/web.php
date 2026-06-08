@@ -35,6 +35,8 @@ use App\Http\Controllers\Admin\DigitalBookController;
 use App\Http\Controllers\Admin\StudentController;
 use App\Http\Controllers\Admin\AdminUserController;
 use App\Http\Controllers\FavoriteController;
+use App\Http\Controllers\Admin\AdminBookController;
+
 
 
 
@@ -101,8 +103,9 @@ Route::get('/', function () {
         ->sortByDesc('created_at')
         ->take(5);
 
-    $mostDownloadedBooks = Book::latest()->take(5)->get();
-
+$mostDownloadedBooks = Book::orderByDesc('downloads_count')
+    ->take(5)
+    ->get();
     if (Auth::check()) {
         if (Auth::user()->role === 'admin') {
             return redirect()->route('admin.dashboard');
@@ -131,9 +134,25 @@ Route::get('/', function () {
         'mostDownloadedBooks'
     ));
 
+    
+
 })->name('home');
 
+Route::get('/language/{locale}', function ($locale) {
+    if (! in_array($locale, ['ar', 'en'])) {
+        abort(400);
+    }
 
+    session(['locale' => $locale]);
+
+    return back();
+})->name('language.switch');
+
+Route::get('/books/{book}/download', function (Book $book) {
+    $book->increment('downloads_count');
+
+    return response()->download(storage_path('app/public/' . $book->file_path));
+})->name('books.download');
 
 Route::get('/journals', function () {
     $journals = Journal::latest()->paginate(9);
@@ -363,74 +382,17 @@ Route::post('/borrows/{id}/return', function ($id) {
 })->name('borrows.return');
 
 
-       Route::get('/books', function () {
+      Route::get('/books', [AdminBookController::class, 'index'])
+    ->name('books.index');
 
-    $books = LibraryBook::with('department')
-    ->orderBy('title')
-    ->get();
+Route::get('/books/create', [AdminBookController::class, 'create'])
+    ->name('books.create');
 
-    return view('admin.books.index', compact('books'));
+Route::post('/books', [AdminBookController::class, 'store'])
+    ->name('books.store');
 
-})->name('books.index');
-
-
-
-Route::get('/books/create', function () {
-
-$departments = Department::where('status', 'active')
-    ->orderBy('name')
-    ->get();
-    return view('admin.books.create', compact('departments'));
-
-})->name('books.create');
-
-
-
-Route::post('/books', function (Request $request) {
-
-   $book = LibraryBook::create([
-    'title' => $request->title,
-    'author' => $request->author,
-    'publisher' => $request->publisher,
-    'publication_year' => $request->publication_year,
-    'publication_place' => $request->publication_place,
-    'book_number' => $request->book_number,
-    'edition_number' => $request->edition_number,
-    'department_id' => $request->department_id,
-    'shelf_location' => $request->shelf_location,
-    'total_copies' => $request->total_copies,
-    'available_copies' => $request->total_copies,
-    'status' => 'available',
-]);
-    AdminActivity::create([
-    'admin_id' => Auth::id(),
-    'action' => 'إضافة كتاب ورقي',
-    'description' => 'تمت إضافة الكتاب الورقي: ' . $book->title,
-    'type' => 'library_book',
-]);
-
-    return back()->with('success', 'تم إضافة الكتاب بنجاح');
-
-})->name('books.store');
-
-Route::delete('/books/{id}', function ($id) {
-
-    $book = LibraryBook::findOrFail($id);
-
-    $title = $book->title;
-
-    $book->delete();
-
-    AdminActivity::create([
-        'admin_id' => Auth::id(),
-        'action' => 'حذف كتاب ورقي',
-        'description' => 'تم حذف الكتاب الورقي: ' . $title,
-        'type' => 'library_book',
-    ]);
-
-    return back()->with('success', 'تم حذف الكتاب بنجاح');
-
-})->name('books.destroy');
+Route::delete('/books/{id}', [AdminBookController::class, 'destroy'])
+    ->name('books.destroy');
     
 
 Route::get('/journals', [JournalController::class,'index'])

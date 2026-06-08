@@ -9,7 +9,7 @@
 
                     <p>
                         @if($channel->platform)
-                            المنصة: {{ $channel->platform }}
+                            {{ __('messages.platform') }}: {{ $channel->platform }}
                         @endif
                     </p>
 
@@ -19,10 +19,25 @@
                 </div>
 
                 <div class="content-action">
+                    <form method="POST"
+                          action="{{ route('favorites.toggle') }}"
+                          style="display:inline;">
+                        @csrf
+
+                        <input type="hidden" name="favoritable_id" value="{{ $channel->id }}">
+                        <input type="hidden" name="favoritable_type" value="{{ App\Models\EducationalChannel::class }}">
+
+                        <button type="submit"
+                                class="favorite-btn"
+                                title="{{ __('messages.add_to_favorites') }}">
+                            ⭐
+                        </button>
+                    </form>
+
                     <a class="download-btn"
                        href="{{ $channel->channel_url }}"
                        target="_blank">
-                        فتح القناة
+                        {{ __('messages.open_channel') }}
                     </a>
                 </div>
             </div>

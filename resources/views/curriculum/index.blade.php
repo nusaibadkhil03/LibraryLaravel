@@ -4,16 +4,22 @@
 
 <div class="curriculum-page">
 
-    <h2 class="curriculum-title">الخطة الدراسية والجداول</h2>
+    <h2 class="curriculum-title">
+        {{ __('messages.curriculum_and_schedules') }}
+    </h2>
 
     <form method="GET" action="{{ route('curriculum') }}" class="department-filter">
         <select name="department_id" onchange="this.form.submit()">
-            <option value="">اختر القسم</option>
+            <option value="">
+                {{ __('messages.select_department') }}
+            </option>
 
             @foreach($departments as $department)
                 <option value="{{ $department->id }}"
                     {{ $selectedDepartment == $department->id ? 'selected' : '' }}>
-                    {{ $department->name }}
+                    {{ app()->getLocale() == 'en'
+                        ? ucwords(str_replace('-', ' ', $department->slug))
+                        : $department->name }}
                 </option>
             @endforeach
         </select>
@@ -22,109 +28,144 @@
     <div class="tabs">
         <button type="button" class="tab-btn active" onclick="showSection('schedules', this)">
             <span>🗓️</span>
-            الجداول الدراسية
+            {{ __('messages.study_schedules') }}
         </button>
 
         <button type="button" class="tab-btn" onclick="showSection('plans', this)">
             <span>📘</span>
-            الخطة الدراسية
+            {{ __('messages.study_plan') }}
         </button>
 
         <button type="button" class="tab-btn" onclick="showSection('calendars', this)">
             <span>📆</span>
-            التقويم الأكاديمي
+            {{ __('messages.academic_calendar') }}
         </button>
+
         <button type="button" class="tab-btn" onclick="showSection('exams', this)">
             <span>📝</span>
-             جدول الامتحانات
-            </button>
+            {{ __('messages.exam_schedules') }}
+        </button>
     </div>
 
     <div id="schedules" class="section-box active">
-        <h3 class="section-title">الجداول الدراسية</h3>
+        <h3 class="section-title">
+            {{ __('messages.study_schedules') }}
+        </h3>
 
         @if(!$selectedDepartment)
-            <p class="empty-msg">يرجى اختيار القسم لعرض الجداول الدراسية.</p>
+            <p class="empty-msg">
+                {{ __('messages.select_department_for_schedules') }}
+            </p>
         @elseif($schedules->count())
             <div class="grid-box">
                 @foreach($schedules as $item)
                     <div class="image-card">
-                        <img src="{{ asset('storage/' . $item->image) }}" alt="جدول دراسي">
-                        <a class="download-btn" href="{{ asset('storage/' . $item->image) }}" download>
-                            تحميل الصورة
+                        <img src="{{ asset('storage/' . $item->image) }}"
+                             alt="{{ __('messages.study_schedule') }}">
+
+                        <a class="download-btn"
+                           href="{{ asset('storage/' . $item->image) }}"
+                           download>
+                            {{ __('messages.download_image') }}
                         </a>
                     </div>
                 @endforeach
             </div>
         @else
-            <p class="empty-msg">لا توجد جداول دراسية لهذا القسم حالياً.</p>
+            <p class="empty-msg">
+                {{ __('messages.no_schedules_for_department') }}
+            </p>
         @endif
     </div>
 
     <div id="plans" class="section-box">
-        <h3 class="section-title">الخطة الدراسية</h3>
+        <h3 class="section-title">
+            {{ __('messages.study_plan') }}
+        </h3>
 
         @if(!$selectedDepartment)
-            <p class="empty-msg">يرجى اختيار القسم لعرض الخطة الدراسية.</p>
+            <p class="empty-msg">
+                {{ __('messages.select_department_for_plan') }}
+            </p>
         @elseif($plans->count())
             <div class="grid-box">
                 @foreach($plans as $item)
                     <div class="image-card">
-                        <img src="{{ asset('storage/' . $item->image) }}" alt="خطة دراسية">
-                        <a class="download-btn" href="{{ asset('storage/' . $item->image) }}" download>
-                            تحميل الصورة
+                        <img src="{{ asset('storage/' . $item->image) }}"
+                             alt="{{ __('messages.study_plan') }}">
+
+                        <a class="download-btn"
+                           href="{{ asset('storage/' . $item->image) }}"
+                           download>
+                            {{ __('messages.download_image') }}
                         </a>
                     </div>
                 @endforeach
             </div>
         @else
-            <p class="empty-msg">لا توجد خطة دراسية لهذا القسم حالياً.</p>
+            <p class="empty-msg">
+                {{ __('messages.no_plan_for_department') }}
+            </p>
         @endif
     </div>
 
     <div id="calendars" class="section-box">
-        <h3 class="section-title">التقويم الأكاديمي</h3>
+        <h3 class="section-title">
+            {{ __('messages.academic_calendar') }}
+        </h3>
 
         @if($calendars->count())
             <div class="grid-box">
                 @foreach($calendars as $item)
                     <div class="image-card">
-                        <img src="{{ asset('storage/' . $item->image) }}" alt="التقويم الأكاديمي">
-                        <a class="download-btn" href="{{ asset('storage/' . $item->image) }}" download>
-                            تحميل الصورة
+                        <img src="{{ asset('storage/' . $item->image) }}"
+                             alt="{{ __('messages.academic_calendar') }}">
+
+                        <a class="download-btn"
+                           href="{{ asset('storage/' . $item->image) }}"
+                           download>
+                            {{ __('messages.download_image') }}
                         </a>
                     </div>
                 @endforeach
             </div>
         @else
-            <p class="empty-msg">لا يوجد تقويم أكاديمي حالياً.</p>
+            <p class="empty-msg">
+                {{ __('messages.no_academic_calendar') }}
+            </p>
         @endif
     </div>
+
     <div id="exams" class="section-box">
-    <h3 class="section-title">جداول الامتحانات</h3>
+        <h3 class="section-title">
+            {{ __('messages.exam_schedules') }}
+        </h3>
 
-    @if(!$selectedDepartment)
-        <p class="empty-msg">يرجى اختيار القسم لعرض جداول الامتحانات.</p>
+        @if(!$selectedDepartment)
+            <p class="empty-msg">
+                {{ __('messages.select_department_for_exams') }}
+            </p>
+        @elseif($examSchedules->count())
+            <div class="grid-box">
+                @foreach($examSchedules as $item)
+                    <div class="image-card">
+                        <img src="{{ asset('storage/' . $item->image) }}"
+                             alt="{{ __('messages.exam_schedule') }}">
 
-    @elseif($examSchedules->count())
-        <div class="grid-box">
-            @foreach($examSchedules as $item)
-                <div class="image-card">
-                    <img src="{{ asset('storage/' . $item->image) }}" alt="جدول امتحانات">
-
-                    <a class="download-btn"
-                       href="{{ asset('storage/' . $item->image) }}"
-                       download>
-                        تحميل الجدول
-                    </a>
-                </div>
-            @endforeach
-        </div>
-
-    @else
-        <p class="empty-msg">لا توجد جداول امتحانات لهذا القسم حالياً.</p>
-    @endif
-</div>
+                        <a class="download-btn"
+                           href="{{ asset('storage/' . $item->image) }}"
+                           download>
+                            {{ __('messages.download_schedule') }}
+                        </a>
+                    </div>
+                @endforeach
+            </div>
+        @else
+            <p class="empty-msg">
+                {{ __('messages.no_exam_schedules_for_department') }}
+            </p>
+        @endif
+    </div>
 
 </div>
 

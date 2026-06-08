@@ -1,19 +1,24 @@
 @extends('layouts.borrow_layout')
 
-@section('title', 'استعارة كتاب')
+@section('title', __('messages.borrow_book'))
 
 @section('content')
 
 <div class="borrow-container">
 
     <div class="tabs" id="main-tabs">
-        <button type="button" class="tab-btn active" onclick="showTab('request-form-container', this)">طلب استعارة</button>
-        <button type="button" class="tab-btn" onclick="showTab('status-view', this)">حالة الطلب</button>
+        <button type="button" class="tab-btn active" onclick="showTab('request-form-container', this)">
+            {{ __('messages.borrow_request') }}
+        </button>
+
+        <button type="button" class="tab-btn" onclick="showTab('status-view', this)">
+            {{ __('messages.request_status') }}
+        </button>
     </div>
 
     <div id="request-form-container" class="form-section active">
 
-        <h2>تقديم طلب استعارة</h2>
+        <h2>{{ __('messages.submit_borrow_request') }}</h2>
 
         @if(session('success'))
             <div style="background:#d4edda; color:#155724; padding:10px; margin-bottom:15px; border-radius:8px; text-align:center;">
@@ -29,7 +34,7 @@
 
         @if($errors->any())
             <div style="background:#f8d7da; color:#721c24; padding:10px; margin-bottom:15px; border-radius:8px; text-align:center;">
-                الرجاء اختيار كتاب صحيح من القائمة.
+                {{ __('messages.select_valid_book') }}
             </div>
         @endif
 
@@ -38,40 +43,41 @@
 
             <div class="form-grid">
                 <div class="input-box">
-                    <label>اسم الطالب *</label>
-                    <input type="text" name="student_name" placeholder="أدخل اسمك الكامل" required>
+                    <label>{{ __('messages.student_name') }} *</label>
+                    <input type="text" name="student_name" placeholder="{{ __('messages.full_name') }}" required>
                 </div>
 
                 <div class="input-box">
-                    <label>رقم القيد *</label>
-                    <input type="text" name="student_id" placeholder="مثال: 202012345" required>
+                    <label>{{ __('messages.student_number') }} *</label>
+                    <input type="text" name="student_id" placeholder="{{ __('messages.student_number_example') }}" required>
                 </div>
             </div>
 
             <div class="form-grid">
-    <div class="input-box">
-        <label>القسم</label>
-        <input type="text"
-               value="{{ auth()->user()->department->name ?? '-' }}"
-               readonly>
-    </div>
+                <div class="input-box">
+                    <label>{{ __('messages.department') }}</label>
+                    <input type="text"
+                           value="{{ app()->getLocale() == 'en'
+                                ? ucwords(str_replace('-', ' ', auth()->user()->department->slug ?? '-'))
+                                : (auth()->user()->department->name ?? '-') }}"
+                           readonly>
+                </div>
 
-    <div class="input-box">
-        <label>رقم الهاتف</label>
-        <input type="text"
-               name="phone"
-               value="{{ auth()->user()->phone ?? '' }}"
-               readonly>
-    </div>
-</div>
+                <div class="input-box">
+                    <label>{{ __('messages.phone_number') }}</label>
+                    <input type="text"
+                           name="phone"
+                           value="{{ auth()->user()->phone ?? '' }}">
+                </div>
+            </div>
 
             <div class="input-box">
-                <label>اسم الكتاب *</label>
+                <label>{{ __('messages.book_name') }} *</label>
 
                 <input
                     list="booksList"
                     id="bookSearch"
-                    placeholder="اكتب اسم الكتاب..."
+                    placeholder="{{ __('messages.type_book_name') }}"
                     autocomplete="off"
                     required
                     style="padding:10px; width:100%;"
@@ -88,63 +94,61 @@
 
             <div class="form-grid">
                 <div class="input-box">
-                    <label>اسم المؤلف</label>
+                    <label>{{ __('messages.author_name') }}</label>
                     <input type="text" name="author">
                 </div>
 
                 <div class="input-box">
-                    <label>رقم الطبعة</label>
+                    <label>{{ __('messages.edition_number') }}</label>
                     <input type="text" name="edition">
                 </div>
             </div>
 
             <div class="form-grid">
                 <div class="input-box">
-                    <label>تاريخ الاستعارة</label>
+                    <label>{{ __('messages.borrow_date') }}</label>
                     <input type="date" id="borrow_date">
                 </div>
 
                 <div class="input-box">
-                    <label>تاريخ الإرجاع المتوقع</label>
+                    <label>{{ __('messages.expected_return_date') }}</label>
                     <input type="text" id="return_date_display" readonly>
                 </div>
             </div>
 
-           <div style="
-    background:#fff8e1;
-    color:#7a5a00;
-    border:1px solid #ffe08a;
-    padding:10px 14px;
-    border-radius:12px;
-    margin:15px 0;
-    font-size:14px;
-    display:flex;
-    align-items:center;
-    gap:8px;
-">
-    <span style="font-size:18px;">⚠️</span>
-    <span>
-        <strong>تنبيه:</strong>
-        في حالة التأخر عن تاريخ الإرجاع سيتم تطبيق غرامة مالية.
-    </span>
-</div>
+            <div style="
+                background:#fff8e1;
+                color:#7a5a00;
+                border:1px solid #ffe08a;
+                padding:10px 14px;
+                border-radius:12px;
+                margin:15px 0;
+                font-size:14px;
+                display:flex;
+                align-items:center;
+                gap:8px;
+            ">
+                <span style="font-size:18px;">⚠️</span>
+                <span>
+                    <strong>{{ __('messages.warning') }}:</strong>
+                    {{ __('messages.late_return_warning') }}
+                </span>
+            </div>
 
-           <div class="borrow-actions">
+            <div class="borrow-actions">
+                <button type="submit" class="borrow-submit-btn">
+                    {{ __('messages.send_request') }}
+                </button>
 
-    <button type="submit" class="borrow-submit-btn">
-        إرسال الطلب
-    </button>
-
-    <a href="{{ url('/') }}" class="borrow-back-btn">
-        الرجوع إلى الصفحة الرئيسية
-    </a>
-
-</div>
+                <a href="{{ url('/') }}" class="borrow-back-btn">
+                    {{ __('messages.back_home') }}
+                </a>
+            </div>
         </form>
     </div>
 
     <div id="status-view" class="form-section" style="display:none;">
-        <h2>متابعة حالة الطلب</h2>
+        <h2>{{ __('messages.track_request_status') }}</h2>
 
         @if(isset($borrows) && $borrows->count())
             @foreach($borrows as $borrow)
@@ -162,30 +166,37 @@
                     </p>
 
                     @if($borrow->status == 'pending')
-                        <span style="color:#e67e22; font-weight:bold;">⏳ قيد المراجعة</span>
+                        <span style="color:#e67e22; font-weight:bold;">
+                            ⏳ {{ __('messages.pending_review') }}
+                        </span>
 
                     @elseif($borrow->status == 'approved' || $borrow->status == 'borrowed')
-                        <span style="color:green; font-weight:bold;">✅ تمت الموافقة</span>
+                        <span style="color:green; font-weight:bold;">
+                            ✅ {{ __('messages.approved') }}
+                        </span>
 
                         @if($borrow->due_date)
                             <p style="margin-top:8px;">
-                                تاريخ الإرجاع المتوقع: {{ $borrow->due_date }}
+                                {{ __('messages.expected_return_date') }}: {{ $borrow->due_date }}
                             </p>
                         @endif
 
                     @elseif($borrow->status == 'returned')
-                        <span style="color:#007bff; font-weight:bold;">📗 تم الإرجاع</span>
+                        <span style="color:#007bff; font-weight:bold;">
+                            📗 {{ __('messages.returned') }}
+                        </span>
 
                     @elseif($borrow->status == 'rejected')
-                        <span style="color:red; font-weight:bold;">❌ مرفوض</span>
-
+                        <span style="color:red; font-weight:bold;">
+                            ❌ {{ __('messages.rejected') }}
+                        </span>
                     @endif
 
                 </div>
 
             @endforeach
         @else
-            <p>لا توجد طلبات حالياً</p>
+            <p>{{ __('messages.no_requests') }}</p>
         @endif
 
     </div>
@@ -241,7 +252,7 @@ document.addEventListener("DOMContentLoaded", function () {
         if (!input.value) return;
 
         let borrowDate = new Date(input.value);
-        borrowDate.setDate(borrowDate.getDate() + 14);
+        borrowDate.setDate(borrowDate.getDate() + 5);
 
         const year = borrowDate.getFullYear();
         const month = String(borrowDate.getMonth() + 1).padStart(2, '0');

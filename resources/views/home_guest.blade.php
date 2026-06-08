@@ -27,96 +27,112 @@
     </script>
 @endif
 
-<section class="welcome-banner" dir="rtl">
-    <div class="welcome-text" style="text-align:right;">
-        <h1>مرحباً بك في مكتبة الجامعة الليبية الإلكترونية</h1>
+<section class="welcome-banner">
+    <div class="welcome-text">
+        <h1>{{ __('messages.hero_title') }}</h1>
+
         <p>
-            بوابتك الرقمية الشاملة للمراجع الأكاديمية، المناهج الدراسية، المجلات العلمية، وتوثيقات مشاريع التخرج.
+            {{ __('messages.hero_description_guest') }}
         </p>
 
-        <div class="action-buttons" style="justify-content:flex-start;">
-            <a href="#services" class="btn-primary">استكشف الخدمات</a>
-            <a href="{{ route('about') }}" class="btn-secondary">عن الجامعة</a>
+        <div class="action-buttons">
+            <a href="#services" class="btn-primary">
+                {{ __('messages.explore_services') }}
+            </a>
+
+            <a href="{{ route('about') }}" class="btn-secondary">
+                {{ __('messages.about_university') }}
+            </a>
         </div>
     </div>
 </section>
 
 <section class="stats-modern-section">
     <div class="stats-header">
-        <span>نظرة عامة</span>
-        <h2>إحصائيات المكتبة الرقمية</h2>
-        <p>أرقام مباشرة من قاعدة البيانات تعكس محتوى المنصة وخدماتها الأكاديمية.</p>
+        <span>{{ __('messages.overview') }}</span>
+        <h2>{{ __('messages.library_statistics_digital') }}</h2>
+        <p>{{ __('messages.statistics_description') }}</p>
     </div>
 
     <div class="stats-modern-grid">
+
         <div class="stat-modern-card">
             <div class="stat-info">
                 <span class="stat-icon">📚</span>
-                <h3>{{ $stats['books'] ?? 0 }}</h3>
-                <p>كتاب ومرجع أكاديمي</p>
+                <h3>{{ $stats['library_books'] ?? $stats['books'] ?? 0 }}</h3>
+                <p>{{ __('messages.academic_book_reference') }}</p>
             </div>
-            <div class="stat-bar"><span style="height:85%;"></span></div>
+            <div class="stat-bar">
+                <span style="height:85%;"></span>
+            </div>
         </div>
 
         <div class="stat-modern-card">
             <div class="stat-info">
                 <span class="stat-icon">🎓</span>
                 <h3>{{ $stats['projects'] ?? 0 }}</h3>
-                <p>مشروع تخرج</p>
+                <p>{{ __('messages.graduation_project') }}</p>
             </div>
-            <div class="stat-bar"><span style="height:65%;"></span></div>
+            <div class="stat-bar">
+                <span style="height:65%;"></span>
+            </div>
         </div>
 
         <div class="stat-modern-card">
             <div class="stat-info">
                 <span class="stat-icon">🏛️</span>
                 <h3>{{ $stats['departments'] ?? 0 }}</h3>
-                <p>قسم أكاديمي</p>
+                <p>{{ __('messages.academic_department') }}</p>
             </div>
-            <div class="stat-bar"><span style="height:45%;"></span></div>
+            <div class="stat-bar">
+                <span style="height:45%;"></span>
+            </div>
         </div>
 
         <div class="stat-modern-card">
             <div class="stat-info">
                 <span class="stat-icon">🧾</span>
                 <h3>{{ $stats['researches'] ?? 0 }}</h3>
-                <p>بحث أو مجلة علمية</p>
+                <p>{{ __('messages.research_or_journal') }}</p>
             </div>
-            <div class="stat-bar"><span style="height:55%;"></span></div>
+            <div class="stat-bar">
+                <span style="height:55%;"></span>
+            </div>
         </div>
+
     </div>
 </section>
 
 <section class="academic-showcase" id="services">
     <div class="showcase-header">
-        <span>محتوى مميز</span>
-        <h2>نافذة سريعة على المكتبة الرقمية</h2>
-        <p>يمكن للضيف فتح صفحة عن الجامعة والمجلات، وباقي الخدمات تحتاج تسجيل دخول.</p>
+        <span>{{ __('messages.featured_content') }}</span>
+        <h2>{{ __('messages.quick_window') }}</h2>
+        <p>{{ __('messages.guest_quick_description') }}</p>
     </div>
 
     <div class="showcase-grid">
 
         <div class="showcase-card downloads-card guest-info-card">
-            <h3>الكتب الرقمية</h3>
+            <h3>{{ __('messages.digital_books') }}</h3>
 
             <div class="locked-preview-item">
                 <div class="mini-icon">📚</div>
                 <div>
-                    <strong>كتب ومراجع أكاديمية</strong>
-                    <p>كتب ومراجع رقمية يتم تنظيمها حسب الأقسام الأكاديمية.</p>
+                    <strong>{{ __('messages.academic_books_references') }}</strong>
+                    <p>{{ __('messages.digital_books_description') }}</p>
                 </div>
             </div>
 
             <div class="locked-preview-item">
                 <div class="mini-icon">🔒</div>
                 <div>
-                    <strong>تحتاج تسجيل الدخول</strong>
-                    <p>استعراض وتحميل الكتب متاح للطلاب المسجلين فقط.</p>
+                    <strong>{{ __('messages.login_required') }}</strong>
+                    <p>{{ __('messages.login_required_books') }}</p>
                 </div>
             </div>
 
             <a href="{{ route('guest.blocked') }}" class="showcase-btn guest-popup-btn">
-                استعراض الكتب
+                {{ __('messages.browse_books') }}
             </a>
         </div>
 
@@ -124,36 +140,37 @@
              style="background-image: url('{{ asset('images/journals-bg.jpeg') }}');">
             <div class="journal-overlay">
                 <div class="journal-icon">📘</div>
-                <h3>مجلات الجامعة</h3>
-                <p>تصفح الإصدارات العلمية والمجلات الأكاديمية الخاصة بالجامعة.</p>
+
+                <h3>{{ __('messages.university_journals') }}</h3>
+                <p>{{ __('messages.university_journals_description') }}</p>
 
                 <a href="{{ route('journals') }}" class="journal-btn">
-                    استعراض المجلات
+                    {{ __('messages.browse_journals') }}
                 </a>
             </div>
         </div>
 
         <div class="showcase-card updates-card guest-info-card">
-            <h3>عن الجامعة</h3>
+            <h3>{{ __('messages.about_university') }}</h3>
 
             <div class="locked-preview-item">
                 <div class="mini-icon">🏛️</div>
                 <div>
-                    <strong>معلومات عامة</strong>
-                    <p>تعرف على الجامعة ورؤيتها ورسالتها الأكاديمية.</p>
+                    <strong>{{ __('messages.general_info') }}</strong>
+                    <p>{{ __('messages.university_info_description') }}</p>
                 </div>
             </div>
 
             <div class="locked-preview-item">
                 <div class="mini-icon">✅</div>
                 <div>
-                    <strong>متاحة للضيف</strong>
-                    <p>يمكنك فتح صفحة عن الجامعة بدون تسجيل دخول.</p>
+                    <strong>{{ __('messages.available_for_guest') }}</strong>
+                    <p>{{ __('messages.guest_about_description') }}</p>
                 </div>
             </div>
 
             <a href="{{ route('about') }}" class="showcase-btn">
-                فتح صفحة عن الجامعة
+                {{ __('messages.open_about_page') }}
             </a>
         </div>
 
@@ -161,8 +178,13 @@
 </section>
 
 <div style="margin:35px 0; text-align:center;">
-    <a href="{{ route('login') }}" class="btn-primary" style="margin-left:10px;">تسجيل الدخول</a>
-    <a href="{{ route('register') }}" class="btn-secondary">إنشاء حساب</a>
+    <a href="{{ route('login') }}" class="btn-primary" style="margin-left:10px;">
+        {{ __('messages.login') }}
+    </a>
+
+    <a href="{{ route('register') }}" class="btn-secondary">
+        {{ __('messages.register') }}
+    </a>
 </div>
 
 @endsection

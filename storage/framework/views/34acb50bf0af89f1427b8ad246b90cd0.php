@@ -1,28 +1,32 @@
-<?php $__env->startSection('title', 'الملف الشخصي - مكتبة الجامعة'); ?>
+<?php $__env->startSection('title', __('messages.profile_page_title')); ?>
 
 <?php $__env->startSection('form_body'); ?>
 
-<h2>الملف الشخصي</h2>
+<h2><?php echo e(__('messages.profile')); ?></h2>
 
 <p class="note">
-يمكنك تعديل بياناتك الشخصية من هنا
+        <?php echo e(__('messages.edit_profile_note')); ?>
+
+
 </p>
 
 <?php if(session('status') === 'profile-updated'): ?>
     <p style="color: green; text-align: center; margin-bottom: 15px;">
-        تم تحديث البيانات بنجاح
+        <?php echo e(__('messages.profile_updated')); ?>
+
     </p>
 <?php endif; ?>
 
 <!-- ✅ البيانات الشخصية -->
 <div class="form-section">
-    <h3>البيانات الشخصية</h3>
+    <h3><?php echo e(__('messages.personal_information')); ?></h3>
 
     <form method="POST" action="<?php echo e(route('profile.update')); ?>">
         <?php echo csrf_field(); ?>
         <?php echo method_field('PATCH'); ?>
 
-        <label>اسم الطالب</label>
+        <label><?php echo e(__('messages.student_name')); ?></label>
+
         <input type="text" name="name" value="<?php echo e(old('name', $user->name)); ?>" required>
 
         <?php $__errorArgs = ['name'];
@@ -36,7 +40,8 @@ if (isset($__messageOriginal)) { $message = $__messageOriginal; }
 endif;
 unset($__errorArgs, $__bag); ?>
 
-        <label>البريد الإلكتروني</label>
+        <label><?php echo e(__('messages.email')); ?></label>
+
         <input type="email" name="email" value="<?php echo e(old('email', $user->email)); ?>" required>
 
         <?php $__errorArgs = ['email'];
@@ -50,31 +55,35 @@ if (isset($__messageOriginal)) { $message = $__messageOriginal; }
 endif;
 unset($__errorArgs, $__bag); ?>
 
-        <label>رقم القيد</label>
+        <label><?php echo e(__('messages.student_number')); ?></label>
+
         <input type="text"
-               value="<?php echo e($user->student_number ?? 'غير محدد'); ?>"
+               value="<?php echo e($user->student_number ?? __('messages.not_specified')); ?>"
                readonly
                style="background:#f8f8f8; cursor:not-allowed;">
 
-        <label>القسم</label>
+        <label><?php echo e(__('messages.department')); ?></label>
         <input type="text"
-               value="<?php echo e($user->department->name ?? 'غير محدد'); ?>"
+               value="<?php echo e($user->department->name ?? __('messages.not_specified')); ?>"
                readonly
                style="background:#f8f8f8; cursor:not-allowed;">
 
-        <button type="submit" class="login-btn">حفظ التعديلات</button>
+<button type="submit" class="login-btn">
+    <?php echo e(__('messages.save_changes')); ?>
+
+</button>
     </form>
 </div>
 
 <!-- 🔐 تغيير كلمة المرور -->
 <div class="form-section">
-    <h3>تغيير كلمة المرور</h3>
+    <h3><?php echo e(__('messages.change_password')); ?></h3>
 
     <form method="POST" action="<?php echo e(route('password.update')); ?>">
         <?php echo csrf_field(); ?>
         <?php echo method_field('PUT'); ?>
 
-        <label>كلمة المرور الحالية</label>
+        <label><?php echo e(__('messages.current_password')); ?></label>
         <input type="password" name="current_password">
 
         <?php $__errorArgs = ['current_password', 'updatePassword'];
@@ -88,7 +97,7 @@ if (isset($__messageOriginal)) { $message = $__messageOriginal; }
 endif;
 unset($__errorArgs, $__bag); ?>
 
-        <label>كلمة المرور الجديدة</label>
+        <label><?php echo e(__('messages.new_password')); ?></label>
         <input type="password" name="password">
 
         <?php $__errorArgs = ['password', 'updatePassword'];
@@ -102,27 +111,33 @@ if (isset($__messageOriginal)) { $message = $__messageOriginal; }
 endif;
 unset($__errorArgs, $__bag); ?>
 
-        <label>تأكيد كلمة المرور الجديدة</label>
+        <label><?php echo e(__('messages.confirm_new_password')); ?></label>
         <input type="password" name="password_confirmation">
 
-        <button type="submit" class="login-btn">تحديث كلمة المرور</button>
+        <button type="submit" class="login-btn">
+            <?php echo e(__('messages.update_password')); ?>
+
+        </button>
     </form>
 </div>
 
 <!-- 🗑️ حذف الحساب -->
 <div class="form-section">
-    <h3 style="color:#c0392b;">حذف الحساب</h3>
+    <h3 style="color:#c0392b;"><?php echo e(__('messages.delete_account')); ?></h3>
 
     <p class="note">
-        عند حذف الحساب سيتم حذف جميع البيانات المرتبطة به نهائيًا.
-    </p>
+    <?php echo e(__('messages.delete_account_warning')); ?>
+
+</p>
 
     <form method="POST" action="<?php echo e(route('profile.destroy')); ?>">
         <?php echo csrf_field(); ?>
         <?php echo method_field('DELETE'); ?>
 
-        <label>أدخل كلمة المرور لتأكيد الحذف</label>
-        <input type="password" name="password" required>
+    <label>
+       <?php echo e(__('messages.enter_password_to_delete')); ?>
+
+    </label>        <input type="password" name="password" required>
 
         <?php $__errorArgs = ['password', 'userDeletion'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
@@ -135,14 +150,20 @@ if (isset($__messageOriginal)) { $message = $__messageOriginal; }
 endif;
 unset($__errorArgs, $__bag); ?>
 
-        <button type="submit" class="login-btn" style="background:#c0392b;">
-            حذف الحساب
-        </button>
+        <button type="submit"
+        class="login-btn"
+        style="background:#c0392b;">
+    <?php echo e(__('messages.delete_account')); ?>
+
+</button>
     </form>
 </div>
 
 <p style="text-align:center; margin-top:15px;">
-    <a href="<?php echo e(url('/')); ?>">الرجوع إلى الصفحة الرئيسية</a>
+    <a href="<?php echo e(url('/')); ?>">
+    <?php echo e(__('messages.back_home')); ?>
+
+</a>
 </p>
 
 <?php $__env->stopSection(); ?>

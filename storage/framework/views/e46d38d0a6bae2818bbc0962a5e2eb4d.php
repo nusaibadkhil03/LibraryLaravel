@@ -1,17 +1,24 @@
-<?php $__env->startSection('title', 'استعارة كتاب'); ?>
+<?php $__env->startSection('title', __('messages.borrow_book')); ?>
 
 <?php $__env->startSection('content'); ?>
 
 <div class="borrow-container">
 
     <div class="tabs" id="main-tabs">
-        <button type="button" class="tab-btn active" onclick="showTab('request-form-container', this)">طلب استعارة</button>
-        <button type="button" class="tab-btn" onclick="showTab('status-view', this)">حالة الطلب</button>
+        <button type="button" class="tab-btn active" onclick="showTab('request-form-container', this)">
+            <?php echo e(__('messages.borrow_request')); ?>
+
+        </button>
+
+        <button type="button" class="tab-btn" onclick="showTab('status-view', this)">
+            <?php echo e(__('messages.request_status')); ?>
+
+        </button>
     </div>
 
     <div id="request-form-container" class="form-section active">
 
-        <h2>تقديم طلب استعارة</h2>
+        <h2><?php echo e(__('messages.submit_borrow_request')); ?></h2>
 
         <?php if(session('success')): ?>
             <div style="background:#d4edda; color:#155724; padding:10px; margin-bottom:15px; border-radius:8px; text-align:center;">
@@ -29,7 +36,8 @@
 
         <?php if($errors->any()): ?>
             <div style="background:#f8d7da; color:#721c24; padding:10px; margin-bottom:15px; border-radius:8px; text-align:center;">
-                الرجاء اختيار كتاب صحيح من القائمة.
+                <?php echo e(__('messages.select_valid_book')); ?>
+
             </div>
         <?php endif; ?>
 
@@ -38,40 +46,41 @@
 
             <div class="form-grid">
                 <div class="input-box">
-                    <label>اسم الطالب *</label>
-                    <input type="text" name="student_name" placeholder="أدخل اسمك الكامل" required>
+                    <label><?php echo e(__('messages.student_name')); ?> *</label>
+                    <input type="text" name="student_name" placeholder="<?php echo e(__('messages.full_name')); ?>" required>
                 </div>
 
                 <div class="input-box">
-                    <label>رقم القيد *</label>
-                    <input type="text" name="student_id" placeholder="مثال: 202012345" required>
+                    <label><?php echo e(__('messages.student_number')); ?> *</label>
+                    <input type="text" name="student_id" placeholder="<?php echo e(__('messages.student_number_example')); ?>" required>
                 </div>
             </div>
 
             <div class="form-grid">
-    <div class="input-box">
-        <label>القسم</label>
-        <input type="text"
-               value="<?php echo e(auth()->user()->department->name ?? '-'); ?>"
-               readonly>
-    </div>
+                <div class="input-box">
+                    <label><?php echo e(__('messages.department')); ?></label>
+                    <input type="text"
+                           value="<?php echo e(app()->getLocale() == 'en'
+                                ? ucwords(str_replace('-', ' ', auth()->user()->department->slug ?? '-'))
+                                : (auth()->user()->department->name ?? '-')); ?>"
+                           readonly>
+                </div>
 
-    <div class="input-box">
-        <label>رقم الهاتف</label>
-        <input type="text"
-               name="phone"
-               value="<?php echo e(auth()->user()->phone ?? ''); ?>"
-               readonly>
-    </div>
-</div>
+                <div class="input-box">
+                    <label><?php echo e(__('messages.phone_number')); ?></label>
+                    <input type="text"
+                           name="phone"
+                           value="<?php echo e(auth()->user()->phone ?? ''); ?>">
+                </div>
+            </div>
 
             <div class="input-box">
-                <label>اسم الكتاب *</label>
+                <label><?php echo e(__('messages.book_name')); ?> *</label>
 
                 <input
                     list="booksList"
                     id="bookSearch"
-                    placeholder="اكتب اسم الكتاب..."
+                    placeholder="<?php echo e(__('messages.type_book_name')); ?>"
                     autocomplete="off"
                     required
                     style="padding:10px; width:100%;"
@@ -88,63 +97,64 @@
 
             <div class="form-grid">
                 <div class="input-box">
-                    <label>اسم المؤلف</label>
+                    <label><?php echo e(__('messages.author_name')); ?></label>
                     <input type="text" name="author">
                 </div>
 
                 <div class="input-box">
-                    <label>رقم الطبعة</label>
+                    <label><?php echo e(__('messages.edition_number')); ?></label>
                     <input type="text" name="edition">
                 </div>
             </div>
 
             <div class="form-grid">
                 <div class="input-box">
-                    <label>تاريخ الاستعارة</label>
+                    <label><?php echo e(__('messages.borrow_date')); ?></label>
                     <input type="date" id="borrow_date">
                 </div>
 
                 <div class="input-box">
-                    <label>تاريخ الإرجاع المتوقع</label>
+                    <label><?php echo e(__('messages.expected_return_date')); ?></label>
                     <input type="text" id="return_date_display" readonly>
                 </div>
             </div>
 
-           <div style="
-    background:#fff8e1;
-    color:#7a5a00;
-    border:1px solid #ffe08a;
-    padding:10px 14px;
-    border-radius:12px;
-    margin:15px 0;
-    font-size:14px;
-    display:flex;
-    align-items:center;
-    gap:8px;
-">
-    <span style="font-size:18px;">⚠️</span>
-    <span>
-        <strong>تنبيه:</strong>
-        في حالة التأخر عن تاريخ الإرجاع سيتم تطبيق غرامة مالية.
-    </span>
-</div>
+            <div style="
+                background:#fff8e1;
+                color:#7a5a00;
+                border:1px solid #ffe08a;
+                padding:10px 14px;
+                border-radius:12px;
+                margin:15px 0;
+                font-size:14px;
+                display:flex;
+                align-items:center;
+                gap:8px;
+            ">
+                <span style="font-size:18px;">⚠️</span>
+                <span>
+                    <strong><?php echo e(__('messages.warning')); ?>:</strong>
+                    <?php echo e(__('messages.late_return_warning')); ?>
 
-           <div class="borrow-actions">
+                </span>
+            </div>
 
-    <button type="submit" class="borrow-submit-btn">
-        إرسال الطلب
-    </button>
+            <div class="borrow-actions">
+                <button type="submit" class="borrow-submit-btn">
+                    <?php echo e(__('messages.send_request')); ?>
 
-    <a href="<?php echo e(url('/')); ?>" class="borrow-back-btn">
-        الرجوع إلى الصفحة الرئيسية
-    </a>
+                </button>
 
-</div>
+                <a href="<?php echo e(url('/')); ?>" class="borrow-back-btn">
+                    <?php echo e(__('messages.back_home')); ?>
+
+                </a>
+            </div>
         </form>
     </div>
 
     <div id="status-view" class="form-section" style="display:none;">
-        <h2>متابعة حالة الطلب</h2>
+        <h2><?php echo e(__('messages.track_request_status')); ?></h2>
 
         <?php if(isset($borrows) && $borrows->count()): ?>
             <?php $__currentLoopData = $borrows; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $borrow): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
@@ -163,31 +173,42 @@
                     </p>
 
                     <?php if($borrow->status == 'pending'): ?>
-                        <span style="color:#e67e22; font-weight:bold;">⏳ قيد المراجعة</span>
+                        <span style="color:#e67e22; font-weight:bold;">
+                            ⏳ <?php echo e(__('messages.pending_review')); ?>
+
+                        </span>
 
                     <?php elseif($borrow->status == 'approved' || $borrow->status == 'borrowed'): ?>
-                        <span style="color:green; font-weight:bold;">✅ تمت الموافقة</span>
+                        <span style="color:green; font-weight:bold;">
+                            ✅ <?php echo e(__('messages.approved')); ?>
+
+                        </span>
 
                         <?php if($borrow->due_date): ?>
                             <p style="margin-top:8px;">
-                                تاريخ الإرجاع المتوقع: <?php echo e($borrow->due_date); ?>
+                                <?php echo e(__('messages.expected_return_date')); ?>: <?php echo e($borrow->due_date); ?>
 
                             </p>
                         <?php endif; ?>
 
                     <?php elseif($borrow->status == 'returned'): ?>
-                        <span style="color:#007bff; font-weight:bold;">📗 تم الإرجاع</span>
+                        <span style="color:#007bff; font-weight:bold;">
+                            📗 <?php echo e(__('messages.returned')); ?>
+
+                        </span>
 
                     <?php elseif($borrow->status == 'rejected'): ?>
-                        <span style="color:red; font-weight:bold;">❌ مرفوض</span>
+                        <span style="color:red; font-weight:bold;">
+                            ❌ <?php echo e(__('messages.rejected')); ?>
 
+                        </span>
                     <?php endif; ?>
 
                 </div>
 
             <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
         <?php else: ?>
-            <p>لا توجد طلبات حالياً</p>
+            <p><?php echo e(__('messages.no_requests')); ?></p>
         <?php endif; ?>
 
     </div>
@@ -243,7 +264,7 @@ document.addEventListener("DOMContentLoaded", function () {
         if (!input.value) return;
 
         let borrowDate = new Date(input.value);
-        borrowDate.setDate(borrowDate.getDate() + 14);
+        borrowDate.setDate(borrowDate.getDate() + 5);
 
         const year = borrowDate.getFullYear();
         const month = String(borrowDate.getMonth() + 1).padStart(2, '0');

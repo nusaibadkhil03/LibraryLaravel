@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 use App\Models\Category;
 use App\Models\Department;
 use App\Models\Borrow;
+use App\Models\Favorite;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 class LibraryBook extends Model
 {
@@ -18,6 +20,7 @@ class LibraryBook extends Model
     'book_number',
     'department_id',
     'category_id',
+    'category_name',
     'shelf_location',
     'total_copies',
     'available_copies',
@@ -39,4 +42,9 @@ class LibraryBook extends Model
     {
         return $this->hasMany(Borrow::class, 'library_book_id');
     }
+
+    public function favorites(): MorphMany
+{
+    return $this->morphMany(Favorite::class, 'favoritable');
+}
 }

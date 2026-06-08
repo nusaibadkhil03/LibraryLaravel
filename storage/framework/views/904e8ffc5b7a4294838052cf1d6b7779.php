@@ -1,5 +1,7 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="<?php echo e(app()->getLocale()); ?>"
+      dir="<?php echo e(app()->getLocale() == 'ar' ? 'rtl' : 'ltr'); ?>">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -14,6 +16,8 @@
             <?php echo $__env->yieldContent('content'); ?>
         </div>
     </div>
-     <?php echo $__env->yieldContent('scripts'); ?>
+
+    <?php echo $__env->yieldContent('scripts'); ?>
+
 </body>
 </html><?php /**PATH C:\course laravel\LibraryLaravel\resources\views/layouts/borrow_layout.blade.php ENDPATH**/ ?>

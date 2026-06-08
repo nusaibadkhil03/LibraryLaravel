@@ -27,7 +27,7 @@ class AdminBorrowController extends Controller
         $borrow->update([
             'status' => 'borrowed',
             'borrow_date' => now()->toDateString(),
-            'due_date' => now()->addDays(14)->toDateString(),
+            'due_date' => now()->addDays(5)->toDateString(),
             'approved_by' => auth()->id(),
         ]);
 

@@ -1,19 +1,19 @@
 @extends('layouts.form_layout')
 
-@section('title', 'تسجيل الدخول - مكتبة الجامعة')
+@section('title', __('messages.login_page_title'))
 
 @section('form_body')
 
-<h2>تسجيل الدخول</h2>
+<h2>{{ __('messages.login') }}</h2>
 
 <p class="note">
-أدخل بريدك الإلكتروني وكلمة المرور للدخول إلى حسابك
+    {{ __('messages.login_note') }}
 </p>
 
 <form method="POST" action="{{ route('login') }}">
     @csrf
 
-    <label for="email">البريد الإلكتروني</label>
+    <label for="email">{{ __('messages.email') }}</label>
     <input
         id="email"
         type="email"
@@ -30,12 +30,12 @@
         </p>
     @enderror
 
-    <label for="password">كلمة المرور</label>
+    <label for="password">{{ __('messages.password') }}</label>
     <input
         id="password"
         type="password"
         name="password"
-        placeholder="أدخل كلمة المرور"
+        placeholder="{{ __('messages.password_placeholder') }}"
         required
         autocomplete="current-password"
     >
@@ -48,24 +48,28 @@
     <div style="margin-bottom: 15px;">
         <label style="display: flex; align-items: center; gap: 8px; font-weight: normal;">
             <input type="checkbox" name="remember" style="width: auto; margin: 0;">
-            تذكرني
+            {{ __('messages.remember_me') }}
         </label>
     </div>
 
     @if (Route::has('password.request'))
         <p style="text-align: center; margin-bottom: 15px;">
-            <a href="{{ route('password.request') }}">نسيت كلمة المرور؟</a>
+            <a href="{{ route('password.request') }}">
+                {{ __('messages.forgot_password') }}
+            </a>
         </p>
     @endif
 
     <button type="submit" class="login-btn">
-        تسجيل الدخول
+        {{ __('messages.login') }}
     </button>
 </form>
 
 <p style="text-align:center; margin-top:15px;">
-    ليس لديك حساب؟
-    <a href="{{ route('register') }}">إنشاء حساب</a>
+    {{ __('messages.no_account') }}
+    <a href="{{ route('register') }}">
+        {{ __('messages.create_account') }}
+    </a>
 </p>
 
 @endsection

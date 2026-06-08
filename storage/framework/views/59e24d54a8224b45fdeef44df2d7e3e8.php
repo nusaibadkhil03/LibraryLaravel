@@ -1,56 +1,60 @@
-<?php $__env->startSection('title', 'قسم ' . $department->name); ?>
+<?php $__env->startSection('title', __('messages.department') . ' ' . (app()->getLocale() == 'en' ? ucwords(str_replace('-', ' ', $department->slug)) : $department->name)); ?>
 
 <?php $__env->startSection('content'); ?>
 
 <main class="main-content">
 
     <h2 class="dept-header">
-        قسم <?php echo e($department->name); ?>
+        <?php echo e(__('messages.department')); ?>
+
+        <?php echo e(app()->getLocale() == 'en'
+            ? ucwords(str_replace('-', ' ', $department->slug))
+            : $department->name); ?>
 
     </h2>
 
     <section class="category-box">
         <button class="item" onclick="loadDepartmentContent('channels')">
             <span class="item-icon">📺</span>
-            <p>قنوات تعليمية</p>
+            <p><?php echo e(__('messages.educational_channels')); ?></p>
         </button>
 
         <button class="item active" onclick="loadDepartmentContent('books')">
             <span class="item-icon">📚</span>
-            <p>الكتب</p>
+            <p><?php echo e(__('messages.books')); ?></p>
         </button>
 
         <button class="item" onclick="loadDepartmentContent('syllabuses')">
             <span class="item-icon">📖</span>
-            <p>المناهج</p>
+            <p><?php echo e(__('messages.syllabuses')); ?></p>
         </button>
 
         <button class="item" onclick="loadDepartmentContent('past-exams')">
             <span class="item-icon">📝</span>
-            <p>أسئلة سنوات سابقة</p>
+            <p><?php echo e(__('messages.past_exams')); ?></p>
         </button>
 
         <button class="item" onclick="loadDepartmentContent('researches')">
             <span class="item-icon">🔬</span>
-            <p>البحوث العلمية</p>
+            <p><?php echo e(__('messages.scientific_researches')); ?></p>
         </button>
 
         <button class="item" onclick="loadDepartmentContent('projects')">
             <span class="item-icon">🎓</span>
-            <p>مشاريع تخرج</p>
+            <p><?php echo e(__('messages.graduation_projects')); ?></p>
         </button>
     </section>
 
     <div class="department-toolbar">
         <div class="sort-box">
-            <label>ترتيب المحتوى:</label>
+            <label><?php echo e(__('messages.sort_content')); ?>:</label>
 
             <select id="contentSortSelect" onchange="sortContentItems(this.value)">
-                <option value="default">الترتيب الافتراضي</option>
-                <option value="newest">الأحدث</option>
-                <option value="oldest">الأقدم</option>
-                <option value="az">الاسم (أ - ي)</option>
-                <option value="za">الاسم (ي - أ)</option>
+                <option value="default"><?php echo e(__('messages.default_sort')); ?></option>
+                <option value="newest"><?php echo e(__('messages.newest')); ?></option>
+                <option value="oldest"><?php echo e(__('messages.oldest')); ?></option>
+                <option value="az"><?php echo e(__('messages.name_az')); ?></option>
+                <option value="za"><?php echo e(__('messages.name_za')); ?></option>
             </select>
         </div>
     </div>
@@ -58,8 +62,8 @@
     <section id="department-content-area" class="display-screen">
         <?php echo $__env->make('departments.partials.file-list', [
             'items' => $books,
-            'title' => 'الكتب الرقمية',
-            'emptyMessage' => 'لا توجد كتب رقمية مضافة لهذا القسم حالياً.'
+            'title' => __('messages.digital_books'),
+            'emptyMessage' => __('messages.no_digital_books_department')
         ], array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
     </section>
 
@@ -79,7 +83,7 @@ function loadDepartmentContent(type) {
     });
 
     const contentArea = document.getElementById('department-content-area');
-    contentArea.innerHTML = '<p class="empty-message">جاري تحميل المحتوى...</p>';
+    contentArea.innerHTML = '<p class="empty-message"><?php echo e(__("messages.loading_content")); ?></p>';
 
     fetch("<?php echo e(url('/departments/' . $department->id . '/content')); ?>/" + type)
         .then(response => response.text())
@@ -92,7 +96,7 @@ function loadDepartmentContent(type) {
             }
         })
         .catch(() => {
-            contentArea.innerHTML = '<p class="empty-message">حدث خطأ أثناء تحميل المحتوى</p>';
+            contentArea.innerHTML = '<p class="empty-message"><?php echo e(__("messages.loading_error")); ?></p>';
         });
 }
 
@@ -118,11 +122,11 @@ function sortContentItems(type) {
         }
 
         if (type === 'az') {
-            return titleA.localeCompare(titleB, 'ar');
+            return titleA.localeCompare(titleB, appLocale());
         }
 
         if (type === 'za') {
-            return titleB.localeCompare(titleA, 'ar');
+            return titleB.localeCompare(titleA, appLocale());
         }
 
         return 0;
@@ -134,6 +138,10 @@ function sortContentItems(type) {
 function extractYear(value) {
     const match = String(value || '').match(/\d{4}/);
     return match ? parseInt(match[0]) : 0;
+}
+
+function appLocale() {
+    return "<?php echo e(app()->getLocale()); ?>";
 }
 
 document.addEventListener('DOMContentLoaded', function () {

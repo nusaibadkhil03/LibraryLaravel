@@ -63,36 +63,40 @@ class SyllabusController extends Controller
         return view('admin.syllabuses.create', compact('departments'));
     }
 
-    public function store(Request $request)
-    {
-        $request->validate([
-            'title' => 'required',
-            'department_id' => 'required',
-            'file' => 'required|file|mimes:pdf,doc,docx',
-            'semester' => 'nullable|in:fall,spring,summer',
-        ]);
+   public function store(Request $request)
+{
+    $request->validate([
+        'title' => 'required',
+        'lecture_number' => 'nullable|string|max:255',
+        'doctor_name' => 'nullable|string|max:255',
+        'department_id' => 'required',
+        'file' => 'required|file|mimes:pdf,doc,docx',
+        'semester' => 'nullable|in:fall,spring,summer',
+    ]);
 
-        $filePath = $request->file('file')->store('syllabuses', 'public');
+    $filePath = $request->file('file')->store('syllabuses', 'public');
 
-        $syllabus = Syllabus::create([
-            'title' => $request->title,
-            'department_id' => $request->department_id,
-            'academic_year' => $request->academic_year,
-            'semester' => $request->semester,
-            'description' => $request->description,
-            'file_path' => $filePath,
-            'status' => 'published',
-        ]);
+    $syllabus = Syllabus::create([
+        'title' => $request->title,
+        'lecture_number' => $request->lecture_number,
+        'doctor_name' => $request->doctor_name,
+        'department_id' => $request->department_id,
+        'academic_year' => $request->academic_year,
+        'semester' => $request->semester,
+        'description' => $request->description,
+        'file_path' => $filePath,
+        'status' => 'published',
+    ]);
 
-        AdminActivity::create([
-            'admin_id' => Auth::id(),
-            'action' => 'إضافة منهج',
-            'description' => 'تمت إضافة المنهج: ' . $syllabus->title,
-            'type' => 'syllabus',
-        ]);
+    AdminActivity::create([
+        'admin_id' => Auth::id(),
+        'action' => 'إضافة منهج',
+        'description' => 'تمت إضافة المنهج: ' . $syllabus->title,
+        'type' => 'syllabus',
+    ]);
 
-        return redirect()->route('admin.syllabuses.index');
-    }
+    return redirect()->route('admin.syllabuses.index');
+}
 
     public function destroy($id)
 {

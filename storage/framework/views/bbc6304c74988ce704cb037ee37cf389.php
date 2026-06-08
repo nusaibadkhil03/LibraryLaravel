@@ -1,17 +1,18 @@
-<?php $__env->startSection('title', 'تسجيل الدخول - مكتبة الجامعة'); ?>
+<?php $__env->startSection('title', __('messages.login_page_title')); ?>
 
 <?php $__env->startSection('form_body'); ?>
 
-<h2>تسجيل الدخول</h2>
+<h2><?php echo e(__('messages.login')); ?></h2>
 
 <p class="note">
-أدخل بريدك الإلكتروني وكلمة المرور للدخول إلى حسابك
+    <?php echo e(__('messages.login_note')); ?>
+
 </p>
 
 <form method="POST" action="<?php echo e(route('login')); ?>">
     <?php echo csrf_field(); ?>
 
-    <label for="email">البريد الإلكتروني</label>
+    <label for="email"><?php echo e(__('messages.email')); ?></label>
     <input
         id="email"
         type="email"
@@ -36,12 +37,12 @@ if (isset($__messageOriginal)) { $message = $__messageOriginal; }
 endif;
 unset($__errorArgs, $__bag); ?>
 
-    <label for="password">كلمة المرور</label>
+    <label for="password"><?php echo e(__('messages.password')); ?></label>
     <input
         id="password"
         type="password"
         name="password"
-        placeholder="أدخل كلمة المرور"
+        placeholder="<?php echo e(__('messages.password_placeholder')); ?>"
         required
         autocomplete="current-password"
     >
@@ -62,24 +63,33 @@ unset($__errorArgs, $__bag); ?>
     <div style="margin-bottom: 15px;">
         <label style="display: flex; align-items: center; gap: 8px; font-weight: normal;">
             <input type="checkbox" name="remember" style="width: auto; margin: 0;">
-            تذكرني
+            <?php echo e(__('messages.remember_me')); ?>
+
         </label>
     </div>
 
     <?php if(Route::has('password.request')): ?>
         <p style="text-align: center; margin-bottom: 15px;">
-            <a href="<?php echo e(route('password.request')); ?>">نسيت كلمة المرور؟</a>
+            <a href="<?php echo e(route('password.request')); ?>">
+                <?php echo e(__('messages.forgot_password')); ?>
+
+            </a>
         </p>
     <?php endif; ?>
 
     <button type="submit" class="login-btn">
-        تسجيل الدخول
+        <?php echo e(__('messages.login')); ?>
+
     </button>
 </form>
 
 <p style="text-align:center; margin-top:15px;">
-    ليس لديك حساب؟
-    <a href="<?php echo e(route('register')); ?>">إنشاء حساب</a>
+    <?php echo e(__('messages.no_account')); ?>
+
+    <a href="<?php echo e(route('register')); ?>">
+        <?php echo e(__('messages.create_account')); ?>
+
+    </a>
 </p>
 
 <?php $__env->stopSection(); ?>

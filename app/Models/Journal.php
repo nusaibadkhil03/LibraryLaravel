@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Favorite;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 class Journal extends Model
 {
@@ -10,9 +12,12 @@ class Journal extends Model
         'title',
         'issue_number',
         'publication_year',
-        'publication_date',
-        'publisher',
         'description',
-        'file_path',
+        'file',
     ];
+
+    public function favorites(): MorphMany
+    {
+        return $this->morphMany(Favorite::class, 'favoritable');
+    }
 }

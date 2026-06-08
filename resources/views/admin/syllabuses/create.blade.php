@@ -86,6 +86,16 @@
                 </div>
 
                 <div class="admin-field">
+    <label>رقم المحاضرة</label>
+    <input type="text" name="lecture_number" placeholder="مثال: المحاضرة الأولى">
+</div>
+
+<div class="admin-field">
+    <label>اسم الدكتور</label>
+    <input type="text" name="doctor_name">
+</div>
+
+                <div class="admin-field">
                     <label>القسم</label>
                     <select name="department_id" required>
                         <option value="">اختر القسم</option>

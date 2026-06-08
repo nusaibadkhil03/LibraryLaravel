@@ -1,6 +1,6 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
-<head>
+<html lang="<?php echo e(app()->getLocale()); ?>"
+      dir="<?php echo e(app()->getLocale() == 'ar' ? 'rtl' : 'ltr'); ?>"><head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?php echo $__env->yieldContent('title'); ?></title>

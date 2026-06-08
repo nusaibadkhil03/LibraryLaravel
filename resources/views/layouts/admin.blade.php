@@ -524,7 +524,7 @@
    href="{{ route('admin.admins.index') }}">
     الأدمن
 </a>
-    <a href="#">الإعدادات</a>
+    
 </aside>
 
     <div class="main-content">

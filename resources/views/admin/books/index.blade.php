@@ -78,6 +78,7 @@ table {
                     <th style="padding:10px;">سنة النشر</th>
 
                     <th style="padding:10px;">رقم التسجيل</th>
+                    <th style="padding:10px;">التصنيف</th>
 
                     <th style="padding:10px;">رقم الطبعة</th>
 
@@ -125,6 +126,10 @@ table {
                         <td style="padding:10px;">
                             {{ $book->book_number ?? '-' }}
                         </td>
+
+                        <td style="padding:10px;">
+    {{ $book->category_name ?? '-' }}
+</td>
 
                         <td style="padding:10px;">
                             {{ $book->edition_number ?? '-' }}

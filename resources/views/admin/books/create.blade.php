@@ -60,6 +60,10 @@
                 </option>
             @endforeach
         </select>
+        <input type="text"
+       name="category_name"
+       placeholder="التصنيف"
+       style="padding:10px; margin:5px;">
 
         <input type="number"
                name="total_copies"
