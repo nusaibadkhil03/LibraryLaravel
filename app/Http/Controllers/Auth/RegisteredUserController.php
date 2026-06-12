@@ -51,14 +51,18 @@ class RegisteredUserController extends Controller
                 'exists:departments,id',
             ],
 
-            'email' => [
-                'required',
-                'string',
-                'lowercase',
-                'email',
-                'max:255',
-                'unique:users,email',
-            ],
+             'email' => [
+        'required',
+        'string',
+        'lowercase',
+        'email',
+        'max:255',
+        'unique:users,email',
+        'regex:/^[A-Za-z0-9._%+\-]+@libyanuniv\.edu\.ly$/',
+    ],
+], [
+    'email.regex' => 'يجب استخدام البريد الجامعي الذي ينتهي بـ @libyanuniv.edu.ly',
+
 
             'password' => [
                 'required',

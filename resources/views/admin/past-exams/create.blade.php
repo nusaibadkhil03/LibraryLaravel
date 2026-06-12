@@ -95,7 +95,7 @@
 
                 <div class="admin-field">
                     <label>الملف</label>
-                    <input type="file" name="file" accept=".pdf,.jpg,.jpeg,.png" required>
+                    <input type="file" name="file" accept=".pdf,.doc,.docx,.ppt,.pptx" required>
                 </div>
 
                 <div class="admin-field full">

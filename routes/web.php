@@ -62,9 +62,9 @@ Route::get('/borrow', function () {
     $books = LibraryBook::all();
 
     $borrows = Borrow::with('libraryBook')
-        ->where('user_id', auth()->id())
-        ->latest()
-        ->get();
+    ->where('user_id', auth()->id())
+    ->latest()
+    ->get();
 
     return view('borrow', compact('books', 'borrows'));
 })->name('borrow');
@@ -293,6 +293,16 @@ Route::delete('/students/{id}', [StudentController::class, 'destroy'])
 
 Route::patch('/admins/{id}/role/{role}', [AdminUserController::class, 'updateRole'])
     ->name('admins.updateRole');
+
+    Route::get('/users/create',
+    [AdminUserController::class,'create'])
+    ->name('users.create');
+
+Route::post('/users/store',
+    [AdminUserController::class,'store'])
+    ->name('users.store');
+    Route::delete('/users/{id}', [AdminUserController::class, 'destroy'])
+    ->name('users.destroy');
         
         Route::get('/curriculum', [CurriculumController::class, 'index'])
     ->name('curriculum.index');
@@ -355,31 +365,13 @@ Route::delete('/curriculum/{id}', [CurriculumController::class, 'destroy'])
 })->name('borrows.approve');
 
 
-Route::post('/borrows/{id}/reject', function ($id) {
-    $borrow = \App\Models\Borrow::findOrFail($id);
-    $borrow->update(['status' => 'rejected']);
+Route::get('/borrows/{id}/return',
+    [AdminBorrowController::class, 'returnForm']
+)->name('borrows.returnForm');
 
-    return back()->with('success', 'تم رفض طلب الاستعارة');
-})->name('borrows.reject');
-
-Route::post('/borrows/{id}/return', function ($id) {
-
-    $borrow = \App\Models\Borrow::with('libraryBook')->findOrFail($id);
-
-    if ($borrow->status != 'borrowed') {
-        return back()->with('error', 'لا يمكن إرجاع هذا الكتاب.');
-    }
-
-    $borrow->update([
-        'status' => 'returned',
-        'return_date' => now()->toDateString(),
-    ]);
-
-    $borrow->libraryBook->increment('available_copies');
-
-    return back()->with('success', 'تم إرجاع الكتاب بنجاح');
-
-})->name('borrows.return');
+Route::post('/borrows/{id}/return',
+    [AdminBorrowController::class, 'returnBook']
+)->name('borrows.return');
 
 
       Route::get('/books', [AdminBookController::class, 'index'])

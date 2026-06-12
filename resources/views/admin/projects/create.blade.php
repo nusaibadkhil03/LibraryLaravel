@@ -90,7 +90,7 @@
 
                 <div class="admin-field full">
                     <label>ملف المشروع</label>
-                    <input type="file" name="file">
+                    <input type="file" name="file" accept=".pdf,.doc,.docx,.ppt,.pptx">
                 </div>
 
                 <div class="admin-field full">

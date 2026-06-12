@@ -14,7 +14,7 @@
     <div class="stats-header">
         <span><?php echo e(__('messages.overview')); ?></span>
         <h2><?php echo e(__('messages.library_statistics')); ?></h2>
-        <p><?php echo e(__('messages.statistics_description')); ?></p>
+        
     </div>
 
     <div class="stats-modern-grid">

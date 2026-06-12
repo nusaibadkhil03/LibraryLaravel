@@ -67,33 +67,23 @@
                                 <a class="download-btn"
                                    href="{{ asset('storage/' . $file) }}"
                                    target="_blank">
-                                   👁️ {{ __('messages.read_project') }}
+                                    👁️ {{ __('messages.read_project') }}
                                 </a>
 
                             @else
 
-                                @if($modelClass === App\Models\Book::class)
-
-                                    <a class="download-btn"
-                                       href="{{ route('books.download', $item->id) }}">
-                                       📥 {{ __('messages.download_file') }}
-                                    </a>
-
-                                @else
-
-                                    <a class="download-btn"
-                                       href="{{ asset('storage/' . $file) }}"
-                                       target="_blank"
-                                       download>
-                                       📥 {{ __('messages.download_file') }}
-                                    </a>
-
-                                @endif
+                                <a class="download-btn"
+                                   href="{{ asset('storage/' . $file) }}"
+                                   target="_blank">
+                                    📥 {{ __('messages.download_file') }}
+                                </a>
 
                             @endif
 
                         @else
+
                             <span class="no-file">{{ __('messages.no_file') }}</span>
+
                         @endif
 
                         <form method="POST"

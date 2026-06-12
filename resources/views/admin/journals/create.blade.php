@@ -111,7 +111,7 @@
                 </label>
                 <input type="file"
                        name="file"
-                       accept=".pdf"
+                       accept=".pdf,.doc,.docx,.ppt,.pptx"
                        required
                        style="width:100%; padding:11px; border:1px solid #ddd; border-radius:10px; background:white;">
             </div>

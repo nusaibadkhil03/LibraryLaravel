@@ -58,7 +58,7 @@ class DigitalBookController extends Controller
             'semester' => 'nullable|string|max:255',
             'author' => 'nullable|string|max:255',
             'description' => 'nullable|string',
-            'file' => 'required|mimes:pdf|max:20480',
+            'file' => 'required|mimes:pdf|max:102400',
         ]);
 
         $filePath = $request->file('file')->store('books', 'public');

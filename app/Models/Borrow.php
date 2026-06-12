@@ -20,6 +20,12 @@ class Borrow extends Model
         'edition_number',
         'approved_by',
         'notes',
+        'rejection_reason',
+        'actual_return_date',
+'is_late',
+'fine_amount',
+'fine_paid',
+'return_notes',
     ];
 
     // المستخدم الذي استعار

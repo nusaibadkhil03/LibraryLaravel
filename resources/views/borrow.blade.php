@@ -181,16 +181,18 @@
                             </p>
                         @endif
 
-                    @elseif($borrow->status == 'returned')
-                        <span style="color:#007bff; font-weight:bold;">
-                            📗 {{ __('messages.returned') }}
-                        </span>
-
                     @elseif($borrow->status == 'rejected')
-                        <span style="color:red; font-weight:bold;">
-                            ❌ {{ __('messages.rejected') }}
-                        </span>
-                    @endif
+    <span style="color:red; font-weight:bold;">
+        ❌ {{ __('messages.rejected') }}
+    </span>
+
+    @if(!empty($borrow->rejection_reason))
+        <p style="margin-top:8px; color:#b91c1c; background:#fee2e2; padding:8px; border-radius:8px;">
+            <strong>{{ __('messages.rejection_reason') }}:</strong>
+            {{ $borrow->rejection_reason }}
+        </p>
+    @endif
+@endif
 
                 </div>
 

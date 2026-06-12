@@ -61,6 +61,10 @@
             @endforeach
         </select>
         <input type="text"
+       name="department_name"
+       placeholder="أو اكتب قسم / جهة أخرى"
+       style="padding:10px; margin:5px;">
+        <input type="text"
        name="category_name"
        placeholder="التصنيف"
        style="padding:10px; margin:5px;">
@@ -71,6 +75,11 @@
                required
                min="1"
                style="padding:10px; margin:5px;">
+
+               <textarea name="description"
+          placeholder="وصف مختصر للكتاب"
+          rows="3"
+          style="padding:10px; margin:5px; width:100%; border-radius:12px; border:1px solid #ddd;"></textarea>
 
         <button type="submit" class="admin-logout-btn">
             إضافة كتاب

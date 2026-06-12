@@ -90,7 +90,13 @@
 <div class="digital-form-card">
 
     <h2 class="digital-form-title">إضافة كتاب رقمي PDF</h2>
-
+       @if ($errors->any())
+    <div style="background:#f8d7da; color:#721c24; padding:12px; border-radius:10px; margin-bottom:15px;">
+        @foreach ($errors->all() as $error)
+            <div>{{ $error }}</div>
+        @endforeach
+    </div>
+@endif
     <form method="POST"
           action="{{ route('admin.digital-books.store') }}"
           enctype="multipart/form-data">
@@ -126,7 +132,7 @@
 
             <div class="digital-field full">
                 <label>ملف PDF</label>
-                <input type="file" name="file" accept="application/pdf" required>
+                <input type="file" name="file" accept=".pdf,.doc,.docx,.ppt,.pptx" required>
             </div>
 
             <div class="digital-field full">

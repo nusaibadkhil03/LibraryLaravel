@@ -191,18 +191,20 @@
                             </p>
                         <?php endif; ?>
 
-                    <?php elseif($borrow->status == 'returned'): ?>
-                        <span style="color:#007bff; font-weight:bold;">
-                            📗 <?php echo e(__('messages.returned')); ?>
-
-                        </span>
-
                     <?php elseif($borrow->status == 'rejected'): ?>
-                        <span style="color:red; font-weight:bold;">
-                            ❌ <?php echo e(__('messages.rejected')); ?>
+    <span style="color:red; font-weight:bold;">
+        ❌ <?php echo e(__('messages.rejected')); ?>
 
-                        </span>
-                    <?php endif; ?>
+    </span>
+
+    <?php if(!empty($borrow->rejection_reason)): ?>
+        <p style="margin-top:8px; color:#b91c1c; background:#fee2e2; padding:8px; border-radius:8px;">
+            <strong><?php echo e(__('messages.rejection_reason')); ?>:</strong>
+            <?php echo e($borrow->rejection_reason); ?>
+
+        </p>
+    <?php endif; ?>
+<?php endif; ?>
 
                 </div>
 

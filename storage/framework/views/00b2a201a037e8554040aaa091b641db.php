@@ -69,36 +69,25 @@
                                 <a class="download-btn"
                                    href="<?php echo e(asset('storage/' . $file)); ?>"
                                    target="_blank">
-                                   👁️ <?php echo e(__('messages.read_project')); ?>
+                                    👁️ <?php echo e(__('messages.read_project')); ?>
 
                                 </a>
 
                             <?php else: ?>
 
-                                <?php if($modelClass === App\Models\Book::class): ?>
+                                <a class="download-btn"
+                                   href="<?php echo e(asset('storage/' . $file)); ?>"
+                                   target="_blank">
+                                    📥 <?php echo e(__('messages.download_file')); ?>
 
-                                    <a class="download-btn"
-                                       href="<?php echo e(route('books.download', $item->id)); ?>">
-                                       📥 <?php echo e(__('messages.download_file')); ?>
-
-                                    </a>
-
-                                <?php else: ?>
-
-                                    <a class="download-btn"
-                                       href="<?php echo e(asset('storage/' . $file)); ?>"
-                                       target="_blank"
-                                       download>
-                                       📥 <?php echo e(__('messages.download_file')); ?>
-
-                                    </a>
-
-                                <?php endif; ?>
+                                </a>
 
                             <?php endif; ?>
 
                         <?php else: ?>
+
                             <span class="no-file"><?php echo e(__('messages.no_file')); ?></span>
+
                         <?php endif; ?>
 
                         <form method="POST"

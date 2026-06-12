@@ -12,14 +12,61 @@ use Illuminate\Support\Facades\Auth;
 
 class AdminBookController extends Controller
 {
-    public function index()
-    {
-        $books = LibraryBook::with(['department', 'category'])
-            ->orderBy('title')
-            ->get();
+    public function index(Request $request)
+{
+    $departments = Department::where('status', 'active')
+        ->orderBy('name')
+        ->get();
 
-        return view('admin.books.index', compact('books'));
+    $query = LibraryBook::with(['department', 'category']);
+
+    if ($request->filled('search')) {
+        $query->where(function ($q) use ($request) {
+            $q->where('title', 'like', '%' . $request->search . '%')
+              ->orWhere('author', 'like', '%' . $request->search . '%')
+              ->orWhere('publisher', 'like', '%' . $request->search . '%')
+              ->orWhere('book_number', 'like', '%' . $request->search . '%')
+              ->orWhere('category_name', 'like', '%' . $request->search . '%');
+        });
     }
+
+    if ($request->filled('department_id')) {
+        $query->where('department_id', $request->department_id);
+    }
+
+    if ($request->filled('category_name')) {
+        $query->where('category_name', 'like', '%' . $request->category_name . '%');
+    }
+
+    if ($request->filled('publication_year')) {
+        $query->where('publication_year', $request->publication_year);
+    }
+
+    if ($request->filled('status')) {
+        $query->where('status', $request->status);
+    }
+
+    if ($request->sort === 'oldest') {
+        $query->oldest();
+    } elseif ($request->sort === 'title') {
+        $query->orderBy('title');
+    } elseif ($request->sort === 'copies_desc') {
+        $query->orderByDesc('total_copies');
+    } elseif ($request->sort === 'available_desc') {
+        $query->orderByDesc('available_copies');
+    } elseif ($request->sort === 'year_desc') {
+        $query->orderByDesc('publication_year');
+    } else {
+        $query->latest();
+    }
+
+    $books = $query->get();
+
+    return view('admin.books.index', compact(
+        'books',
+        'departments'
+    ));
+}
 
     public function create()
     {
@@ -52,6 +99,8 @@ class AdminBookController extends Controller
             'total_copies' => $request->total_copies,
             'available_copies' => $request->total_copies,
             'status' => 'available',
+            'department_name' => $request->department_name,
+            'description' => $request->description,
         ]);
 
         AdminActivity::create([

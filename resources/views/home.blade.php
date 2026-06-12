@@ -16,7 +16,7 @@
     <div class="stats-header">
         <span>{{ __('messages.overview') }}</span>
         <h2>{{ __('messages.library_statistics') }}</h2>
-        <p>{{ __('messages.statistics_description') }}</p>
+        
     </div>
 
     <div class="stats-modern-grid">

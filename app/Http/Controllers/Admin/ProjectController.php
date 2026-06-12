@@ -58,7 +58,7 @@ class ProjectController extends Controller
             'academic_year' => 'nullable|string|max:50',
             'semester' => 'nullable|in:fall,spring,summer',
             'description' => 'nullable|string',
-            'file' => 'nullable|file|mimes:pdf,doc,docx,ppt,pptx|max:20480',
+            'file' => 'nullable|file|mimes:pdf,doc,docx,ppt,pptx|max:102400',
             'cover_image' => 'nullable|image|mimes:jpg,jpeg,png|max:5120',
         ]);
 

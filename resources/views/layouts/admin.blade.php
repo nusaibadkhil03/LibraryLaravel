@@ -1,9 +1,11 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
-<head>
+<html lang="{{ app()->getLocale() }}"
+      dir="{{ app()->getLocale() == 'ar' ? 'rtl' : 'ltr' }}">
+      <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>لوحة تحكم الأدمن</title>
+    <title>{{ __('messages.admin_dashboard_title') }}</title>
+
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
@@ -447,121 +449,169 @@
     background: #fee2e2;
     color: #991b1b;
 }
+.admin-lang-btn {
+    background: #fff4ec;
+    color: #e67e22;
+    border: 1px solid #e67e22;
+    padding: 8px 16px;
+    border-radius: 20px;
+    text-decoration: none;
+    font-weight: bold;
+}
     </style>
 </head>
 
 <body>
 
 <div class="admin-wrapper">
-
-   <aside class="sidebar">
-    <h2>لوحة الأدمن</h2>
-
-    <a class="{{ request()->routeIs('admin.dashboard') ? 'active' : '' }}"
-       href="{{ route('admin.dashboard') }}">الرئيسية</a>
-
-    <a class="{{ request()->routeIs('admin.departments.*') ? 'active' : '' }}"
-       href="{{ route('admin.departments.index') }}">الأقسام</a>
-
-    <a class="{{ request()->routeIs('admin.books.*') ? 'active' : '' }}"
-       href="{{ route('admin.books.index') }}">الكتب</a>
-
-    <a class="{{ request()->routeIs('admin.borrows.*') ? 'active' : '' }}"
-       href="{{ route('admin.borrows.index') }}">الاستعارات</a>
     
+    <aside class="sidebar">
 
-    <a class="{{ request()->routeIs('admin.curriculum.*') ? 'active' : '' }}"
-      href="{{ route('admin.curriculum.index') }}">الخطة الدراسية</a>
+<h2>{{ __('messages.admin_panel') }}</h2>
 
-   
+<a class="{{ request()->routeIs('admin.dashboard') ? 'active' : '' }}"
+   href="{{ route('admin.dashboard') }}">
+    {{ __('messages.dashboard') }}
+</a>
 
-    <div class="sidebar-dropdown {{ request()->routeIs(
-        'admin.digital-books.*',
-        'admin.curriculum.*',
-        'admin.syllabuses.*',
-        'admin.past-exams.*',
-        'admin.projects.*',
-        'admin.researches.*',
-        'admin.journals.*',
-        'admin.educational-channels.*'
-    ) ? 'open active' : '' }}">
+<a class="{{ request()->routeIs('admin.departments.*') ? 'active' : '' }}"
+   href="{{ route('admin.departments.index') }}">
+    {{ __('messages.departments') }}
+</a>
 
-        <button type="button" class="sidebar-dropdown-btn">
-            <span>المحتوى الرقمي</span>
-            <span class="arrow">▼</span>
-        </button>
+<a class="{{ request()->routeIs('admin.books.*') ? 'active' : '' }}"
+   href="{{ route('admin.books.index') }}">
+    {{ __('messages.books') }}
+</a>
 
-        <div class="sidebar-dropdown-content">
-            <a class="{{ request()->routeIs('admin.digital-books.*') ? 'active' : '' }}"
-               href="{{ route('admin.digital-books.index') }}">الكتب الرقمية</a>
+<a class="{{ request()->routeIs('admin.borrows.*') ? 'active' : '' }}"
+   href="{{ route('admin.borrows.index') }}">
+    {{ __('messages.borrow_requests') }}
+</a>
 
+<a class="{{ request()->routeIs('admin.curriculum.*') ? 'active' : '' }}"
+   href="{{ route('admin.curriculum.index') }}">
+    {{ __('messages.curriculum') }}
+</a>
 
-            <a class="{{ request()->routeIs('admin.syllabuses.*') ? 'active' : '' }}"
-               href="{{ route('admin.syllabuses.index') }}">المناهج</a>
+<div class="sidebar-dropdown {{ request()->routeIs(
+    'admin.digital-books.*',
+    'admin.curriculum.*',
+    'admin.syllabuses.*',
+    'admin.past-exams.*',
+    'admin.projects.*',
+    'admin.researches.*',
+    'admin.journals.*',
+    'admin.educational-channels.*'
+) ? 'open active' : '' }}">
 
-            <a class="{{ request()->routeIs('admin.past-exams.*') ? 'active' : '' }}"
-               href="{{ route('admin.past-exams.index') }}">أسئلة السنوات</a>
+    <button type="button" class="sidebar-dropdown-btn">
+        <span>{{ __('messages.digital_content') }}</span>
+        <span class="arrow">▼</span>
+    </button>
 
-            <a class="{{ request()->routeIs('admin.projects.*') ? 'active' : '' }}"
-               href="{{ route('admin.projects.index') }}">مشاريع التخرج</a>
+    <div class="sidebar-dropdown-content">
+        <a class="{{ request()->routeIs('admin.digital-books.*') ? 'active' : '' }}"
+           href="{{ route('admin.digital-books.index') }}">
+            {{ __('messages.digital_books') }}
+        </a>
 
-            <a class="{{ request()->routeIs('admin.researches.*') ? 'active' : '' }}"
-               href="{{ route('admin.researches.index') }}">البحوث العلمية</a>
+        <a class="{{ request()->routeIs('admin.syllabuses.*') ? 'active' : '' }}"
+           href="{{ route('admin.syllabuses.index') }}">
+            {{ __('messages.syllabuses') }}
+        </a>
 
-            <a class="{{ request()->routeIs('admin.journals.*') ? 'active' : '' }}"
-               href="{{ route('admin.journals.index') }}">المجلات</a>
+        <a class="{{ request()->routeIs('admin.past-exams.*') ? 'active' : '' }}"
+           href="{{ route('admin.past-exams.index') }}">
+            {{ __('messages.past_exams') }}
+        </a>
 
-            <a class="{{ request()->routeIs('admin.educational-channels.*') ? 'active' : '' }}"
-               href="{{ route('admin.educational-channels.index') }}">القنوات التعليمية</a>
+        <a class="{{ request()->routeIs('admin.projects.*') ? 'active' : '' }}"
+           href="{{ route('admin.projects.index') }}">
+            {{ __('messages.graduation_projects') }}
+        </a>
+
+        <a class="{{ request()->routeIs('admin.researches.*') ? 'active' : '' }}"
+           href="{{ route('admin.researches.index') }}">
+            {{ __('messages.scientific_researches') }}
+        </a>
+
+        <a class="{{ request()->routeIs('admin.journals.*') ? 'active' : '' }}"
+           href="{{ route('admin.journals.index') }}">
+            {{ __('messages.journals') }}
+        </a>
+
+        <a class="{{ request()->routeIs('admin.educational-channels.*') ? 'active' : '' }}"
+           href="{{ route('admin.educational-channels.index') }}">
+            {{ __('messages.educational_channels') }}
+        </a>
+    </div>
+</div>
+
+<a class="{{ request()->routeIs('admin.students.*') ? 'active' : '' }}"
+   href="{{ route('admin.students.index') }}">
+    {{ __('messages.students') }}
+</a>
+
+<a class="{{ request()->routeIs('admin.admins.*') ? 'active' : '' }}"
+   href="{{ route('admin.admins.index') }}">
+    {{ __('messages.admins') }}
+</a>
+
+</aside>
+
+<div class="main-content">
+
+    <div class="topbar">
+        <h1>@yield('page_title', __('messages.dashboard'))</h1>
+
+        <div class="admin-search-container">
+            <input
+                type="text"
+                id="adminLiveSearchInput"
+                placeholder="{{ __('messages.admin_search_placeholder') }}"
+                autocomplete="off"
+            >
+
+            <button type="button">🔍</button>
+
+            <div id="adminLiveSearchResults" class="admin-live-search-results"></div>
+        </div>
+
+        <div class="admin-actions">
+            <div class="admin-info">
+                {{ __('messages.welcome_admin') }}، {{ auth()->user()->name }}
+            </div>
+
+            @if(app()->getLocale() == 'ar')
+                <a href="{{ route('language.switch', 'en') }}" class="admin-lang-btn">EN</a>
+            @else
+                <a href="{{ route('language.switch', 'ar') }}" class="admin-lang-btn">AR</a>
+            @endif
+
+            <form method="POST" action="{{ route('logout') }}">
+                @csrf
+
+                <button type="submit" class="admin-logout-btn">
+                    {{ __('messages.logout') }}
+                </button>
+            </form>
         </div>
     </div>
 
-    <a class="{{ request()->routeIs('admin.students.*') ? 'active' : '' }}"
-       href="{{ route('admin.students.index') }}">
-          الطلبة
-    </a>
-    <a class="{{ request()->routeIs('admin.admins.*') ? 'active' : '' }}"
-   href="{{ route('admin.admins.index') }}">
-    الأدمن
-</a>
+    <main class="content">
+        @yield('content')
+    </main>
+
+</div>
+
+</div>
+
+   
     
 </aside>
 
-    <div class="main-content">
-
-        <div class="topbar">
-            <h1>@yield('page_title', 'لوحة التحكم')</h1>
-              <div class="admin-search-container">
-    <input
-        type="text"
-        id="adminLiveSearchInput"
-        placeholder="ابحث داخل لوحة الأدمن..."
-        autocomplete="off"
-    >
-
-    <button type="button">🔍</button>
-
-    <div id="adminLiveSearchResults" class="admin-live-search-results"></div>
-</div>
-            <div class="admin-actions">
-                <div class="admin-info">
-                    مرحبًا، {{ auth()->user()->name }}
-                </div>
-
-                <form method="POST" action="{{ route('logout') }}">
-                    @csrf
-                    <button type="submit" class="admin-logout-btn">
-                        تسجيل الخروج
-                    </button>
-                </form>
-            </div>
-        </div>
-
-        <main class="content">
-            @yield('content')
-        </main>
-
-    </div>
+    
 
 </div>
 <script>

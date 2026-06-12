@@ -26,6 +26,8 @@ class LibraryBook extends Model
     'available_copies',
     'status',
     'edition_number',
+    'department_name',
+    'description',
 ];
 
     public function category()

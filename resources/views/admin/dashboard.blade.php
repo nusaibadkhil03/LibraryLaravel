@@ -32,12 +32,12 @@
     </div>
 
     <div class="card">
-        <h3>عدد الكتب الورقية</h3>
+        <h3>عدد العناوين </h3>
         <p>{{ $booksCount ?? 0 }}</p>
     </div>
 
     <div class="card">
-        <h3>النسخ المتاحة</h3>
+        <h3>عدد الكتب</h3>
         <p>{{ $availableBooksCount ?? 0 }}</p>
     </div>
 

@@ -80,7 +80,7 @@
 
                 <div class="admin-field">
                     <label>ملف البحث PDF</label>
-                    <input type="file" name="file" accept=".pdf" required>
+                    <input type="file" name="file" accept=".pdf,.doc,.docx,.ppt,.pptx">
                 </div>
 
                 <div class="admin-field full">

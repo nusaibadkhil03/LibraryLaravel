@@ -70,7 +70,7 @@ class SyllabusController extends Controller
         'lecture_number' => 'nullable|string|max:255',
         'doctor_name' => 'nullable|string|max:255',
         'department_id' => 'required',
-        'file' => 'required|file|mimes:pdf,doc,docx',
+        'file' => 'required|file|mimes:pdf,doc,docx|max:102400',
         'semester' => 'nullable|in:fall,spring,summer',
     ]);
 

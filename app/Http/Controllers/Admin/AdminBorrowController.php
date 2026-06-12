@@ -8,12 +8,53 @@ use Illuminate\Http\Request;
 
 class AdminBorrowController extends Controller
 {
-    public function index()
-    {
-        $borrows = Borrow::with(['user', 'libraryBook'])->latest()->get();
+    public function index(Request $request)
+{
+    $query = Borrow::with(['user.department', 'libraryBook']);
 
-        return view('admin.borrow.index', compact('borrows'));
+    if ($request->filled('search')) {
+        $query->where(function ($q) use ($request) {
+            $q->where('student_name', 'like', '%' . $request->search . '%')
+              ->orWhere('student_number', 'like', '%' . $request->search . '%')
+              ->orWhereHas('user', function ($userQuery) use ($request) {
+                  $userQuery->where('name', 'like', '%' . $request->search . '%')
+                      ->orWhere('student_number', 'like', '%' . $request->search . '%')
+                      ->orWhere('phone', 'like', '%' . $request->search . '%');
+              })
+              ->orWhereHas('libraryBook', function ($bookQuery) use ($request) {
+                  $bookQuery->where('title', 'like', '%' . $request->search . '%');
+              });
+        });
     }
+
+    if ($request->filled('status')) {
+        $query->where('status', $request->status);
+    }
+
+    if ($request->filled('borrow_date')) {
+        $query->whereDate('borrow_date', $request->borrow_date);
+    }
+
+    if ($request->filled('due_date')) {
+        $query->whereDate('due_date', $request->due_date);
+    }
+
+    if ($request->sort === 'oldest') {
+        $query->oldest();
+    } elseif ($request->sort === 'student') {
+        $query->orderBy('student_name');
+    } elseif ($request->sort === 'borrow_date') {
+        $query->orderByDesc('borrow_date');
+    } elseif ($request->sort === 'due_date') {
+        $query->orderByDesc('due_date');
+    } else {
+        $query->latest();
+    }
+
+    $borrows = $query->get();
+
+    return view('admin.borrow.index', compact('borrows'));
+}
 
     public function approve($id)
     {
@@ -36,32 +77,64 @@ class AdminBorrowController extends Controller
         return back()->with('success', 'تم قبول طلب الاستعارة وتحديث عدد النسخ.');
     }
 
-    public function reject($id)
-    {
-        $borrow = Borrow::findOrFail($id);
+    public function reject(Request $request, $id)
+{
+    $request->validate([
+        'rejection_reason' => 'required|string|max:500',
+    ]);
 
-        $borrow->update([
-            'status' => 'rejected',
-        ]);
+    $borrow = Borrow::findOrFail($id);
 
-        return back()->with('success', 'تم رفض طلب الاستعارة.');
+    $borrow->update([
+        'status' => 'rejected',
+        'rejection_reason' => $request->rejection_reason,
+    ]);
+
+    return back()->with('success', 'تم رفض طلب الاستعارة مع توضيح السبب.');
+}
+
+    public function returnBook(Request $request, $id)
+{
+    $borrow = Borrow::with('libraryBook')->findOrFail($id);
+
+    if ($borrow->status != 'borrowed') {
+        return back()->with('error', 'لا يمكن إرجاع هذا الطلب.');
     }
 
-    public function returnBook($id)
-    {
-        $borrow = Borrow::with('libraryBook')->findOrFail($id);
+    $request->validate([
+        'actual_return_date' => 'required|date',
+        'fine_amount' => 'nullable|numeric|min:0',
+        'return_notes' => 'nullable|string|max:1000',
+    ]);
 
-        if ($borrow->status != 'borrowed') {
-            return back()->with('error', 'لا يمكن إرجاع هذا الطلب.');
-        }
+    $borrow->update([
+        'status'             => 'returned',
+        'return_date'        => now()->toDateString(),
 
-        $borrow->update([
-            'status' => 'returned',
-            'return_date' => now()->toDateString(),
-        ]);
+        'actual_return_date' => $request->actual_return_date,
+        'is_late'            => $request->is_late ? true : false,
+        'fine_amount'        => $request->fine_amount ?? 0,
+        'fine_paid'          => $request->fine_paid ? true : false,
+        'return_notes'       => $request->return_notes,
+    ]);
 
-        $borrow->libraryBook->increment('available_copies');
+    $borrow->libraryBook->increment('available_copies');
 
-        return back()->with('success', 'تم إرجاع الكتاب وتحديث عدد النسخ.');
+    return redirect()
+        ->route('admin.borrows.index')
+        ->with('success', 'تم إرجاع الكتاب وتسجيل بيانات الغرامة بنجاح.');
+}
+public function returnForm($id)
+{
+    $borrow = Borrow::with(['user.department', 'libraryBook'])
+        ->findOrFail($id);
+
+    if ($borrow->status != 'borrowed' && $borrow->status != 'approved') {
+        return redirect()
+            ->route('admin.borrows.index')
+            ->with('error', 'لا يمكن فتح صفحة الإرجاع لهذا الطلب.');
     }
+
+    return view('admin.borrows.return', compact('borrow'));
+}
 }
