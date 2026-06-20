@@ -42,6 +42,9 @@ return [
 'curriculum_and_plans' => 'Curriculum and Study Plans',
 'borrow_requests' => 'Borrow Requests',
 'scientific_journals' => 'Scientific Journals',
+    'login_required_title' => 'Login Required',
+
+    'login_required_text' => 'Please login or create an account to access this feature.',
 
 'about_university' => 'About University',
 'journals' => 'Journals',

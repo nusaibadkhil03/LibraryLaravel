@@ -1,8 +1,6 @@
-@extends('layouts.admin')
+<?php $__env->startSection('page_title', 'إدارة الكتب '); ?>
 
-@section('page_title', 'إدارة الكتب ')
-
-@section('content')
+<?php $__env->startSection('content'); ?>
 
 <style>
 .books-page {
@@ -228,25 +226,26 @@
     <div class="books-header">
         <h2>إدارة الكتب </h2>
 
-        <a href="{{ route('admin.books.create') }}" class="add-book-btn">
+        <a href="<?php echo e(route('admin.books.create')); ?>" class="add-book-btn">
             + إضافة كتاب جديد
         </a>
     </div>
 
-    @if(session('success'))
+    <?php if(session('success')): ?>
         <div class="success-message">
-            {{ session('success') }}
-        </div>
-    @endif
+            <?php echo e(session('success')); ?>
 
-    <form method="GET" action="{{ route('admin.books.index') }}" class="filter-box">
+        </div>
+    <?php endif; ?>
+
+    <form method="GET" action="<?php echo e(route('admin.books.index')); ?>" class="filter-box">
         <div class="filter-grid">
 
             <div>
                 <label>بحث</label>
                 <input type="text"
                        name="search"
-                       value="{{ request('search') }}"
+                       value="<?php echo e(request('search')); ?>"
                        placeholder="العنوان، المؤلف، الناشر، رقم التسجيل">
             </div>
 
@@ -255,12 +254,13 @@
                 <select name="department_id">
                     <option value="">كل الأقسام</option>
 
-                    @foreach($departments as $department)
-                        <option value="{{ $department->id }}"
-                            {{ request('department_id') == $department->id ? 'selected' : '' }}>
-                            {{ $department->name }}
+                    <?php $__currentLoopData = $departments; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $department): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                        <option value="<?php echo e($department->id); ?>"
+                            <?php echo e(request('department_id') == $department->id ? 'selected' : ''); ?>>
+                            <?php echo e($department->name); ?>
+
                         </option>
-                    @endforeach
+                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                 </select>
             </div>
 
@@ -268,7 +268,7 @@
                 <label>التصنيف</label>
                 <input type="text"
                        name="category_name"
-                       value="{{ request('category_name') }}"
+                       value="<?php echo e(request('category_name')); ?>"
                        placeholder="اكتب التصنيف">
             </div>
 
@@ -276,7 +276,7 @@
                 <label>سنة النشر</label>
                 <input type="number"
                        name="publication_year"
-                       value="{{ request('publication_year') }}"
+                       value="<?php echo e(request('publication_year')); ?>"
                        placeholder="مثال: 2024">
             </div>
 
@@ -284,10 +284,10 @@
                 <label>الحالة</label>
                 <select name="status">
                     <option value="">كل الحالات</option>
-                    <option value="available" {{ request('status') == 'available' ? 'selected' : '' }}>
+                    <option value="available" <?php echo e(request('status') == 'available' ? 'selected' : ''); ?>>
                         متاح
                     </option>
-                    <option value="unavailable" {{ request('status') == 'unavailable' ? 'selected' : '' }}>
+                    <option value="unavailable" <?php echo e(request('status') == 'unavailable' ? 'selected' : ''); ?>>
                         غير متاح
                     </option>
                 </select>
@@ -297,18 +297,18 @@
                 <label>الترتيب</label>
                 <select name="sort">
                     <option value="">الأحدث</option>
-                    <option value="oldest" {{ request('sort') == 'oldest' ? 'selected' : '' }}>الأقدم</option>
-                    <option value="title" {{ request('sort') == 'title' ? 'selected' : '' }}>العنوان</option>
-                    <option value="year_desc" {{ request('sort') == 'year_desc' ? 'selected' : '' }}>سنة النشر الأحدث</option>
-                    <option value="copies_desc" {{ request('sort') == 'copies_desc' ? 'selected' : '' }}>الأكثر نسخًا</option>
-                    <option value="available_desc" {{ request('sort') == 'available_desc' ? 'selected' : '' }}>الأكثر توفرًا</option>
+                    <option value="oldest" <?php echo e(request('sort') == 'oldest' ? 'selected' : ''); ?>>الأقدم</option>
+                    <option value="title" <?php echo e(request('sort') == 'title' ? 'selected' : ''); ?>>العنوان</option>
+                    <option value="year_desc" <?php echo e(request('sort') == 'year_desc' ? 'selected' : ''); ?>>سنة النشر الأحدث</option>
+                    <option value="copies_desc" <?php echo e(request('sort') == 'copies_desc' ? 'selected' : ''); ?>>الأكثر نسخًا</option>
+                    <option value="available_desc" <?php echo e(request('sort') == 'available_desc' ? 'selected' : ''); ?>>الأكثر توفرًا</option>
                 </select>
             </div>
 
             <div class="filter-actions">
                 <button type="submit" class="search-btn">تطبيق</button>
 
-                <a href="{{ route('admin.books.index') }}" class="reset-btn">
+                <a href="<?php echo e(route('admin.books.index')); ?>" class="reset-btn">
                     إعادة ضبط
                 </a>
             </div>
@@ -316,7 +316,7 @@
         </div>
     </form>
 
-    @if($books->count())
+    <?php if($books->count()): ?>
 
         <div class="table-wrapper">
             <table class="books-table">
@@ -335,30 +335,31 @@
     </tr>
 </thead>
                 <tbody>
-    @foreach($books as $book)
+    <?php $__currentLoopData = $books; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $book): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
         <tr>
-            <td>{{ $loop->iteration }}</td>
+            <td><?php echo e($loop->iteration); ?></td>
 
-            <td>{{ $book->book_number ?? '-' }}</td>
+            <td><?php echo e($book->book_number ?? '-'); ?></td>
 
             <td class="book-title">
-                {{ $book->title }}
+                <?php echo e($book->title); ?>
+
             </td>
 
-            <td>{{ $book->author ?? '-' }}</td>
+            <td><?php echo e($book->author ?? '-'); ?></td>
 
-            <td>{{ $book->edition_number ?? '-' }}</td>
+            <td><?php echo e($book->edition_number ?? '-'); ?></td>
 
-            <td>{{ $book->total_copies }}</td>
+            <td><?php echo e($book->total_copies); ?></td>
 
-            <td>{{ $book->publication_place ?? '-' }}</td>
+            <td><?php echo e($book->publication_place ?? '-'); ?></td>
 
             <td>
-                @if($book->status == 'available')
+                <?php if($book->status == 'available'): ?>
                     <span class="status-badge status-available">متاح</span>
-                @else
+                <?php else: ?>
                     <span class="status-badge status-unavailable">غير متاح</span>
-                @endif
+                <?php endif; ?>
             </td>
 
             <td>
@@ -366,43 +367,44 @@
                     <summary>عرض</summary>
 
                     <div class="details-content">
-                        <p><strong>القسم:</strong> {{ $book->department->name ?? $book->department_name ?? '-' }}</p>
-                        <p><strong>الناشر:</strong> {{ $book->publisher ?? '-' }}</p>
-                        <p><strong>سنة النشر:</strong> {{ $book->publication_year ?? '-' }}</p>
-                        <p><strong>مكان النشر:</strong> {{ $book->publication_place ?? '-' }}</p>
-                        <p><strong>التصنيف:</strong> {{ $book->category_name ?? '-' }}</p>
-                        <p><strong>رقم الطبعة:</strong> {{ $book->edition_number ?? '-' }}</p>
-                        <p><strong>مكان الرف:</strong> {{ $book->shelf_location ?? '-' }}</p>
-                        <p><strong>النسخ المتاحة:</strong> {{ $book->available_copies }}</p>
-                        <p><strong>النسخ المستعارة:</strong> {{ $book->total_copies - $book->available_copies }}</p>
+                        <p><strong>القسم:</strong> <?php echo e($book->department->name ?? $book->department_name ?? '-'); ?></p>
+                        <p><strong>الناشر:</strong> <?php echo e($book->publisher ?? '-'); ?></p>
+                        <p><strong>سنة النشر:</strong> <?php echo e($book->publication_year ?? '-'); ?></p>
+                        <p><strong>مكان النشر:</strong> <?php echo e($book->publication_place ?? '-'); ?></p>
+                        <p><strong>التصنيف:</strong> <?php echo e($book->category_name ?? '-'); ?></p>
+                        <p><strong>رقم الطبعة:</strong> <?php echo e($book->edition_number ?? '-'); ?></p>
+                        <p><strong>مكان الرف:</strong> <?php echo e($book->shelf_location ?? '-'); ?></p>
+                        <p><strong>النسخ المتاحة:</strong> <?php echo e($book->available_copies); ?></p>
+                        <p><strong>النسخ المستعارة:</strong> <?php echo e($book->total_copies - $book->available_copies); ?></p>
 
-                        @if(!empty($book->is_series))
+                        <?php if(!empty($book->is_series)): ?>
                             <hr>
                             <p><strong>نوع الكتاب:</strong> تابع لسلسلة</p>
-                            <p><strong>اسم السلسلة:</strong> {{ $book->series_name ?? '-' }}</p>
-                            <p><strong>رقم الجزء:</strong> {{ $book->part_number ?? '-' }} من {{ $book->series_parts_count ?? '-' }}</p>
-                        @else
+                            <p><strong>اسم السلسلة:</strong> <?php echo e($book->series_name ?? '-'); ?></p>
+                            <p><strong>رقم الجزء:</strong> <?php echo e($book->part_number ?? '-'); ?> من <?php echo e($book->series_parts_count ?? '-'); ?></p>
+                        <?php else: ?>
                             <p><strong>نوع الكتاب:</strong> كتاب مستقل</p>
-                        @endif
+                        <?php endif; ?>
 
                         <hr>
 
-                        <p><strong>الوصف:</strong> {{ $book->description ?? '-' }}</p>
+                        <p><strong>الوصف:</strong> <?php echo e($book->description ?? '-'); ?></p>
 
                         <p>
                             <strong>سياسة الفقدان:</strong>
-                            {{ $book->loss_policy ?? 'إحضار نسخة بديلة أو دفع خمسة أضعاف سعر الكتاب، وفي حال كان ضمن سلسلة يتم دفع قيمة السلسلة كاملة.' }}
+                            <?php echo e($book->loss_policy ?? 'إحضار نسخة بديلة أو دفع خمسة أضعاف سعر الكتاب، وفي حال كان ضمن سلسلة يتم دفع قيمة السلسلة كاملة.'); ?>
+
                         </p>
                     </div>
                 </details>
             </td>
 
             <td>
-                <form action="{{ route('admin.books.destroy', $book->id) }}"
+                <form action="<?php echo e(route('admin.books.destroy', $book->id)); ?>"
                       method="POST"
                       onsubmit="return confirm('هل أنت متأكد من حذف هذا الكتاب؟')">
-                    @csrf
-                    @method('DELETE')
+                    <?php echo csrf_field(); ?>
+                    <?php echo method_field('DELETE'); ?>
 
                     <button class="delete-btn">
                         حذف
@@ -410,18 +412,19 @@
                 </form>
             </td>
         </tr>
-    @endforeach
+    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
 </tbody>
 
             </table>
         </div>
 
-    @else
+    <?php else: ?>
         <div class="empty-message">
             لا توجد كتب حالياً.
         </div>
-    @endif
+    <?php endif; ?>
 
 </div>
 
-@endsection
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('layouts.admin', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\course laravel\LibraryLaravel\resources\views/admin/books/index.blade.php ENDPATH**/ ?>

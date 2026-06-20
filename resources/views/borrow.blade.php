@@ -72,25 +72,29 @@
             </div>
 
             <div class="input-box">
-                <label>{{ __('messages.book_name') }} *</label>
+    <label>{{ __('messages.book_name') }} *</label>
 
-                <input
-                    list="booksList"
-                    id="bookSearch"
-                    placeholder="{{ __('messages.type_book_name') }}"
-                    autocomplete="off"
-                    required
-                    style="padding:10px; width:100%;"
-                >
+    <input
+        type="text"
+        id="bookSearch"
+        placeholder="اكتب اسم الكتاب..."
+        autocomplete="off"
+        required
+    >
 
-                <datalist id="booksList">
-                    @foreach($books as $book)
-                        <option data-id="{{ $book->id }}" value="{{ $book->title }}"></option>
-                    @endforeach
-                </datalist>
+    <input type="hidden" name="book_id" id="book_id">
 
-                <input type="hidden" name="book_id" id="book_id">
-            </div>
+    <div id="bookResults"
+         style="
+            display:none;
+            background:white;
+            border:1px solid #ddd;
+            border-radius:10px;
+            max-height:220px;
+            overflow-y:auto;
+            margin-top:5px;">
+    </div>
+</div>
 
             <div class="form-grid">
                 <div class="input-box">
@@ -220,6 +224,7 @@ function showTab(sectionId, button) {
     });
 
     const section = document.getElementById(sectionId);
+
     if (section) {
         section.style.display = 'block';
         section.classList.add('active');
@@ -229,39 +234,92 @@ function showTab(sectionId, button) {
 }
 
 document.addEventListener("DOMContentLoaded", function () {
-    const bookSearch = document.getElementById('bookSearch');
-    const bookIdInput = document.getElementById('book_id');
-    const options = document.querySelectorAll('#booksList option');
 
-    if (bookSearch && bookIdInput) {
-        bookSearch.addEventListener('input', function () {
-            bookIdInput.value = '';
+    const searchInput = document.getElementById('bookSearch');
+    const resultsBox = document.getElementById('bookResults');
+    const hiddenBookId = document.getElementById('book_id');
 
-            options.forEach(option => {
-                if (option.value === bookSearch.value) {
-                    bookIdInput.value = option.dataset.id;
+    if (searchInput && resultsBox && hiddenBookId) {
+        searchInput.addEventListener('input', async function () {
+            let value = this.value.trim();
+
+            hiddenBookId.value = '';
+            resultsBox.innerHTML = '';
+            resultsBox.style.display = 'none';
+
+            if (value.length < 3) return;
+
+            try {
+                let response = await fetch(`/borrow/books/search?q=${encodeURIComponent(value)}`);
+                let books = await response.json();
+
+                resultsBox.innerHTML = '';
+
+                if (!books.length) {
+                    resultsBox.innerHTML = `
+                        <div style="padding:10px; color:#777; text-align:center;">
+                            لا توجد نتائج مطابقة
+                        </div>
+                    `;
+                    resultsBox.style.display = 'block';
+                    return;
                 }
-            });
+
+                books.forEach(book => {
+                    let item = document.createElement('div');
+
+                    item.style.padding = '10px';
+                    item.style.cursor = 'pointer';
+                    item.style.borderBottom = '1px solid #eee';
+                    item.style.background = '#fff';
+
+                    item.innerHTML = `
+                        <strong>${book.title}</strong>
+                        <br>
+                        <small>${book.author ?? ''}</small>
+                    `;
+
+                    item.addEventListener('click', function () {
+                        searchInput.value = book.title;
+                        hiddenBookId.value = book.id;
+                        resultsBox.innerHTML = '';
+                        resultsBox.style.display = 'none';
+                    });
+
+                    resultsBox.appendChild(item);
+                });
+
+                resultsBox.style.display = 'block';
+
+            } catch (error) {
+                console.log(error);
+            }
+        });
+
+        document.addEventListener('click', function (e) {
+            if (!searchInput.contains(e.target) && !resultsBox.contains(e.target)) {
+                resultsBox.style.display = 'none';
+            }
         });
     }
 
     const input = document.getElementById("borrow_date");
     const output = document.getElementById("return_date_display");
 
-    if (!input || !output) return;
+    if (input && output) {
+        input.addEventListener("input", function () {
+            if (!input.value) return;
 
-    input.addEventListener("input", function () {
-        if (!input.value) return;
+            let borrowDate = new Date(input.value);
+            borrowDate.setDate(borrowDate.getDate() + 5);
 
-        let borrowDate = new Date(input.value);
-        borrowDate.setDate(borrowDate.getDate() + 5);
+            const year = borrowDate.getFullYear();
+            const month = String(borrowDate.getMonth() + 1).padStart(2, '0');
+            const day = String(borrowDate.getDate()).padStart(2, '0');
 
-        const year = borrowDate.getFullYear();
-        const month = String(borrowDate.getMonth() + 1).padStart(2, '0');
-        const day = String(borrowDate.getDate()).padStart(2, '0');
-
-        output.value = `${year}-${month}-${day}`;
-    });
+            output.value = `${year}-${month}-${day}`;
+        });
+    }
 });
 </script>
 @endsection

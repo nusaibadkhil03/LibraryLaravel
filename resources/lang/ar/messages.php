@@ -30,6 +30,9 @@ return [
     'profile' => 'الملف الشخصي',
 
     'search_placeholder' => 'ابحث عن كتاب، منهج، مشروع ...',
+    'login_required_title' => 'تسجيل الدخول مطلوب',
+
+    'login_required_text' => 'يجب تسجيل الدخول أو إنشاء حساب للوصول إلى هذه الخدمة.',
 
 'contact_us' => 'تواصل معنا',
 'platform_services' => 'خدمات المنصة',

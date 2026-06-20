@@ -31,11 +31,11 @@ class AdminBorrowController extends Controller
         $query->where('status', $request->status);
     }
 
-    if ($request->filled('borrow_date')) {
+    if ($request->filled('borrow_date') && strtotime($request->borrow_date)) {
         $query->whereDate('borrow_date', $request->borrow_date);
     }
 
-    if ($request->filled('due_date')) {
+    if ($request->filled('due_date') && strtotime($request->due_date)) {
         $query->whereDate('due_date', $request->due_date);
     }
 
@@ -97,32 +97,74 @@ class AdminBorrowController extends Controller
 {
     $borrow = Borrow::with('libraryBook')->findOrFail($id);
 
-    if ($borrow->status != 'borrowed') {
+    if ($borrow->status != 'borrowed' && $borrow->status != 'approved') {
         return back()->with('error', 'لا يمكن إرجاع هذا الطلب.');
     }
 
     $request->validate([
         'actual_return_date' => 'required|date',
+        'return_status' => 'required|in:returned,lost',
         'fine_amount' => 'nullable|numeric|min:0',
+        'fine_paid' => 'nullable',
         'return_notes' => 'nullable|string|max:1000',
+
+        'loss_compensation_type' => 'nullable|required_if:return_status,lost|in:replacement,pay_five_times,pay_series',
+        'loss_compensation_amount' => 'nullable|numeric|min:0',
+        'loss_notes' => 'nullable|string|max:1000',
     ]);
+
+    $book = $borrow->libraryBook;
+
+    $lossAmount = 0;
+
+    if ($request->return_status === 'lost') {
+        if ($request->loss_compensation_type === 'replacement') {
+            $lossAmount = 0;
+        } elseif ($request->loss_compensation_type === 'pay_five_times') {
+            $lossAmount = ($book->price ?? 0) * 5;
+        } elseif ($request->loss_compensation_type === 'pay_series') {
+            $lossAmount = ($book->price ?? 0) * ($book->series_parts_count ?? 1);
+        }
+    }
 
     $borrow->update([
-        'status'             => 'returned',
-        'return_date'        => now()->toDateString(),
+        'status' => 'returned',
+        'return_status' => $request->return_status,
+        'return_date' => now()->toDateString(),
 
         'actual_return_date' => $request->actual_return_date,
-        'is_late'            => $request->is_late ? true : false,
-        'fine_amount'        => $request->fine_amount ?? 0,
-        'fine_paid'          => $request->fine_paid ? true : false,
-        'return_notes'       => $request->return_notes,
+        'is_late' => $request->is_late ? true : false,
+        'fine_amount' => $request->fine_amount ?? 0,
+        'fine_paid' => $request->fine_paid ? true : false,
+        'return_notes' => $request->return_notes,
+
+        'loss_compensation_type' => $request->return_status === 'lost'
+            ? $request->loss_compensation_type
+            : null,
+
+        'loss_compensation_amount' => $request->return_status === 'lost'
+            ? $lossAmount
+            : 0,
+
+        'loss_notes' => $request->return_status === 'lost'
+            ? $request->loss_notes
+            : null,
     ]);
 
-    $borrow->libraryBook->increment('available_copies');
+    if ($request->return_status === 'returned') {
+        $book->increment('available_copies');
+    }
+
+    if (
+        $request->return_status === 'lost' &&
+        $request->loss_compensation_type === 'replacement'
+    ) {
+        $book->increment('available_copies');
+    }
 
     return redirect()
         ->route('admin.borrows.index')
-        ->with('success', 'تم إرجاع الكتاب وتسجيل بيانات الغرامة بنجاح.');
+        ->with('success', 'تم تسجيل حالة الإرجاع بنجاح.');
 }
 public function returnForm($id)
 {

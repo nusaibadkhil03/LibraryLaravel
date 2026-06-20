@@ -9,24 +9,23 @@ use App\Models\LibraryBook;
 class Borrow extends Model
 {
     protected $fillable = [
-        'user_id',
-        'library_book_id',
-        'borrow_date',
-        'due_date',
-        'return_date',
-        'status',
-        'student_name',
-        'student_number',
-        'edition_number',
-        'approved_by',
-        'notes',
-        'rejection_reason',
-        'actual_return_date',
-'is_late',
-'fine_amount',
-'fine_paid',
-'return_notes',
-    ];
+    'user_id',
+    'library_book_id',
+    'status',
+    'notes',
+    'borrow_date',
+    'due_date',
+    'actual_return_date',
+    'is_late',
+    'fine_amount',
+    'fine_paid',
+    'return_notes',
+
+    'return_status',
+    'loss_compensation_type',
+    'loss_compensation_amount',
+    'loss_notes',
+];
 
     // المستخدم الذي استعار
     public function user()

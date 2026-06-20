@@ -139,7 +139,7 @@
         <div class="showcase-card journal-feature"
              style="background-image: url('{{ asset('images/journals-bg.jpeg') }}');">
             <div class="journal-overlay">
-                <div class="journal-icon">📘</div>
+                
 
                 <h3>{{ __('messages.university_journals') }}</h3>
                 <p>{{ __('messages.university_journals_description') }}</p>

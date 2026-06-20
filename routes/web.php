@@ -154,6 +154,10 @@ Route::get('/books/{book}/download', function (Book $book) {
     return response()->download(storage_path('app/public/' . $book->file_path));
 })->name('books.download');
 
+Route::get('/digital-books/{id}/download', [DigitalBookController::class, 'download'])
+    ->name('digital-books.download');
+   
+
 Route::get('/journals', function () {
     $journals = Journal::latest()->paginate(9);
 
@@ -207,6 +211,30 @@ Route::post('/borrow', function (Request $request) {
 
     return back()->with('success', 'تم إرسال طلب الاستعارة بنجاح');
 })->name('borrow.store');
+
+Route::get('/borrow/books/search', function (Request $request) {
+
+    $search = $request->q;
+
+    if (!$search || mb_strlen($search) < 3) {
+        return response()->json([]);
+    }
+
+    $books = LibraryBook::where('status', 'available')
+        ->where('available_copies', '>', 1)
+        ->where('title', 'like', '%' . $search . '%')
+        ->orderBy('title')
+        ->limit(10)
+        ->get([
+            'id',
+            'title',
+            'author',
+            'edition_number'
+        ]);
+
+    return response()->json($books);
+
+})->name('borrow.books.search');
 
     Route::view('/projects', 'projects')->name('projects');
     Route::view('/exams', 'exams')->name('exams');
@@ -335,15 +363,16 @@ Route::delete('/curriculum/{id}', [CurriculumController::class, 'destroy'])
         })->name('departments.delete');
 
         Route::get('/borrows', function () {
-            $borrows = Borrow::with(['user', 'libraryBook'])
-                ->latest()
-                ->get();
+    $borrows = Borrow::with(['user', 'libraryBook'])
+        ->latest()
+        ->get();
 
-            return view('admin.borrows.index', compact('borrows'));
-        })->name('borrows.index');
-       Route::post('/borrows/{id}/approve', function ($id) {
+    return view('admin.borrows.index', compact('borrows'));
+})->name('borrows.index');
 
-    $borrow = \App\Models\Borrow::with('libraryBook')->findOrFail($id);
+Route::post('/borrows/{id}/approve', function ($id) {
+
+    $borrow = Borrow::with('libraryBook')->findOrFail($id);
 
     $book = $borrow->libraryBook;
 
@@ -354,7 +383,7 @@ Route::delete('/curriculum/{id}', [CurriculumController::class, 'destroy'])
     $borrow->update([
         'status' => 'borrowed',
         'borrow_date' => now()->toDateString(),
-        'due_date' => now()->addDays(14)->toDateString(),
+        'due_date' => now()->addDays(5)->toDateString(),
         'approved_by' => auth()->id(),
     ]);
 
@@ -364,6 +393,9 @@ Route::delete('/curriculum/{id}', [CurriculumController::class, 'destroy'])
 
 })->name('borrows.approve');
 
+Route::post('/borrows/{id}/reject',
+    [AdminBorrowController::class, 'reject']
+)->name('borrows.reject');
 
 Route::get('/borrows/{id}/return',
     [AdminBorrowController::class, 'returnForm']
@@ -410,6 +442,7 @@ Route::post('/digital-books', [DigitalBookController::class, 'store'])
 
 Route::delete('/digital-books/{id}', [DigitalBookController::class, 'destroy'])
     ->name('digital-books.destroy');
+
     });
 });
 require __DIR__.'/auth.php';

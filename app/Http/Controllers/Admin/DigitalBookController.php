@@ -83,6 +83,22 @@ AdminActivity::create([
         return back()->with('success', 'تم رفع الكتاب الرقمي بنجاح');
     }
 
+    public function download($id)
+{
+    $book = Book::findOrFail($id);
+
+    if (!$book->file_path || !Storage::disk('public')->exists($book->file_path)) {
+        abort(404);
+    }
+
+    $book->increment('downloads_count');
+
+    return response()->download(
+        storage_path('app/public/' . $book->file_path),
+        basename($book->file_path)
+    );
+}
+
    public function destroy($id)
 {
     $book = Book::findOrFail($id);

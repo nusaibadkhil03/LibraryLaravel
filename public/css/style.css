@@ -859,15 +859,50 @@ footer {
 }
 
 .item {
-    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    width: 140px;
+    min-height: 90px;
+
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    border-radius: 16px;
+
     cursor: pointer;
-    transition: 0.3s;
+    transition: all .3s ease;
 }
 
 .item:hover {
-    transform: translateY(-5px);
+    transform: translateY(-4px);
+    box-shadow: 0 8px 20px rgba(0,0,0,.08);
 }
 
+.item i,
+.item svg,
+.item span:first-child {
+    font-size: 28px;
+    margin-bottom: 8px;
+    display: block;
+}
+
+.item p,
+.item span:last-child {
+    margin: 0;
+    font-size: 14px;
+    font-weight: 600;
+}
+.tabs-container,
+.curriculum-tabs,
+.items-container {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin: 25px 0;
+}
 .plans-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -911,6 +946,69 @@ footer {
     align-self: center;
     position: relative;
     z-index: 1;
+}
+.curriculum-tabs {
+    display: flex;
+    justify-content: center;
+    align-items: stretch;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin: 25px auto 25px;
+}
+
+.curriculum-tab-btn {
+    width: 150px;
+    min-height: 72px;
+    background: #fff;
+    border: 1px solid #e67e22;
+    border-radius: 15px;
+    color: #111827;
+    cursor: pointer;
+    font-family: inherit;
+    font-weight: 700;
+    font-size: 14px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+
+    line-height: 1.4;
+    overflow: hidden;
+}
+
+.curriculum-tab-btn span {
+    display: block;
+    font-size: 24px;
+    line-height: 1;
+    margin: 0;
+}
+
+.curriculum-tab-btn.active {
+    background: #e67e22;
+    color: white;
+    box-shadow: 0 8px 18px rgba(230, 126, 34, 0.25);
+}
+
+.curriculum-tab-btn:hover {
+    transform: translateY(-3px);
+}
+
+@media (max-width: 700px) {
+    .curriculum-tabs {
+        gap: 8px;
+    }
+
+    .curriculum-tab-btn {
+        width: calc(50% - 8px);
+        min-height: 68px;
+        font-size: 13px;
+    }
+
+    .curriculum-tab-btn span {
+        font-size: 22px;
+    }
 }
 
 
@@ -1853,12 +1951,11 @@ footer {
         height: 230px;
     }
 }
-
-/* about page */
+/* About Page */
 .about-cinematic {
     position: relative;
-    min-height: 100vh;
-    width: 100vw;
+    width: 100%;
+    min-height: calc(100vh - 0px);
     margin: 0;
     overflow: hidden;
     display: flex;
@@ -1872,8 +1969,9 @@ footer {
     background-size: cover;
     background-position: center;
     opacity: 0;
-    transform: scale(1.08);
-    transition: opacity 1.6s ease, transform 6s ease;}
+    transform: scale(1.05);
+    transition: opacity 1.3s ease, transform 5s ease;
+}
 
 .about-slide.active {
     opacity: 1;
@@ -1885,67 +1983,58 @@ footer {
     inset: 0;
     background: linear-gradient(
         to bottom,
-        rgba(0,0,0,0.35),
-        rgba(0,0,0,0.72)
+        rgba(0, 0, 0, 0.30),
+        rgba(0, 0, 0, 0.70)
     );
     z-index: 1;
 }
 
 .about-cinematic-content {
     position: relative;
-    z-index: 2;
-    width: min(950px, 90%);
+    z-index: 3;
+    width: min(90%, 560px);
+    margin: 0 auto;
+    padding: 130px 20px 60px;
     text-align: center;
-    color: white;
-    padding-top: 120px;
-}
-
-.about-cinematic-content > span {
-    display: inline-block;
-    color: #fb923c;
-    font-weight: 800;
-    margin-bottom: 14px;
+    color: #fff;
 }
 
 .about-cinematic-content h1 {
-    font-size: 52px;
-    line-height: 1.4;
-    margin-bottom: 20px;
-    transition: 0.5s ease;
+    font-size: 30px;
+    line-height: 1.7;
+    margin: 0 0 12px;
+    color: #fff;
 }
 
 .about-cinematic-content p {
-    font-size: 20px;
+    font-size: 15px;
     line-height: 2;
+    margin: 0 auto 22px;
     color: #f3f4f6;
-    max-width: 780px;
-    margin: 0 auto 30px;
-    transition: 0.5s ease;
+    max-width: 460px;
 }
 
 .about-tags {
     display: flex;
-    flex-wrap: wrap;
     justify-content: center;
-    gap: 12px;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-top: 18px;
 }
 
-.about-tags a {
+.about-tags a,
+.about-tags span {
+    display: inline-block;
+    padding: 9px 18px;
+    border-radius: 25px;
+    color: #fff;
     text-decoration: none;
-    background: rgba(255,255,255,0.08);
+    background: rgba(255,255,255,0.18);
     border: 1px solid rgba(255,255,255,0.35);
-    color: white;
-    padding: 12px 22px;
-    border-radius: 999px;
+    backdrop-filter: blur(8px);
+    font-size: 14px;
     font-weight: 700;
-    transition: 0.3s ease;
-    backdrop-filter: blur(10px);
-}
-
-.about-tags a:hover {
-    background: #f97316;
-    border-color: #f97316;
-    transform: translateY(-4px);
+    line-height: 1.4;
 }
 
 body:has(.about-cinematic) {
@@ -1958,7 +2047,7 @@ body:has(.about-cinematic) .container {
     padding: 0 !important;
     margin: 0 !important;
     max-width: none !important;
-    width: 90% !important;
+    width: 100% !important;
 }
 
 body:has(.about-cinematic) header {
@@ -1967,24 +2056,46 @@ body:has(.about-cinematic) header {
     width: 100%;
     z-index: 20;
     background: transparent !important;
-    backdrop-filter: none;
     box-shadow: none !important;
 }
 
 body:has(.about-cinematic) footer {
+    margin-top: 0 !important;
     position: relative;
     z-index: 20;
-    background: rgba(230, 126, 34, 0.65) !important;
-    backdrop-filter: blur(10px);
+    background: rgba(230, 126, 34, 0.85) !important;
 }
 
-@media (max-width: 768px) {
+/* Mobile */
+@media (max-width: 700px) {
+    .about-cinematic {
+        min-height: calc(100vh - 0px);
+    }
+
+    .about-cinematic-content {
+        width: 92%;
+        padding: 120px 16px 45px;
+    }
+
     .about-cinematic-content h1 {
-        font-size: 32px;
+        font-size: 22px;
+        line-height: 1.7;
     }
 
     .about-cinematic-content p {
-        font-size: 16px;
+        font-size: 13px;
+        line-height: 1.9;
+        max-width: 310px;
+    }
+
+    .about-tags {
+        gap: 8px;
+    }
+
+    .about-tags a,
+    .about-tags span {
+        font-size: 12px;
+        padding: 8px 14px;
     }
 }
 /* welcome section */
@@ -2393,4 +2504,477 @@ body:has(.about-cinematic) footer {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+}
+/* =========================================================
+   FINAL POLISH - Graduation Presentation Screens
+   يحافظ على الشكل العام ويعالج العرض على الموبايل والتابلت
+   ========================================================= */
+
+:root {
+    --main-orange: #e67e22;
+    --main-orange-dark: #cf6f18;
+    --soft-orange: #fff4e8;
+    --text-dark: #1f2937;
+    --text-muted: #6b7280;
+    --border-soft: #e5e7eb;
+    --card-shadow: 0 18px 45px rgba(15, 23, 42, 0.14);
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    line-height: 1.7;
+    overflow-x: hidden;
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+}
+
+button,
+a,
+input,
+select,
+textarea {
+    -webkit-tap-highlight-color: transparent;
+}
+
+input,
+select,
+textarea {
+    max-width: 100%;
+}
+
+button,
+.btn-primary,
+.btn-secondary,
+.btn-white,
+.download-btn,
+.showcase-btn,
+.journal-btn,
+.borrow-submit-btn,
+.borrow-back-btn {
+    transition: 0.25s ease;
+}
+
+button:active,
+.btn-primary:active,
+.btn-secondary:active,
+.btn-white:active,
+.download-btn:active,
+.showcase-btn:active,
+.journal-btn:active,
+.borrow-submit-btn:active,
+.borrow-back-btn:active {
+    transform: scale(0.98);
+}
+
+/* تحسين الكروت العامة بدون تغيير الهوية */
+.container,
+.curriculum-page,
+.showcase-section,
+.content-section {
+    width: min(100% - 32px, 1200px);
+}
+
+.book-card,
+.showcase-card,
+.locked-preview-card,
+.guest-info-card,
+.content-row,
+.category-box,
+.borrow-container,
+.login-container,
+.borrow-box {
+    border: 1px solid rgba(229, 231, 235, 0.85);
+}
+
+/* ===================== Borrow Page ===================== */
+.borrow-page {
+    min-height: 100vh;
+    background-image:
+        linear-gradient(rgba(0, 0, 0, 0.42), rgba(0, 0, 0, 0.42)),
+        url("../images/library.jpg");
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+}
+
+.borrow-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.48);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 24px;
+    overflow-y: auto;
+}
+
+.borrow-box,
+.borrow-container,
+.login-container {
+    width: min(100%, 720px);
+    margin: auto;
+    background: rgba(255, 255, 255, 0.97);
+    padding: 32px;
+    border-radius: 24px;
+    box-shadow: var(--card-shadow);
+    backdrop-filter: blur(6px);
+}
+
+.borrow-box h1,
+.borrow-box h2,
+.borrow-box h3,
+.borrow-container h1,
+.borrow-container h2,
+.borrow-container h3,
+.login-container h1,
+.login-container h2,
+.login-container h3 {
+    color: var(--text-dark);
+    text-align: center;
+    margin-bottom: 18px;
+    font-weight: 800;
+}
+
+.borrow-tabs,
+.tabs {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 26px;
+    flex-wrap: wrap;
+}
+
+.borrow-tabs button,
+.tabs button,
+.tab-btn {
+    width: 150px !important;
+    height: 48px !important;
+    padding: 9px 14px !important;
+    border-radius: 14px !important;
+    border: 1px solid var(--main-orange) !important;
+    background: #fff !important;
+    color: var(--text-dark) !important;
+    font-size: 14px !important;
+    font-weight: 800 !important;
+    cursor: pointer;
+}
+
+.borrow-tabs button.active,
+.tabs button.active,
+.tab-btn.active {
+    background: var(--main-orange) !important;
+    color: #fff !important;
+    box-shadow: 0 8px 18px rgba(230, 126, 34, 0.24);
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px 18px;
+}
+
+.flex-row {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px 18px;
+}
+
+.input-box {
+    margin-bottom: 0;
+}
+
+.input-box label {
+    display: block;
+    margin-bottom: 7px;
+    color: var(--text-dark);
+    font-size: 13px;
+    font-weight: 800;
+}
+
+.input-box input,
+.input-box select,
+.input-box textarea,
+.borrow-box input,
+.borrow-box select,
+.borrow-box textarea,
+.borrow-container input,
+.borrow-container select,
+.borrow-container textarea,
+.login-container input,
+.login-container select,
+.login-container textarea {
+    width: 100%;
+    min-height: 45px;
+    padding: 11px 13px;
+    border: 1px solid var(--border-soft);
+    border-radius: 13px;
+    outline: none;
+    background: #fff;
+    color: var(--text-dark);
+    font-size: 14px;
+    box-shadow: inset 0 1px 0 rgba(15, 23, 42, 0.02);
+}
+
+.input-box textarea,
+.borrow-box textarea,
+.borrow-container textarea,
+.login-container textarea {
+    min-height: 92px;
+    resize: vertical;
+}
+
+.input-box input:focus,
+.input-box select:focus,
+.input-box textarea:focus,
+.borrow-box input:focus,
+.borrow-box select:focus,
+.borrow-box textarea:focus,
+.borrow-container input:focus,
+.borrow-container select:focus,
+.borrow-container textarea:focus,
+.login-container input:focus,
+.login-container select:focus,
+.login-container textarea:focus {
+    border-color: var(--main-orange);
+    box-shadow: 0 0 0 4px rgba(230, 126, 34, 0.14);
+}
+
+.borrow-actions {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+    margin-top: 20px;
+    flex-wrap: wrap;
+}
+
+.borrow-actions button,
+.borrow-actions a {
+    min-width: 160px;
+    height: 48px;
+    padding: 10px 20px;
+    border-radius: 14px;
+    font-size: 14px;
+    font-weight: 800;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.borrow-submit-btn {
+    background: var(--main-orange);
+    color: #fff;
+    border: 1px solid var(--main-orange);
+    box-shadow: 0 9px 18px rgba(230, 126, 34, 0.22);
+}
+
+.borrow-submit-btn:hover {
+    background: var(--main-orange-dark);
+    border-color: var(--main-orange-dark);
+}
+
+.borrow-back-btn {
+    background: #fff;
+    color: var(--text-dark);
+    border: 1px solid var(--main-orange);
+}
+
+.borrow-back-btn:hover {
+    background: var(--soft-orange);
+}
+
+.alert,
+.warning,
+.notice,
+.borrow-alert {
+    border-radius: 14px;
+    padding: 12px 14px;
+    line-height: 1.7;
+}
+
+/* ===================== Mobile Improvements ===================== */
+@media (max-width: 768px) {
+    header,
+    .site-header {
+        border-radius: 0 0 22px 22px;
+    }
+
+    .container,
+    .curriculum-page,
+    .showcase-section,
+    .content-section {
+        width: min(100% - 24px, 1200px);
+        padding-left: 0;
+        padding-right: 0;
+    }
+
+    .welcome-banner {
+        padding: 34px 22px;
+        border-radius: 22px;
+        text-align: center;
+        flex-direction: column;
+        gap: 18px;
+    }
+
+    .welcome-text h1 {
+        font-size: 1.9rem;
+    }
+
+    .section-title,
+    .page-title,
+    .curriculum-title {
+        font-size: 1.7rem;
+        margin-bottom: 24px;
+    }
+
+    .content-row,
+    .book-card,
+    .showcase-card,
+    .locked-preview-item {
+        border-radius: 18px;
+    }
+
+    .borrow-overlay {
+        align-items: flex-start;
+        padding: 18px 12px;
+    }
+
+    .borrow-box,
+    .borrow-container,
+    .login-container {
+        width: min(100%, 390px);
+        padding: 22px 16px;
+        border-radius: 22px;
+        margin: 12px auto;
+    }
+
+    .borrow-box h1,
+    .borrow-box h2,
+    .borrow-box h3,
+    .borrow-container h1,
+    .borrow-container h2,
+    .borrow-container h3,
+    .login-container h1,
+    .login-container h2,
+    .login-container h3 {
+        font-size: 20px;
+        margin-bottom: 16px;
+    }
+
+    .borrow-tabs,
+    .tabs {
+        gap: 10px;
+        margin-bottom: 22px;
+    }
+
+    .borrow-tabs button,
+    .tabs button,
+    .tab-btn {
+        width: 132px !important;
+        height: 44px !important;
+        font-size: 13px !important;
+    }
+
+    .form-grid,
+    .flex-row {
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+    }
+
+    .input-box label {
+        font-size: 12px;
+        margin-bottom: 5px;
+    }
+
+    .input-box input,
+    .input-box select,
+    .input-box textarea,
+    .borrow-box input,
+    .borrow-box select,
+    .borrow-box textarea,
+    .borrow-container input,
+    .borrow-container select,
+    .borrow-container textarea,
+    .login-container input,
+    .login-container select,
+    .login-container textarea {
+        min-height: 42px;
+        padding: 9px 11px;
+        border-radius: 11px;
+        font-size: 12.5px;
+    }
+
+    .borrow-actions {
+        gap: 10px;
+        margin-top: 16px;
+    }
+
+    .borrow-actions button,
+    .borrow-actions a {
+        min-width: 124px;
+        height: 44px;
+        padding: 8px 12px;
+        border-radius: 12px;
+        font-size: 12.5px;
+    }
+}
+
+@media (max-width: 430px) {
+    .borrow-page {
+        background-attachment: scroll;
+    }
+
+    .borrow-overlay {
+        padding: 14px 10px;
+    }
+
+    .borrow-box,
+    .borrow-container,
+    .login-container {
+        width: 100%;
+        padding: 20px 14px;
+        border-radius: 20px;
+    }
+
+    .form-grid,
+    .flex-row {
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+    }
+
+    .borrow-actions {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        width: 100%;
+    }
+
+    .borrow-actions button,
+    .borrow-actions a {
+        width: 100%;
+        min-width: 0;
+    }
+}
+
+@media (max-width: 360px) {
+    .form-grid,
+    .flex-row,
+    .borrow-actions {
+        grid-template-columns: 1fr;
+    }
+
+    .borrow-tabs button,
+    .tabs button,
+    .tab-btn {
+        width: 100% !important;
+    }
 }

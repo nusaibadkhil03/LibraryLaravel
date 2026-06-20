@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Auth;
 
 class AdminBookController extends Controller
 {
-    public function index(Request $request)
+ public function index(Request $request)
 {
     $departments = Department::where('status', 'active')
         ->orderBy('name')
@@ -57,7 +57,7 @@ class AdminBookController extends Controller
     } elseif ($request->sort === 'year_desc') {
         $query->orderByDesc('publication_year');
     } else {
-        $query->latest();
+        $query->orderByRaw('CAST(book_number AS UNSIGNED) ASC');
     }
 
     $books = $query->get();

@@ -122,45 +122,45 @@
 <div class="admin-table-page">
 
     <div class="admin-table-header">
-    <h2>إدارة المناهج</h2>
+        <h2>إدارة المناهج</h2>
 
-    <div class="admin-header-actions">
+        <div class="admin-header-actions">
 
-        <form method="GET"
-              action="{{ route('admin.syllabuses.index') }}"
-              class="admin-filter-form">
+            <form method="GET"
+                  action="{{ route('admin.syllabuses.index') }}"
+                  class="admin-filter-form">
 
-            <select name="department_id" onchange="this.form.submit()">
-                <option value="">كل الأقسام</option>
+                <select name="department_id" onchange="this.form.submit()">
+                    <option value="">كل الأقسام</option>
 
-                @foreach($departments as $department)
-                    <option value="{{ $department->id }}"
-                        {{ request('department_id') == $department->id ? 'selected' : '' }}>
-                        {{ $department->name }}
+                    @foreach($departments as $department)
+                        <option value="{{ $department->id }}"
+                            {{ request('department_id') == $department->id ? 'selected' : '' }}>
+                            {{ $department->name }}
+                        </option>
+                    @endforeach
+                </select>
+
+                <select name="sort" onchange="this.form.submit()">
+                    <option value="">الأحدث أولاً</option>
+
+                    <option value="oldest" {{ request('sort') == 'oldest' ? 'selected' : '' }}>
+                        الأقدم أولاً
                     </option>
-                @endforeach
-            </select>
 
-            <select name="sort" onchange="this.form.submit()">
-                <option value="">الأحدث أولاً</option>
+                    <option value="title" {{ request('sort') == 'title' ? 'selected' : '' }}>
+                        ترتيب أبجدي
+                    </option>
+                </select>
 
-                <option value="oldest" {{ request('sort') == 'oldest' ? 'selected' : '' }}>
-                    الأقدم أولاً
-                </option>
+            </form>
 
-                <option value="title" {{ request('sort') == 'title' ? 'selected' : '' }}>
-                    ترتيب أبجدي
-                </option>
-            </select>
+            <a href="{{ route('admin.syllabuses.create') }}" class="admin-add-btn">
+                + إضافة منهج
+            </a>
 
-        </form>
-
-        <a href="{{ route('admin.syllabuses.create') }}" class="admin-add-btn">
-            + إضافة منهج
-        </a>
-
+        </div>
     </div>
-</div>
 
     @if(session('success'))
         <div class="success-message">
@@ -174,11 +174,12 @@
                 <tr>
                     <th>#</th>
                     <th>عنوان المنهج</th>
+                    <th>رقم المحاضرة</th>
                     <th>القسم</th>
+                    <th>اسم الدكتور</th>
                     <th>السنة الدراسية</th>
                     <th>الفصل</th>
                     <th>الملف</th>
-                    <th>الحالة</th>
                     <th>إجراء</th>
                 </tr>
             </thead>
@@ -194,18 +195,14 @@
                             'second' => 'الثاني',
                             'full_year' => 'سنة كاملة',
                         ];
-
-                        $statusNames = [
-                            'published' => 'منشور',
-                            'hidden' => 'مخفي',
-                            'archived' => 'مؤرشف',
-                        ];
                     @endphp
 
                     <tr>
                         <td>{{ $index + 1 }}</td>
                         <td>{{ $item->title }}</td>
+                        <td>{{ $item->lecture_number ?? '-' }}</td>
                         <td>{{ $item->department->name ?? '-' }}</td>
+                        <td>{{ $item->doctor_name ?? '-' }}</td>
                         <td>{{ $item->academic_year ?? '-' }}</td>
                         <td>{{ $semesterNames[$item->semester] ?? '-' }}</td>
 
@@ -218,8 +215,6 @@
                                 -
                             @endif
                         </td>
-
-                        <td>{{ $statusNames[$item->status] ?? '-' }}</td>
 
                         <td>
                             <form action="{{ route('admin.syllabuses.destroy', $item->id) }}"
@@ -236,7 +231,7 @@
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="8" class="empty-table">
+                        <td colspan="9" class="empty-table">
                             لا توجد مناهج مضافة حالياً.
                         </td>
                     </tr>

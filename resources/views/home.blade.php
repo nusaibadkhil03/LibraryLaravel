@@ -95,25 +95,28 @@
         <p>{{ __('messages.quick_window_description') }}</p>
     </div>
 
-    <div class="showcase-grid">
+   <div class="showcase-grid">
 
-        <div class="showcase-card downloads-card">
-    <h3>{{ __('messages.most_downloaded_books') }}</h3>
+    <div class="showcase-card downloads-card">
+        <h3>{{ __('messages.most_downloaded_books') }}</h3>
 
-    @forelse(($mostDownloadedBooks ?? collect())->take(3) as $book)
-        <a href="{{ asset('storage/' . $book->file_path) }}"
-           target="_blank"
-           class="mini-book mini-link">
-            <div class="mini-icon">📘</div>
-            <div>
-                <strong>{{ $book->title ?? 'عنوان غير متوفر' }}</strong>
-                <p>{{ $book->downloads_count ?? 0 }} تحميل</p>
-            </div>
-        </a>
-    @empty
-        <p class="empty-text">لا توجد بيانات تحميل حالياً.</p>
-    @endforelse
-</div>
+        @forelse(($mostDownloadedBooks ?? collect())->take(3) as $book)
+            <a href="{{ route('digital-books.download', $book->id) }}"
+               target="_blank"
+               class="mini-book mini-link">
+
+                <div class="mini-icon">📘</div>
+
+                <div>
+                    <strong>{{ $book->title ?? 'عنوان غير متوفر' }}</strong>
+                    <p>{{ $book->downloads_count ?? 0 }} تحميل</p>
+                </div>
+
+            </a>
+        @empty
+            <p class="empty-text">لا توجد بيانات تحميل حالياً.</p>
+        @endforelse
+    </div>
 
         <div class="showcase-card journal-feature"
              style="background-image: url('{{ asset('images/journals-bg.jpeg') }}');">

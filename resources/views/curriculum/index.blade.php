@@ -25,23 +25,22 @@
         </select>
     </form>
 
-    <div class="tabs">
-        <button type="button" class="tab-btn active" onclick="showSection('schedules', this)">
+<div class="curriculum-tabs">        <button type="button" class="curriculum-tab-btn active" onclick="showSection('schedules', this)">
             <span>🗓️</span>
             {{ __('messages.study_schedules') }}
         </button>
 
-        <button type="button" class="tab-btn" onclick="showSection('plans', this)">
+        <button type="button" class="curriculum-tab-btn" onclick="showSection('plans', this)">
             <span>📘</span>
             {{ __('messages.study_plan') }}
         </button>
 
-        <button type="button" class="tab-btn" onclick="showSection('calendars', this)">
+        <button type="button" class="curriculum-tab-btn" onclick="showSection('calendars', this)">
             <span>📆</span>
             {{ __('messages.academic_calendar') }}
         </button>
 
-        <button type="button" class="tab-btn" onclick="showSection('exams', this)">
+        <button type="button" class="curriculum-tab-btn" onclick="showSection('exams', this)">
             <span>📝</span>
             {{ __('messages.exam_schedules') }}
         </button>
@@ -171,11 +170,11 @@
 
 <script>
     function showSection(sectionId, button) {
-        document.querySelectorAll('.section-box').forEach(section => {
+        document.querySelectorAll('.curriculum-page .section-box').forEach(section => {
             section.classList.remove('active');
         });
 
-        document.querySelectorAll('.tab-btn').forEach(btn => {
+        document.querySelectorAll('.curriculum-tab-btn').forEach(btn => {
             btn.classList.remove('active');
         });
 

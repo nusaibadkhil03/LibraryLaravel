@@ -98,25 +98,28 @@
         <p><?php echo e(__('messages.quick_window_description')); ?></p>
     </div>
 
-    <div class="showcase-grid">
+   <div class="showcase-grid">
 
-        <div class="showcase-card downloads-card">
-    <h3><?php echo e(__('messages.most_downloaded_books')); ?></h3>
+    <div class="showcase-card downloads-card">
+        <h3><?php echo e(__('messages.most_downloaded_books')); ?></h3>
 
-    <?php $__empty_1 = true; $__currentLoopData = ($mostDownloadedBooks ?? collect())->take(3); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $book): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
-        <a href="<?php echo e(asset('storage/' . $book->file_path)); ?>"
-           target="_blank"
-           class="mini-book mini-link">
-            <div class="mini-icon">📘</div>
-            <div>
-                <strong><?php echo e($book->title ?? 'عنوان غير متوفر'); ?></strong>
-                <p><?php echo e($book->downloads_count ?? 0); ?> تحميل</p>
-            </div>
-        </a>
-    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
-        <p class="empty-text">لا توجد بيانات تحميل حالياً.</p>
-    <?php endif; ?>
-</div>
+        <?php $__empty_1 = true; $__currentLoopData = ($mostDownloadedBooks ?? collect())->take(3); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $book): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
+            <a href="<?php echo e(route('digital-books.download', $book->id)); ?>"
+               target="_blank"
+               class="mini-book mini-link">
+
+                <div class="mini-icon">📘</div>
+
+                <div>
+                    <strong><?php echo e($book->title ?? 'عنوان غير متوفر'); ?></strong>
+                    <p><?php echo e($book->downloads_count ?? 0); ?> تحميل</p>
+                </div>
+
+            </a>
+        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
+            <p class="empty-text">لا توجد بيانات تحميل حالياً.</p>
+        <?php endif; ?>
+    </div>
 
         <div class="showcase-card journal-feature"
              style="background-image: url('<?php echo e(asset('images/journals-bg.jpeg')); ?>');">

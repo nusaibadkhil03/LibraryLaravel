@@ -1,8 +1,8 @@
-@extends('layouts.admin')
 
-@section('page_title', 'إضافة كتاب')
 
-@section('content')
+<?php $__env->startSection('page_title', 'إضافة كتاب'); ?>
+
+<?php $__env->startSection('content'); ?>
 <style>
     .book-form {
     margin-top: 20px;
@@ -86,7 +86,7 @@
     <h2>إضافة كتاب جديد</h2>
     <div style="margin:20px 0;">
 
-    <a href="{{ route('admin.books.index') }}">
+    <a href="<?php echo e(route('admin.books.index')); ?>">
 
         <button style="
             background:#6c757d;
@@ -103,14 +103,15 @@
 
 </div>
 
-    @if(session('success'))
+    <?php if(session('success')): ?>
         <div style="background:#d4edda; color:#155724; padding:10px; margin-bottom:15px; border-radius:8px;">
-            {{ session('success') }}
-        </div>
-    @endif
+            <?php echo e(session('success')); ?>
 
-   <form method="POST" action="{{ route('admin.books.store') }}" class="book-form">
-    @csrf
+        </div>
+    <?php endif; ?>
+
+   <form method="POST" action="<?php echo e(route('admin.books.store')); ?>" class="book-form">
+    <?php echo csrf_field(); ?>
 
     <div class="form-section">
         <h3>البيانات الأساسية</h3>
@@ -121,9 +122,9 @@
 
             <select name="department_id">
                 <option value="">اختر القسم</option>
-                @foreach($departments as $department)
-                    <option value="{{ $department->id }}">{{ $department->name }}</option>
-                @endforeach
+                <?php $__currentLoopData = $departments; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $department): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                    <option value="<?php echo e($department->id); ?>"><?php echo e($department->name); ?></option>
+                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
             </select>
 
             <input type="text" name="book_number" placeholder="رقم الكتاب / التسجيل">
@@ -176,4 +177,5 @@
 
 </div>
 
-@endsection
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('layouts.admin', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\course laravel\LibraryLaravel\resources\views/admin/books/create.blade.php ENDPATH**/ ?>

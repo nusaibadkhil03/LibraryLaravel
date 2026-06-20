@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="{{ app()->getLocale() }}"
-      dir="{{ app()->getLocale() == 'ar' ? 'rtl' : 'ltr' }}">
+<html lang="<?php echo e(app()->getLocale()); ?>"
+      dir="<?php echo e(app()->getLocale() == 'ar' ? 'rtl' : 'ltr'); ?>">
 
 <head>
     <meta charset="UTF-8">
-    <title>{{ __('messages.favorites') }}</title>
+    <title><?php echo e(__('messages.favorites')); ?></title>
 
     <style>
 body {
@@ -186,90 +186,101 @@ body {
 <body>
 
 <div class="favorites-header">
-    <h2>⭐ {{ __('messages.favorites') }}</h2>
-    <a href="{{ url('/') }}">{{ __('messages.home') }}</a>
+    <h2>⭐ <?php echo e(__('messages.favorites')); ?></h2>
+    <a href="<?php echo e(url('/')); ?>"><?php echo e(__('messages.home')); ?></a>
 </div>
 
 <div class="favorites-container">
 
-    @forelse($favorites as $favorite)
-        @php
+    <?php $__empty_1 = true; $__currentLoopData = $favorites; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $favorite): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
+        <?php
             $item = $favorite->favoritable;
             $type = class_basename($favorite->favoritable_type);
-        @endphp
+        ?>
 
-        @if($item)
+        <?php if($item): ?>
             <div class="favorite-card">
 
                 <div class="favorite-info">
                     <span class="favorite-type">
-                        @if($type == 'Journal')
-                            {{ __('messages.scientific_journal') }}
-                        @elseif($type == 'LibraryBook')
-                            {{ __('messages.book') }}
-                        @elseif($type == 'Curriculum')
-                            {{ __('messages.curriculum_plan') }}
-                        @elseif($type == 'PastExam')
-                            {{ __('messages.past_exams') }}
-                        @elseif($type == 'EducationalChannel')
-                            {{ __('messages.educational_channel') }}
-                        @else
-                            {{ __('messages.digital_content') }}
-                        @endif
+                        <?php if($type == 'Journal'): ?>
+                            <?php echo e(__('messages.scientific_journal')); ?>
+
+                        <?php elseif($type == 'LibraryBook'): ?>
+                            <?php echo e(__('messages.book')); ?>
+
+                        <?php elseif($type == 'Curriculum'): ?>
+                            <?php echo e(__('messages.curriculum_plan')); ?>
+
+                        <?php elseif($type == 'PastExam'): ?>
+                            <?php echo e(__('messages.past_exams')); ?>
+
+                        <?php elseif($type == 'EducationalChannel'): ?>
+                            <?php echo e(__('messages.educational_channel')); ?>
+
+                        <?php else: ?>
+                            <?php echo e(__('messages.digital_content')); ?>
+
+                        <?php endif; ?>
                     </span>
 
-                    <h3>{{ $item->title ?? $item->name ?? __('messages.untitled_item') }}</h3>
+                    <h3><?php echo e($item->title ?? $item->name ?? __('messages.untitled_item')); ?></h3>
 
-                    @if(isset($item->issue_number))
-                        <p>{{ __('messages.issue_number') }}: {{ $item->issue_number }}</p>
-                    @endif
+                    <?php if(isset($item->issue_number)): ?>
+                        <p><?php echo e(__('messages.issue_number')); ?>: <?php echo e($item->issue_number); ?></p>
+                    <?php endif; ?>
 
-                    @if(isset($item->publication_year))
-                        <p>{{ __('messages.publication_year') }}: {{ $item->publication_year }}</p>
-                    @endif
+                    <?php if(isset($item->publication_year)): ?>
+                        <p><?php echo e(__('messages.publication_year')); ?>: <?php echo e($item->publication_year); ?></p>
+                    <?php endif; ?>
 
-                    @if(isset($item->description))
-                        <p>{{ $item->description }}</p>
-                    @endif
+                    <?php if(isset($item->description)): ?>
+                        <p><?php echo e($item->description); ?></p>
+                    <?php endif; ?>
                 </div>
 
                 <div class="favorite-actions">
 
-                    @if(isset($item->file_path))
-                        <a class="open-btn" href="{{ asset('storage/' . $item->file_path) }}" target="_blank">
-                            {{ __('messages.open_file') }}
-                        </a>
-                    @elseif(isset($item->file))
-                        <a class="open-btn" href="{{ asset('storage/' . $item->file) }}" target="_blank">
-                            {{ __('messages.open_file') }}
-                        </a>
-                    @elseif(isset($item->channel_url))
-                        <a class="open-btn" href="{{ $item->channel_url }}" target="_blank">
-                            {{ __('messages.open_link') }}
-                        </a>
-                    @endif
+                    <?php if(isset($item->file_path)): ?>
+                        <a class="open-btn" href="<?php echo e(asset('storage/' . $item->file_path)); ?>" target="_blank">
+                            <?php echo e(__('messages.open_file')); ?>
 
-                    <form method="POST" action="{{ route('favorites.toggle') }}">
-                        @csrf
-                        <input type="hidden" name="favoritable_id" value="{{ $favorite->favoritable_id }}">
-                        <input type="hidden" name="favoritable_type" value="{{ $favorite->favoritable_type }}">
+                        </a>
+                    <?php elseif(isset($item->file)): ?>
+                        <a class="open-btn" href="<?php echo e(asset('storage/' . $item->file)); ?>" target="_blank">
+                            <?php echo e(__('messages.open_file')); ?>
+
+                        </a>
+                    <?php elseif(isset($item->channel_url)): ?>
+                        <a class="open-btn" href="<?php echo e($item->channel_url); ?>" target="_blank">
+                            <?php echo e(__('messages.open_link')); ?>
+
+                        </a>
+                    <?php endif; ?>
+
+                    <form method="POST" action="<?php echo e(route('favorites.toggle')); ?>">
+                        <?php echo csrf_field(); ?>
+                        <input type="hidden" name="favoritable_id" value="<?php echo e($favorite->favoritable_id); ?>">
+                        <input type="hidden" name="favoritable_type" value="<?php echo e($favorite->favoritable_type); ?>">
 
                         <button type="submit" class="remove-btn">
-                            {{ __('messages.remove') }}
+                            <?php echo e(__('messages.remove')); ?>
+
                         </button>
                     </form>
 
                 </div>
 
             </div>
-        @endif
-    @empty
+        <?php endif; ?>
+    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
         <div class="empty-box">
-            {{ __('messages.no_favorites') }}
+            <?php echo e(__('messages.no_favorites')); ?>
+
         </div>
-    @endforelse
+    <?php endif; ?>
 
 </div>
 
 </body>
-</html>
+</html><?php /**PATH C:\course laravel\LibraryLaravel\resources\views/favorites/index.blade.php ENDPATH**/ ?>

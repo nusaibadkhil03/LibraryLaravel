@@ -144,7 +144,7 @@
         <div class="showcase-card journal-feature"
              style="background-image: url('<?php echo e(asset('images/journals-bg.jpeg')); ?>');">
             <div class="journal-overlay">
-                <div class="journal-icon">📘</div>
+                
 
                 <h3><?php echo e(__('messages.university_journals')); ?></h3>
                 <p><?php echo e(__('messages.university_journals_description')); ?></p>

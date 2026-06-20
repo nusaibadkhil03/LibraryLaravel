@@ -75,12 +75,14 @@
 
                             <?php else: ?>
 
-                                <a class="download-btn"
-                                   href="<?php echo e(asset('storage/' . $file)); ?>"
-                                   target="_blank">
-                                    📥 <?php echo e(__('messages.download_file')); ?>
+                               <a class="download-btn"
+   href="<?php echo e($modelClass === \App\Models\Book::class 
+        ? route('digital-books.download', $item->id) 
+        : asset('storage/' . $file)); ?>"
+   target="_blank">
+    📥 <?php echo e(__('messages.download_file')); ?>
 
-                                </a>
+</a>
 
                             <?php endif; ?>
 

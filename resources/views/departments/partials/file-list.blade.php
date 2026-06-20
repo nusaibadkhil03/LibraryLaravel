@@ -72,11 +72,13 @@
 
                             @else
 
-                                <a class="download-btn"
-                                   href="{{ asset('storage/' . $file) }}"
-                                   target="_blank">
-                                    📥 {{ __('messages.download_file') }}
-                                </a>
+                               <a class="download-btn"
+   href="{{ $modelClass === \App\Models\Book::class 
+        ? route('digital-books.download', $item->id) 
+        : asset('storage/' . $file) }}"
+   target="_blank">
+    📥 {{ __('messages.download_file') }}
+</a>
 
                             @endif
 

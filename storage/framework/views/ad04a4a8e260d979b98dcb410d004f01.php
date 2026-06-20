@@ -1,23 +1,23 @@
-@extends('layouts.admin')
 
-@section('page_title', 'تأكيد إرجاع الكتاب')
 
-@section('content')
+<?php $__env->startSection('page_title', 'تأكيد إرجاع الكتاب'); ?>
+
+<?php $__env->startSection('content'); ?>
 
 <div class="section-box">
 
     <h2>تأكيد إرجاع الكتاب</h2>
 
     <div style="background:#fff; padding:20px; border-radius:16px; margin-bottom:20px; box-shadow:0 4px 14px rgba(0,0,0,0.08); line-height:1.9;">
-        <p><strong>اسم الطالب:</strong> {{ $borrow->student_name ?? $borrow->user->name ?? '-' }}</p>
-        <p><strong>رقم القيد:</strong> {{ $borrow->student_number ?? $borrow->user->student_number ?? '-' }}</p>
-        <p><strong>اسم الكتاب:</strong> {{ $borrow->libraryBook->title ?? '-' }}</p>
-        <p><strong>سعر الكتاب:</strong> {{ $borrow->libraryBook->price ?? 0 }} د.ل</p>
-        <p><strong>تاريخ الإرجاع المتوقع:</strong> {{ $borrow->due_date ?? '-' }}</p>
+        <p><strong>اسم الطالب:</strong> <?php echo e($borrow->student_name ?? $borrow->user->name ?? '-'); ?></p>
+        <p><strong>رقم القيد:</strong> <?php echo e($borrow->student_number ?? $borrow->user->student_number ?? '-'); ?></p>
+        <p><strong>اسم الكتاب:</strong> <?php echo e($borrow->libraryBook->title ?? '-'); ?></p>
+        <p><strong>سعر الكتاب:</strong> <?php echo e($borrow->libraryBook->price ?? 0); ?> د.ل</p>
+        <p><strong>تاريخ الإرجاع المتوقع:</strong> <?php echo e($borrow->due_date ?? '-'); ?></p>
     </div>
 
-    <form method="POST" action="{{ route('admin.borrows.return', $borrow->id) }}">
-        @csrf
+    <form method="POST" action="<?php echo e(route('admin.borrows.return', $borrow->id)); ?>">
+        <?php echo csrf_field(); ?>
 
         <div style="display:grid; grid-template-columns:repeat(2, 1fr); gap:18px;">
 
@@ -25,7 +25,7 @@
                 <label>تاريخ الإرجاع الفعلي</label>
                 <input type="date"
                        name="actual_return_date"
-                       value="{{ date('Y-m-d') }}"
+                       value="<?php echo e(date('Y-m-d')); ?>"
                        required
                        style="width:100%; padding:12px; border-radius:10px; border:1px solid #ddd;">
             </div>
@@ -129,7 +129,7 @@
                 تأكيد الإرجاع
             </button>
 
-            <a href="{{ route('admin.borrows.index') }}" style="
+            <a href="<?php echo e(route('admin.borrows.index')); ?>" style="
                 background:#6c757d;
                 color:white;
                 text-decoration:none;
@@ -145,8 +145,8 @@
 </div>
 
 <script>
-    const bookPrice = {{ $borrow->libraryBook->price ?? 0 }};
-    const seriesPartsCount = {{ $borrow->libraryBook->series_parts_count ?? 0 }};
+    const bookPrice = <?php echo e($borrow->libraryBook->price ?? 0); ?>;
+    const seriesPartsCount = <?php echo e($borrow->libraryBook->series_parts_count ?? 0); ?>;
 
     const returnStatus = document.getElementById('return_status');
     const lostBookBox = document.getElementById('lost_book_box');
@@ -181,4 +181,5 @@
     });
 </script>
 
-@endsection
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('layouts.admin', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\course laravel\LibraryLaravel\resources\views/admin/borrows/return.blade.php ENDPATH**/ ?>
