@@ -37,10 +37,7 @@
                     نشط
                 </option>
 
-                <option value="inactive"
-                    <?php echo e(request('status') == 'inactive' ? 'selected' : ''); ?>>
-                    غير نشط
-                </option>
+                
 
                 <option value="suspended"
                     <?php echo e(request('status') == 'suspended' ? 'selected' : ''); ?>>
@@ -103,10 +100,7 @@
                                     نشط
                                 </span>
 
-                            <?php elseif($student->status == 'inactive'): ?>
-                                <span class="status-inactive">
-                                    غير نشط
-                                </span>
+                            
 
                             <?php else: ?>
                                 <span class="status-suspended">
@@ -130,15 +124,7 @@
                                     </button>
                                 </form>
 
-                                <form method="POST"
-                                      action="<?php echo e(route('admin.students.updateStatus', [$student->id,'inactive'])); ?>">
-                                    <?php echo csrf_field(); ?>
-                                    <?php echo method_field('PATCH'); ?>
-
-                                    <button class="btn-warning">
-                                        تعطيل
-                                    </button>
-                                </form>
+                         
 
                                 <form method="POST"
                                       action="<?php echo e(route('admin.students.updateStatus', [$student->id,'suspended'])); ?>">

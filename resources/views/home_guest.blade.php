@@ -56,51 +56,72 @@
 
     <div class="stats-modern-grid">
 
-        <div class="stat-modern-card">
-            <div class="stat-info">
-                <span class="stat-icon">📚</span>
-                <h3>{{ $stats['library_books'] ?? $stats['books'] ?? 0 }}</h3>
-                <p>{{ __('messages.academic_book_reference') }}</p>
-            </div>
-            <div class="stat-bar">
-                <span style="height:85%;"></span>
-            </div>
+    <div class="stat-modern-card">
+        <div class="stat-info">
+            <span class="stat-icon">📚</span>
+            <h3 class="counter" data-target="{{ $stats['library_books'] ?? $stats['books'] ?? 0 }}">
+                {{ $stats['library_books'] ?? $stats['books'] ?? 0 }}
+            </h3>
+            <p>{{ __('messages.academic_book_reference') }}</p>
         </div>
-
-        <div class="stat-modern-card">
-            <div class="stat-info">
-                <span class="stat-icon">🎓</span>
-                <h3>{{ $stats['projects'] ?? 0 }}</h3>
-                <p>{{ __('messages.graduation_project') }}</p>
-            </div>
-            <div class="stat-bar">
-                <span style="height:65%;"></span>
-            </div>
+        <div class="stat-bar">
+            <span style="height:85%;"></span>
         </div>
-
-        <div class="stat-modern-card">
-            <div class="stat-info">
-                <span class="stat-icon">🏛️</span>
-                <h3>{{ $stats['departments'] ?? 0 }}</h3>
-                <p>{{ __('messages.academic_department') }}</p>
-            </div>
-            <div class="stat-bar">
-                <span style="height:45%;"></span>
-            </div>
-        </div>
-
-        <div class="stat-modern-card">
-            <div class="stat-info">
-                <span class="stat-icon">🧾</span>
-                <h3>{{ $stats['researches'] ?? 0 }}</h3>
-                <p>{{ __('messages.research_or_journal') }}</p>
-            </div>
-            <div class="stat-bar">
-                <span style="height:55%;"></span>
-            </div>
-        </div>
-
     </div>
+
+    <div class="stat-modern-card">
+        <div class="stat-info">
+            <span class="stat-icon">🎓</span>
+            <h3 class="counter" data-target="{{ $stats['projects'] ?? 0 }}">
+                {{ $stats['projects'] ?? 0 }}
+            </h3>
+            <p>{{ __('messages.graduation_project') }}</p>
+        </div>
+        <div class="stat-bar">
+            <span style="height:65%;"></span>
+        </div>
+    </div>
+
+    <div class="stat-modern-card">
+    <div class="stat-info">
+        <span class="stat-icon">📖</span>
+        <h3 class="counter" data-target="{{ $stats['syllabuses'] ?? 0 }}">
+            {{ $stats['syllabuses'] ?? 0 }}
+        </h3>
+        <p>{{ __('messages.syllabus') }}</p>
+    </div>
+    <div class="stat-bar">
+        <span style="height:75%;"></span>
+    </div>
+</div>
+
+    <div class="stat-modern-card">
+        <div class="stat-info">
+            <span class="stat-icon">🏛️</span>
+            <h3 class="counter" data-target="{{ $stats['departments'] ?? 0 }}">
+                {{ $stats['departments'] ?? 0 }}
+            </h3>
+            <p>{{ __('messages.academic_department') }}</p>
+        </div>
+        <div class="stat-bar">
+            <span style="height:45%;"></span>
+        </div>
+    </div>
+
+    <div class="stat-modern-card">
+        <div class="stat-info">
+            <span class="stat-icon">🧾</span>
+            <h3 class="counter" data-target="{{ $stats['researches'] ?? 0 }}">
+                {{ $stats['researches'] ?? 0 }}
+            </h3>
+            <p>{{ __('messages.research_or_journal') }}</p>
+        </div>
+        <div class="stat-bar">
+            <span style="height:55%;"></span>
+        </div>
+    </div>
+
+</div>
 </section>
 
 <section class="academic-showcase" id="services">

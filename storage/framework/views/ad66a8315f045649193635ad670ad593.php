@@ -60,51 +60,77 @@
 
     <div class="stats-modern-grid">
 
-        <div class="stat-modern-card">
-            <div class="stat-info">
-                <span class="stat-icon">📚</span>
-                <h3><?php echo e($stats['library_books'] ?? $stats['books'] ?? 0); ?></h3>
-                <p><?php echo e(__('messages.academic_book_reference')); ?></p>
-            </div>
-            <div class="stat-bar">
-                <span style="height:85%;"></span>
-            </div>
-        </div>
+    <div class="stat-modern-card">
+        <div class="stat-info">
+            <span class="stat-icon">📚</span>
+            <h3 class="counter" data-target="<?php echo e($stats['library_books'] ?? $stats['books'] ?? 0); ?>">
+                <?php echo e($stats['library_books'] ?? $stats['books'] ?? 0); ?>
 
-        <div class="stat-modern-card">
-            <div class="stat-info">
-                <span class="stat-icon">🎓</span>
-                <h3><?php echo e($stats['projects'] ?? 0); ?></h3>
-                <p><?php echo e(__('messages.graduation_project')); ?></p>
-            </div>
-            <div class="stat-bar">
-                <span style="height:65%;"></span>
-            </div>
+            </h3>
+            <p><?php echo e(__('messages.academic_book_reference')); ?></p>
         </div>
-
-        <div class="stat-modern-card">
-            <div class="stat-info">
-                <span class="stat-icon">🏛️</span>
-                <h3><?php echo e($stats['departments'] ?? 0); ?></h3>
-                <p><?php echo e(__('messages.academic_department')); ?></p>
-            </div>
-            <div class="stat-bar">
-                <span style="height:45%;"></span>
-            </div>
+        <div class="stat-bar">
+            <span style="height:85%;"></span>
         </div>
-
-        <div class="stat-modern-card">
-            <div class="stat-info">
-                <span class="stat-icon">🧾</span>
-                <h3><?php echo e($stats['researches'] ?? 0); ?></h3>
-                <p><?php echo e(__('messages.research_or_journal')); ?></p>
-            </div>
-            <div class="stat-bar">
-                <span style="height:55%;"></span>
-            </div>
-        </div>
-
     </div>
+
+    <div class="stat-modern-card">
+        <div class="stat-info">
+            <span class="stat-icon">🎓</span>
+            <h3 class="counter" data-target="<?php echo e($stats['projects'] ?? 0); ?>">
+                <?php echo e($stats['projects'] ?? 0); ?>
+
+            </h3>
+            <p><?php echo e(__('messages.graduation_project')); ?></p>
+        </div>
+        <div class="stat-bar">
+            <span style="height:65%;"></span>
+        </div>
+    </div>
+
+    <div class="stat-modern-card">
+    <div class="stat-info">
+        <span class="stat-icon">📖</span>
+        <h3 class="counter" data-target="<?php echo e($stats['syllabuses'] ?? 0); ?>">
+            <?php echo e($stats['syllabuses'] ?? 0); ?>
+
+        </h3>
+        <p><?php echo e(__('messages.syllabus')); ?></p>
+    </div>
+    <div class="stat-bar">
+        <span style="height:75%;"></span>
+    </div>
+</div>
+
+    <div class="stat-modern-card">
+        <div class="stat-info">
+            <span class="stat-icon">🏛️</span>
+            <h3 class="counter" data-target="<?php echo e($stats['departments'] ?? 0); ?>">
+                <?php echo e($stats['departments'] ?? 0); ?>
+
+            </h3>
+            <p><?php echo e(__('messages.academic_department')); ?></p>
+        </div>
+        <div class="stat-bar">
+            <span style="height:45%;"></span>
+        </div>
+    </div>
+
+    <div class="stat-modern-card">
+        <div class="stat-info">
+            <span class="stat-icon">🧾</span>
+            <h3 class="counter" data-target="<?php echo e($stats['researches'] ?? 0); ?>">
+                <?php echo e($stats['researches'] ?? 0); ?>
+
+            </h3>
+            <p><?php echo e(__('messages.research_or_journal')); ?></p>
+        </div>
+        <div class="stat-bar">
+            <span style="height:55%;"></span>
+        </div>
+    </div>
+
+</div>
 </section>
 
 <section class="academic-showcase" id="services">

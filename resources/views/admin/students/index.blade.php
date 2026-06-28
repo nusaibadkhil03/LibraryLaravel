@@ -36,10 +36,7 @@
                     نشط
                 </option>
 
-                <option value="inactive"
-                    {{ request('status') == 'inactive' ? 'selected' : '' }}>
-                    غير نشط
-                </option>
+                
 
                 <option value="suspended"
                     {{ request('status') == 'suspended' ? 'selected' : '' }}>
@@ -100,10 +97,7 @@
                                     نشط
                                 </span>
 
-                            @elseif($student->status == 'inactive')
-                                <span class="status-inactive">
-                                    غير نشط
-                                </span>
+                            
 
                             @else
                                 <span class="status-suspended">
@@ -127,15 +121,7 @@
                                     </button>
                                 </form>
 
-                                <form method="POST"
-                                      action="{{ route('admin.students.updateStatus', [$student->id,'inactive']) }}">
-                                    @csrf
-                                    @method('PATCH')
-
-                                    <button class="btn-warning">
-                                        تعطيل
-                                    </button>
-                                </form>
+                         
 
                                 <form method="POST"
                                       action="{{ route('admin.students.updateStatus', [$student->id,'suspended']) }}">

@@ -41,7 +41,7 @@ class StudentController extends Controller
     {
         $student = User::where('role', 'student')->findOrFail($id);
 
-        if (! in_array($status, ['active', 'inactive', 'suspended'])) {
+        if (! in_array($status, ['active', 'suspended'])) {
             abort(404);
         }
 
